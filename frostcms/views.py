@@ -1,21 +1,20 @@
-from pyramid.response import Response
+#coding=utf-8
 from pyramid.view import view_config
+from .models import *
+from logging import getLogger
+import time
+from .token import Token
+from xml.etree import ElementTree
 
-from sqlalchemy.exc import DBAPIError
+log = getLogger(__name__)
 
-from .models import (
-    DBSession,
-    MyModel,
-    )
-
+def includeme(config):
+    config.scan(__name__)
+    config.add_route('home', '/')
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
-    try:
-        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'frostcms'}
+    return {'one': 'king', 'project': 'frostcms'}
 
 conn_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem

@@ -6,8 +6,11 @@ production.ini
 setup.cfg
 setup.py
 frostcms/__init__.py
+frostcms/authentication.py
 frostcms/models.py
+frostcms/security.py
 frostcms/tests.py
+frostcms/token.py
 frostcms/views.py
 frostcms.egg-info/PKG-INFO
 frostcms.egg-info/SOURCES.txt
