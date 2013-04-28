@@ -1,0 +1,178 @@
+body{
+	width:100%;
+	height:100%;
+	overflow-x:hidden;}
+div.list_head{
+	margin:0;
+	padding:0;
+	width:100%;
+	height:32px;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	color:#000;
+	border-bottom:#ddd solid 1px;}
+div.list_name{
+	float:left;
+	margin:0;
+	padding:0;
+	width:22%;
+	height:32px;
+	font-size:18px;
+	line-height:32px;}
+div.head_app{
+	float:left;
+	margin:0;
+	padding:0;
+	width:77%;
+	height:32px;}
+div.search{
+	float:left;
+	width:400px;
+	height:30px;
+	margin:2px 0 0 0;
+	border-top-left-radius:10px;
+	-moz-border-top-left-radius:10px;
+	-webkit-border-top-left-radius:10px;
+	border-top-right-radius:10px;
+	-moz-border-top-right-radius:10px;
+	-webkit-border-top-right-radius:10px;
+	overflow:hidden;
+	background-color:#009999;
+	color:#fff;
+	font-size:14px;
+	line-height:26px;}
+div.search:hover{
+	background-color:#0099CC;
+}
+p.search{
+	float:left;
+	height:26px;
+	margin:2px 5px;
+	border-right:#fff solid 1px;}
+p.search_n{
+	float:left;
+	height:20px;
+	margin:0;}
+form.search{
+	float:left;
+	width:390px;
+	height:20px;
+	margin:5px;}
+input.search_box{
+	float:left;
+	width:138px;
+	height:20px;
+	background-color:#fff;
+	border:none;}
+input.search_bt{
+	float:left;
+	text-align:center;
+	width:40px;
+	height:20px;
+	line-height:20px;
+	margin:0;
+	background-color:transparent;
+	border:none;
+	color:#fff;}
+input.search_bt:hover{
+	color:#00FFFF;
+	cursor:pointer;}
+*:focus{outline: none;}
+div.add{
+	float:left;
+	text-align:center;
+	width:120px;
+	height:30px;
+	margin:2px 0 0 15px;;
+	border-top-left-radius:10px;
+	-moz-border-top-left-radius:10px;
+	-webkit-border-top-left-radius:10px;
+	border-top-right-radius:10px;
+	-moz-border-top-right-radius:10px;
+	-webkit-border-top-right-radius:10px;
+	color:#fff;
+	font-size:14px;
+	line-height:26px;
+	overflow:hidden;
+	background-color:#009999;
+}
+div.add:hover{
+	background-color:#0099CC;
+}
+div.add a:link{
+	color:#fff;
+	text-decoration:none;}
+div.add a:visited{
+	color:#fff;
+	text-decoration:none;}
+div.add a:hover{
+	color:#99FFFF;
+	text-decoration:none;}
+div.add a:active{
+	color:#99FFFF;
+	text-decoration:none;}
+
+table.main_list{
+	margin:15px 25px;
+	width:85%;
+	text-align:center;
+	border-collapse:collapse;
+	border-top-left-radius:10px;
+	-moz-border-top-left-radius:10px;
+	-webkit-border-top-left-radius:10px;
+	border-bottom-right-radius:10px;
+	-moz-border-bottom-right-radius:10px;
+	-webkit-border-bottom-right-radius:10px;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	overflow:hidden;
+	font-size:14px;}
+table.main_list th{
+	background-color:#0099CC;
+	border:#ddd solid 1px;
+	color:#fff;
+	font-size:14px;}
+table.main_list th.number{
+	width:55px;}
+table.main_list th.name{
+	width:140px;}
+table.main_list th.class{
+	width:60px;}
+table.main_list th.grade{
+	width:60px;}
+table.main_list th.faculty{
+	width:120px;}
+table.main_list th.stdn{
+	width:120px;}
+table.main_list td{
+	border:#ddd solid 1px;}
+table.main_list td.handle{
+	text-align:left;
+	padding:0 15px;
+}
+table.main_list td.handle a:link{
+	color:#009966;
+	text-decoration:none;}
+table.main_list td.handle a:visited{
+	color:#009966;
+	text-decoration:none;}
+table.main_list td.handle a:hover{
+	color:#FF0033;
+	text-decoration:none;}
+table.main_list td.handle a:active{
+	color:#FF0033;
+	text-decoration:none;}
+table.main_list td.tfoot{
+	background-color:#0099CC;
+	height:30px;
+}
+table.main_list td.tfoot a:link{
+	color:#fff;
+	text-decoration:none;}
+table.main_list td.tfoot a:visited{
+	color:#fff;
+	text-decoration:none;}
+table.main_list td.tfoot a:hover{
+	color:#99FFFF;
+	text-decoration:none;}
+table.main_list td.tfoot a:active{
+	color:#99FFFF;
+	text-decoration:none;}

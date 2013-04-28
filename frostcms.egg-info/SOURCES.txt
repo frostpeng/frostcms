@@ -7,10 +7,12 @@ setup.cfg
 setup.py
 frostcms/__init__.py
 frostcms/authentication.py
+frostcms/mentor.py
 frostcms/models.py
 frostcms/security.py
 frostcms/tests.py
 frostcms/token.py
+frostcms/user.py
 frostcms/views.py
 frostcms.egg-info/PKG-INFO
 frostcms.egg-info/SOURCES.txt
@@ -31,3 +33,6 @@ frostcms/static/pyramid-small.png
 frostcms/static/pyramid.png
 frostcms/static/transparent.gif
 frostcms/templates/mytemplate.pt
+frostcms/templates/login/login.mako
+frostcms/templates/user/user_add.mako
+frostcms/templates/user/user_list.mako
