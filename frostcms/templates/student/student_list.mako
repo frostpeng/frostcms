@@ -10,7 +10,7 @@
 
 <body>
 	<!-- 登录模块 -->
-    <%include file="/main/login.mako" />
+    <!--<%include file="/main/login.mako" />-->
 	<!-- 顶部固定栏 -->
     <%include file="/main/head.mako" />
 	<!-- 导航栏部分 -->
