@@ -1,0 +1,142 @@
+body{
+	position:relative;
+	width:100%;
+	min-width:960px;
+	margin:0;
+	padding:0;
+	background-color:#FFF;
+}
+/*********************************************************************************************
+	顶部部分
+*********************************************************************************************/
+div.head{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:40px;
+	background-color:#222;
+	border-bottom:#C0C0C0 solid 1px;
+}
+#btn_login{
+	float:right;
+	margin:5px 15px 0 0;	
+}
+div.title{
+	float:left;
+	width:180px;
+	height:auto;
+	margin:0;
+	padding:0;
+	text-align:center;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	font-size:18px;
+	color:#fff;
+	line-height:40px;
+}
+/*********************************************************************************************
+	左部导航部分
+*********************************************************************************************/
+div.left{
+	float:left;
+	width:28%;
+	height:auto;
+	margin:60px 0 0 0;
+	background-color:transparent;
+	border:none;
+	text-align:right;
+}
+#main_nav{
+	background-color:transparent;
+	margin:0 50px 0 0;
+	float:right;
+	width:60%;
+	text-align:left;
+}
+#main_nav li.disabled{
+	text-indent:0em;
+}
+#main_nav li{
+	text-indent:2em;
+}
+/*********************************************************************************************
+	右边主体部分
+*********************************************************************************************/
+div.right{
+	float:left;
+	width:70%;	
+	height:auto;
+	margin:60px 0 0 0;
+	background-color:transparent;
+}
+div.right_head{
+	float:left;
+	width:92%;
+	height:90px;
+	border:#CCC solid 1px;
+	border-radius:5px;
+	margin:0 auto 15px auto;
+}
+div.title_2{
+	width:100%;
+	height:auto;
+	text-align:left;
+	text-indent:1em;
+	margin:0 auto 10px auto;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	font-size:24px;
+	line-height:40px;
+	color:#000;	
+}
+div.search{
+	float:left;
+	margin:0 15px 0 15px;
+}
+#btn_head{
+	float:left;
+	margin:auto 0 auto 20px;	
+}
+div.right_main{
+	float:left;
+	width:92%;
+	height:auto;
+	border:none;
+	padding:0;
+	margin:0 auto 15px auto;
+}
+div.right_foot{
+	float:left;
+	width:92%;
+	height:auto;
+	border:none;
+	padding:0;
+	text-align:center;
+	margin:0 auto 40px auto;	
+}
+th.number{
+	width:60px;
+	text-align:center;
+}
+th.name{
+	width:120px;
+	text-align:center;
+}
+th.stdn{
+	width:120px;
+	text-align:center;
+}
+th.app{
+	text-align:center;
+}
+td.number{
+	text-align:center;
+}
+td.name{
+	text-align:center;
+}
+td.stdn{
+	text-align:center;
+}
+td.app{
+	text-align:left;
+}
