@@ -1,5 +1,9 @@
 // JavaScript Document
-function login(){
-	$('#myModal').modal(options);
-}
-$('#myModal').modal(options);
+$("div").ready(function(){
+  		$("#btn_close").click(function(){
+  			$("#login").hide(600);
+  		});
+  		$("#btn_login").click(function(){
+  			$("#login").show(600);
+  		});
+	});

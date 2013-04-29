@@ -3,16 +3,18 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen">
+    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
     <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/ccms.js"></script>
 </head>
 
 <body>
 	<!-- 登录模块 -->
-    <!--<%include file="/main/login.mako" />-->
+    <%include file="/login/_login.mako" />
 	<!-- 顶部固定栏 -->
-    <%include file="/main/head.mako" />
+    <!--<%include file="/main/head.mako" />-->
 	<!-- 导航栏部分 -->
     <%include file="/main/nav_admin.mako" />
     <!-- 主体部分 -->
@@ -23,9 +25,11 @@
 			<div class="title_2">学生信息管理</div>
             
             <div class="search">
-				<form class="search" action="/student/list" method="post">
-				<input type="text" name="search_identity" class="input-medium search-query" autocomplete="off" value="" />
+				<form class="form-search" action="/student/list" method="post">
+				<div class="input-append">
+				<input type="text" name="search_identity" class="span2 search-query" autocomplete="off" value="" />
 				<input type="submit" name="submit" class="btn" autocomplete="off" value="按学号查询" />
+				</div>
 				</form>
 			</div>	
 			<button class="btn btn-info btn-primary" id="btn_head">添加新学生</button>
