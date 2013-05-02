@@ -22,39 +22,27 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">学生信息管理</div>
-            
-            <div class="search">
-				<form class="form-search" action="/student/list" method="post">
-				<div class="input-append">
-				<input type="text" name="search_identity" class="span2 search-query" autocomplete="off" value="" />
-				<input type="submit" name="submit" class="btn" autocomplete="off" value="按学号查询" />
-				</div>
-				</form>
-			</div>	
-			<button class="btn btn-primary" id="btn_head">添加新学生</button>
-			<button class="btn btn-primary" id="btn_head">从xls文件导入</button>
-            
+			<div class="title_2">学院管理</div>
+			<a class="btn btn-primary" id="btn_head" href="/college/add">添加学院</a>   
 		</div>
         
         <!-- 主体信息表 -->
         <div class="right_main">
         	<table class="table table-bordered table-hover" id="main_table">
             <thead>
-      			<tr>
-        			<th class="number">编号</th>        
-        			<th class="name">姓名</th>
-        			<th class="stdn">学号</th>
+      			<tr>     
+        			<th class="name_l">学院</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="number">${item.id}</td>
         			<td class="name">${item.name}</td>
-        			<td class="stdn">${item.identity}</td>
-        			<td class="app"><a class="btn btn-info" href="/student/add?mentorid=${item.id}">修改学生信息</a></td>
+        			<td class="app">
+        				<a class="btn btn-info" href="/college/add?collegeid=${item.id}">编辑</a>
+        				<a class="btn btn-danger" href="/college/del?collegeid=${item.id}">删除</a>
+        			</td>
       			</tr>
       			% endfor
     		</tbody>

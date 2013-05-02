@@ -121,6 +121,10 @@ th.name{
 	width:120px;
 	text-align:center;
 }
+th.name_l{
+	width:240px;
+	text-align:center;
+}
 th.stdn{
 	width:120px;
 	text-align:center;
@@ -181,3 +185,62 @@ div.check_box{
 	width:100%;
 	width:100%;
 	margin:5px 0;}
+/*********************************************************************************************
+	功能部分
+*********************************************************************************************/
+div.add{
+	float:left;
+	width:240px;
+	height:320px;
+	margin:0 5px 0 5px;
+	border:#CCC solid 1px;
+	border-radius:5px;
+	background-color:#fff;
+	overflow:hidden;
+	index:0;
+}
+iframe.add{
+	border:none;
+	background-color:#fff;
+	margin:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;	
+}
+form.add{
+	float:left;
+	width:100%;
+	height:auto;
+	border:#CCC solid 1px;
+	border-radius:5px;
+	margin:0 auto 15px auto;
+	padding:20px 0 0 0;
+	text-indent:2em;
+}
+span{
+	text-indent:0em;}
+div.app_name{
+	width:100%;
+	height:30px;
+	margin:0 0 10px 0;
+	text-indent:2em;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	font-size:18px;
+	line-height:30px;
+	color:#000;	
+}
+#add_submit{
+	margin:0 0 30px 26px;
+}
+#add_adress input.span2{
+	width:320px;!important	
+}
+form.search{
+	float:left;
+	height:32px;
+	line-height:32px;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	font-size:16px;
+	color:#000;
+	margin:0 0 0 15px;
+}
