@@ -38,13 +38,13 @@ def index(request):
     if  request.user:
         #管理员
         if request.user.role==0:
-            return HTTPFound(location=request.route_url('user_list'))
+            return HTTPFound(location=request.route_url('location_list'))
         #教师
         elif request.user.role==1:
-            return HTTPFound(location=request.route_url('user_list'))
+            return HTTPFound(location=request.route_url('location_list'))
         #学生
         elif request.user.role==2:
-            return HTTPFound(location=request.route_url('user_list'))
+            return HTTPFound(location=request.route_url('location_list'))
     return HTTPFound(location=request.route_url('login'))
 
 @view_config(route_name='logout',permission='user')

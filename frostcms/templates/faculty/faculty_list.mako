@@ -50,11 +50,7 @@
       			<tr>
         			<td class="name">${item.name}</td>
         			<td class="name">
-        			% for li in lis :
-        				% if item.collegeid == li.id:
-        					${li.name}
-        				% endif
-        			% endfor
+        			${item.college.name}
         			</td>
         			<td class="app">
         				<a class="btn btn-info" href="/faculty/add?facultyid=${item.id}">编辑</a>
@@ -75,13 +71,13 @@
 	          		% endif
 	         		% for i in range(items.page - 3,items.page):
 			  		% if items.page_count>0 and i>=items.first_page:
-					<a href="?page=${i}" class="number" title="${i}">${i}</a></li>
+					<li><a href="?page=${i}" class="number" title="${i}">${i}</a></li>
 					% endif
 			  		% endfor
 	          		<li><a href="#" class="number current" title="${items.page}">${items.page}</a></li> 
 	          		% for i in range(items.page+1, items.page + 3):
 			  			% if items.page_count>0 and i<=items.last_page:
-						<a href="?page=${i}" class="number" title="${i}"> ${i} </a></li>
+						<li><a href="?page=${i}" class="number" title="${i}"> ${i} </a></li>
 			  			% endif
 			 		% endfor
 			  		% if items.next_page:

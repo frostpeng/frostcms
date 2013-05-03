@@ -48,6 +48,7 @@ def main(global_config, **settings):
     config.include("frostcms.faculty")
     config.include("frostcms.location")
     config.include("frostcms.college")
+    config.include("frostcms.semester")
     
    # config.include("frostccms.admin")
     return config.make_wsgi_app()
