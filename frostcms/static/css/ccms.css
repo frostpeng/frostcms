@@ -38,7 +38,6 @@ div.title{
 	左部导航部分
 *********************************************************************************************/
 div.left{
-	position:relative;
 	float:left;
 	width:28%;
 	height:auto;
@@ -48,13 +47,10 @@ div.left{
 	text-align:right;
 }
 #main_nav{
-	position:fixed;
-	top:auto;
-	left:8%;
 	background-color:transparent;
 	margin:0 50px 0 0;
 	float:right;
-	width:17%;
+	width:60%;
 	min-width:200px;
 	text-align:left;
 }
