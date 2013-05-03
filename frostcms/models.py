@@ -121,6 +121,7 @@ class Location(Base):   #Location
     address = Column(String(50))
     perrow = Column(Integer)
     totalrows = Column(Integer)
+    area = Column(Integer)
     
 class Mentor(Base):
     __tablename__ = 'mentor'

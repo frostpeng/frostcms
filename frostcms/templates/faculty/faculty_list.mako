@@ -50,7 +50,11 @@
       			<tr>
         			<td class="name">${item.name}</td>
         			<td class="name">
-        			${item.college.name}
+        			% for li in lis :
+        				% if item.collegeid == li.id:
+        					${li.name}
+        				% endif
+        			% endfor
         			</td>
         			<td class="app">
         				<a class="btn btn-info" href="/faculty/add?facultyid=${item.id}">编辑</a>
