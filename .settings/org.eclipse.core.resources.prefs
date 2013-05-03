@@ -5,6 +5,7 @@ encoding//frostcms/faculty.py=utf-8
 encoding//frostcms/location.py=utf-8
 encoding//frostcms/mentor.py=utf-8
 encoding//frostcms/models.py=utf-8
+encoding//frostcms/public.py=utf-8
 encoding//frostcms/security.py=utf-8
 encoding//frostcms/semester.py=utf-8
 encoding//frostcms/student.py=utf-8
