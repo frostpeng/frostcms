@@ -8,6 +8,8 @@ from .token import Token
 import time
 import cgi, uuid
 import webhelpers.paginate as paginate
+from datetime import *  
+import time
 
 log = getLogger(__name__)
 
@@ -24,6 +26,7 @@ def listsemester(request):
      conn = DBSession()
      items = conn.query(Semester).order_by(Semester.id)
      page_url = paginate.PageURL_WebOb(request)
+     
      items = paginate.Page(
             items,
             page=int(page),
@@ -43,13 +46,14 @@ def savesemester(request):
      conn = DBSession()
      if request.params.get('semester.id'):
           semester = conn.query(Semester).filter(Semester.id==request.params.get('semester.id')).first()
-          semester.name=request.params.get('semester.name')
+          semester.start=request.params.get('semester.start')
+          semester.weeks=request.params.get('semester.weeks')
           conn.flush()
           return HTTPFound(location=request.route_url('semester_list'))
      else:
          semester = Semester()
-         semester.name = request.params.get('semester.name')
-
+         semester.start=request.params.get('semester.start')
+         semester.weeks=request.params.get('semester.weeks')
          conn.add(semester)
          return HTTPFound(location=request.route_url('semester_list'))
      return HTTPFound(location=request.route_url('semester_list'))

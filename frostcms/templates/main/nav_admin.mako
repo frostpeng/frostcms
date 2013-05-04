@@ -6,7 +6,7 @@
             <li class="disabled"><a href="#">管理</a></li>
             <li><a href="/location/list">实验室</a></li>
             <li><a href="/mentor/list">教师</a></li>
-            <li><a href="#">学期</a></li>
+            <li><a href="/semester/list">学期</a></li>
             <li><a href="/student/list">学生</a></li>
             <li><a href="/college/list">院系</a></li>
             <li><a href="/faculty/list">专业</a></li>
