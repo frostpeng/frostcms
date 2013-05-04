@@ -54,9 +54,11 @@ class Clazz(Base):  #Class
 class Course(Base):
     __tablename__ = 'course'
     id = Column(Integer,primary_key=True)
-    classnum = Column(Integer)
-    grade = Column(Integer)
-    faculty = Column(Integer)
+    name = Column(String(100))
+    mentorid = Column(Integer,ForeignKey('mentor.id'))
+    semesterid = Column(Integer,ForeignKey('semester.id'))
+    mentor = relationship("Mentor")
+    semester = relationship("Semester")
  
 class Course_Class(Base):   #CourseClassMap
     __tablename__ = 'course_class'
