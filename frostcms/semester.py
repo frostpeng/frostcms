@@ -24,9 +24,29 @@ def includeme(config):
 def listsemester(request):
      page = int(request.params.get('page', 1))
      conn = DBSession()
-     items = conn.query(Semester).order_by(Semester.id)
+     lists = conn.query(Semester).order_by(Semester.id)
      page_url = paginate.PageURL_WebOb(request)
-     
+     items = []
+     class List_semester():
+         def __init__(self):
+             self.id = 0
+             self.name = ""
+             self.time = ""
+             self.weeks = 0
+     for list in lists:
+         t = List_semester()
+         t.id = list.id
+         t.time = date.fromtimestamp(list.start)
+         t.weeks = list.weeks
+         time = t.time
+         name = str(time.year)
+         mon = time.month
+         if  mon >7 :
+             name += "年秋季"
+         else :
+             name += "年春季"
+         t.name = name 
+         items.append(t)
      items = paginate.Page(
             items,
             page=int(page),
@@ -38,30 +58,65 @@ def listsemester(request):
 @view_config(route_name='semester_add', renderer='semester/semester_add.mako',permission='admin')
 def addsemester(request):
      conn = DBSession()
-     semester = conn.query(Semester).filter(Semester.id==request.params.get('semesterid')).first()
+     get = conn.query(Semester).filter(Semester.id==request.params.get('semesterid')).first()
+     class List_semester():
+         def __init__(self):
+             self.id = 0
+             self.name = ""
+             self.time = ""
+             self.weeks = 0
+     if get :
+         semester = List_semester()
+         semester.id = get.id
+         semester.time = date.fromtimestamp(get.start)
+         semester.weeks = get.weeks
+     else :
+         semester = get
      return dict(semester=semester)    
  
 @view_config(route_name='semester_save', renderer='semester/semester_add.mako',permission='admin')
 def savesemester(request):
      conn = DBSession()
+     getStart = request.params.get('semester.start')
+     getWeeks = request.params.get('semester.weeks')
+     start = time.mktime(time.strptime(getStart,'%Y-%m-%d'))
      if request.params.get('semester.id'):
           semester = conn.query(Semester).filter(Semester.id==request.params.get('semester.id')).first()
-          semester.start=request.params.get('semester.start')
-          semester.weeks=request.params.get('semester.weeks')
+          semester.start=start
+          semester.weeks=getWeeks
           conn.flush()
-          return HTTPFound(location=request.route_url('semester_list'))
      else:
          semester = Semester()
-         semester.start=request.params.get('semester.start')
-         semester.weeks=request.params.get('semester.weeks')
+         semester.start=start
+         semester.weeks=getWeeks
          conn.add(semester)
-         return HTTPFound(location=request.route_url('semester_list'))
      return HTTPFound(location=request.route_url('semester_list'))
  
 @view_config(route_name='semester_del', renderer='semester/semester_del.mako',permission='admin')
 def dellocation(request):
     conn = DBSession()
-    semester = conn.query(Semester).filter(Semester.id==request.params.get('semesterid')).first()
+    get = conn.query(Semester).filter(Semester.id==request.params.get('semesterid')).first()
+    class List_semester():
+         def __init__(self):
+             self.id = 0
+             self.name = ""
+             self.time = ""
+             self.weeks = 0
+    if get :
+         semester = List_semester()
+         semester.id = get.id
+         semester.time = date.fromtimestamp(get.start)
+         semester.weeks = get.weeks
+         time = semester.time
+         name = str(time.year)
+         mon = time.month
+         if  mon >7 :
+             name += "年秋季"
+         else :
+             name += "年春季"
+         semester.name = name
+    else :
+         semester = get
     if request.params.get('semester.id'):
         semester = conn.query(Semester).filter(Semester.id==request.params.get('semester.id')).first()
         conn.delete(semester)

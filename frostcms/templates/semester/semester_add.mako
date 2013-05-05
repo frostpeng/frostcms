@@ -3,14 +3,32 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
+    <link href="../../static/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../static/css/ccms.css" rel="stylesheet"/>
+    <link href="../../static/css/datetimepicker.css" rel="stylesheet"/>
     <script src="../../static/js/bootstrap.js"></script>
     <script src="../../static/js/jquery.js"></script>
     <script src="../../static/js/ccms.js"></script>
+    <script src="../../static/js/datetimepicker.js"></script>
+    <script src="../../static/js/datetimepicker_CN.js"></script>
+    <script >	
+						function noneDays(){
+							var year = document.semester.year.value;
+							var mon = document.semester.mon.value;
+							var mon_day = [31,28,31,30,31,30,31,31,30,31,30,31];
+							if ((year%100 && year%4==0) || year%400==0)
+								mon_day[1] +=1;
+							var day = 0;
+							for (day=1;day<=31;day++)
+							{
+								var str = "#day_"+day.toString();
+								$(str).hide();
+							}
+						}
+					</script>
 </head>
 
-<body>
+<body onload="noneDays();">
 	<!-- 登录模块 -->
     <%include file="/login/login.mako" />
 	<!-- 顶部固定栏 -->
@@ -28,39 +46,68 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/location/save" class="add">
- 				%if location:
+        	<form action="/semester/save" class="add" name="semester">
+ 				%if semester:
  				<div class="app_name">
-        		实验室详情
+        		学期管理
         		</div>
- 				<input type="hidden" name="location.id" value="${semester.id}"/>
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">开始日期</span>
-  					<input class="span2" id="prependedInput" type="text" placeholder="" name="semester.start" value="${semester.address}"/>
-				</div>
-				<br />
+        		<input type="hidden" name="semester.id" value="${semester.id}"/>				
+				<fieldset>
+            		<div class="control-group">
+                		<label class="control-label"></label>
+                		<div class="controls input-prepend input-append date form_datetime" id="datetimepicker" data-date="${semester.time}" data-date-format="yyyy-MM-dd" data-link-field="dtp_input1">
+                   		<span class="add-on">开始日期</span>
+                    		<input size="16" type="text" name="semester.start" value="${semester.time}" readonly>
+                    		<span class="add-on"><i class=" icon-remove"></i></span>
+							<span class="add-on"><i class=" icon-th"></i></span>
+                		</div>
+						<input type="hidden" id="dtp_input1" value="" /><br/>
+            		</div>
+        		</fieldset>										
 				<div class="input-prepend">
   					<span class="add-on">周数</span>
-  					<input class="span2" id="prependedInput" type="text" placeholder="" name="semester.weeks" value="${semester.totalrows}"/>
+  					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" value="${semester.weeks}" />
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
  				%else:
  				<div class="app_name">
-        		添加实验室
-        		</div>
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">开始日期</span>
-  					<input class="span2" id="prependedInput" type="text" name="semester.start" placeholder="" />
-				</div>
-				<br />
+        		添加学期
+        		</div>							
+				<fieldset>
+            		<div class="control-group">
+                		<label class="control-label"></label>
+                		<div class="controls input-prepend input-append date form_datetime" id="datetimepicker" data-date="2013-09-1" data-date-format="yyyy-MM-dd" data-link-field="dtp_input1">
+                   		<span class="add-on">开始日期</span>
+                    		<input size="16" type="text" name="semester.start" value="" readonly>
+                    		<span class="add-on"><i class=" icon-remove"></i></span>
+							<span class="add-on"><i class=" icon-th"></i></span>
+                		</div>
+						<input type="hidden" id="dtp_input1" value="" /><br/>
+            		</div>
+        		</fieldset>										
 				<div class="input-prepend">
-  					<span class="add-on">周数</span>
+  					<span class="add-on">保存</span>
   					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" />
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
  				%endif
+ 		<script type="text/javascript">
+    		$('.form_datetime').datetimepicker({
+        		language:  'zh-CN',
+        		weekStart: 0,
+        		format:'yyyy-mm-dd',
+        		todayBtn:  0,
+        		daysOfWeekDisabled: '1,2,3,4,5,6',
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+        		showMeridian: 1
+   	 		});
+		</script>
  			</form>
         </div>               
         

@@ -40,12 +40,12 @@
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="name">${item.id}</td>
-        			<td class="name">${item.start}</td>
+        			<td class="name">${item.name}</td>
+        			<td class="name">${item.time}</td>
         			<td class="name">${item.weeks}</td>
         			<td class="app">
-        				<a class="btn btn-info" href="/location/add?locationid=${item.id}">编辑</a>
-        				<a class="btn btn-danger" href="/location/del?locationid=${item.id}">删除</a>
+        				<a class="btn btn-info" href="/semester/add?semesterid=${item.id}">编辑</a>
+        				<a class="btn btn-danger" href="/semester/del?semesterid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor

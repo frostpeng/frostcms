@@ -49,13 +49,7 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.name}</td>
-        			<td class="name">
-        			% for li in lis :
-        				% if item.collegeid == li.id:
-        					${li.name}
-        				% endif
-        			% endfor
-        			</td>
+        			<td class="name">${item.college.name}</td>
         			<td class="app">
         				<a class="btn btn-info" href="/faculty/add?facultyid=${item.id}">编辑</a>
         				<a class="btn btn-danger" href="/faculty/del?facultyid=${item.id}">删除</a>
