@@ -69,7 +69,7 @@
   					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" value="${semester.weeks}" />
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
  				%else:
  				<div class="app_name">
         		添加学期
@@ -87,7 +87,7 @@
             		</div>
         		</fieldset>										
 				<div class="input-prepend">
-  					<span class="add-on">保存</span>
+  					<span class="add-on">周数</span>
   					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" />
 				</div>
 				<br />

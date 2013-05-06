@@ -7,3 +7,7 @@ $("div").ready(function(){
   			$("#login").show(600);
   		});
 	});
+
+function setFaculty(){
+	
+}

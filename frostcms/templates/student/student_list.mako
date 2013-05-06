@@ -32,8 +32,8 @@
 				</div>
 				</form>
 			</div>	
-			<button class="btn btn-primary" id="btn_head">添加新学生</button>
-			<button class="btn btn-primary" id="btn_head">从xls文件导入</button>
+			<a class="btn btn-primary" id="btn_head" href="/student/add" >添加新学生</a>
+			<a class="btn btn-primary" id="btn_head" href="" >从xls文件导入</a>
             
 		</div>
         
@@ -42,19 +42,22 @@
         	<table class="table table-bordered table-hover" id="main_table">
             <thead>
       			<tr>
-        			<th class="number">编号</th>        
+      				<th class="stdn">学号</th>
         			<th class="name">姓名</th>
-        			<th class="stdn">学号</th>
+        			<th class="name">年级</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="number">${item.id}</td>
-        			<td class="name">${item.name}</td>
         			<td class="stdn">${item.identity}</td>
-        			<td class="app"><a class="btn btn-info" href="/student/add?mentorid=${item.id}">修改学生信息</a></td>
+        			<td class="name">${item.name}</td>
+        			<td class="name">${item.clazz.grade}</td>
+        			<td class="app">
+        			<a class="btn btn-info" href="/student/add?studentid=${item.id}">修改学生信息</a>
+        			<a class="btn btn-danger" href="/student/del?studentid=${item.id}">删除</a>
+        			</td>
       			</tr>
       			% endfor
     		</tbody>

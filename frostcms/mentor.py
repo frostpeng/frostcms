@@ -21,7 +21,12 @@ def includeme(config):
 def listmentor(request):
      page = int(request.params.get('page', 1))
      conn = DBSession()
-     items = conn.query(Mentor).order_by(Mentor.identity)
+     if request.method == "POST":
+         collegeid = request.params.get('collegeid')
+         items = conn.query(Mentor).filter(Mentor.collegeid==collegeid)
+     else :
+         items = conn.query(Mentor).order_by(Mentor.id)
+     lis = conn.query(College).order_by(College.id)
      page_url = paginate.PageURL_WebOb(request)
      items = paginate.Page(
             items,
@@ -29,7 +34,7 @@ def listmentor(request):
             items_per_page=10,
             url=page_url,
             )
-     return dict(items=items) 
+     return dict(items=items,lis=lis) 
  
 @view_config(route_name='mentor_add', renderer='mentor/mentor_add.mako',permission='admin')
 def addmentor(request):

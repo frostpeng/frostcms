@@ -49,7 +49,8 @@ class Clazz(Base):  #Class
     id = Column(Integer,primary_key=True)
     num = Column(Integer)
     grade = Column(Integer)
-    faculty = Column(Integer)
+    facultyid = Column(Integer,ForeignKey('faculty.id'))
+    faculty = relationship("Faculty")
 
 class Course(Base):
     __tablename__ = 'course'
