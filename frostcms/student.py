@@ -10,6 +10,7 @@ import cgi, uuid, os
 import webhelpers.paginate as paginate
 import xlrd
 import thread
+import hashlib 
 import cgitb
 cgitb.enable()
 
@@ -93,7 +94,8 @@ def savestudent(request):
           student.clazzid = request.params.get('clazzid')
           user = User()
           user.name = student.identity
-          user.password = student.identity
+#md5加密           
+          user.password = hashlib.new("md5",student.indentity)
           user.role = 2
           conn.add(user)
           cc = conn.query(User).filter(User.name == student.identity).first()
@@ -185,7 +187,7 @@ def operateexcel(filepath=None):
                 if not user:
                     user=User()
                     user.name=identitynum
-                    user.password=identitynum
+                    user.password=hashlib.new("md5",identitynum)
                     user.regtime=time.time()
                     user.logintimes=0
                     user.lastlogin=time.time()
