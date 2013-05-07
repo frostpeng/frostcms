@@ -54,7 +54,7 @@
         			<td class="name">${item.name}</td>
         			<td class="name">${item.college.name}</td>
         			<td class="name">${item.phone}</td>
-        			<td class="name">${item.mail}</td>
+        			<td class="name">${item.email}</td>
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/mentor/add?mentorid=${item.id}">详情与修改</a>
         				<a class="btn btn-danger btn-mini" href="/mentor/del?mentorid=${item.id}">删除</a>
