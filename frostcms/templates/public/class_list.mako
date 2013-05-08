@@ -24,9 +24,16 @@
 		<div class="right_head">
 			<div class="title_2">查询课表</div>  
 		</div>
-		<form class="frame_login_right" action="" method="post">
-        	<input name="startweek"/>
-          <input type="submit" name="submit" class="login_submit" value="登录" />
+		<form class="search" action="/public/lesson_list" name="form1" method="post">
+        	<input type="text" name="startweek"/>
+        	<input type="text" name="endweek"/>
+        	<select name="locationid">
+					<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
+					% for li in locationdictionary:
+					<option value="${li.id}" >${li.name}</option>
+					% endfor
+				</select>
+          <input type="submit" name="submit" class="login_submit" value="查询" />
         </form>
         <!-- 主体信息表 -->
         <div class="right_main">
@@ -40,7 +47,7 @@
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="name">${item.name}</td>
+        			<td class="name">${item.course.name}</td>
         			<td class="app">
         				<a class="btn btn-info" href="/college/add?collegeid=${item.id}">编辑</a>
         				<a class="btn btn-danger" href="/college/del?collegeid=${item.id}">删除</a>

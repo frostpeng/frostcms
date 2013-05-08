@@ -33,7 +33,12 @@
 				</form>
 			</div>	
 			<a class="btn btn-primary" id="btn_head" href="/student/add" >添加新学生</a>
-			<a class="btn btn-primary" id="btn_head" href="" >从xls文件导入</a>
+			
+			
+			<form enctype="multipart/form-data"  action="/student/upload" method="post">
+			<input type="file" name="file"/>
+			<input type="submit" name="submit" class="btn" value="从xls文件导入" />
+			</form>
             
 		</div>
         
