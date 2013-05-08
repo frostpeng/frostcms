@@ -22,18 +22,17 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">教师管理</div>
-			<form action="/mentor/list" class="search" name="college" method="post">
+			<div class="title_2">课程管理</div>
+			<form action="/lesson/list" class="search" name="college" method="post">
 				按院系查询
 				<select name="collegeid" size="1" onchange= "document.all.college.submit();">
-					<option disabled="disabled" selected="selected" >--------请选择学院--------</option>
+					<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 					% for li in lis:
 					<option value="${li.id}" >${li.name}</option>
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/mentor/add">添加教师</a> 
-			<a class="btn btn-primary" id="btn_head" href="/mentor/xls">从xls文件导入</a> 
+			<a class="btn btn-primary" id="btn_head" href="/faculty/add">添加专业</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -41,10 +40,8 @@
         	<table class="table table-bordered table-hover" id="main_table">
             <thead>
       			<tr>     
-        			<th class="name">姓名</th>
-        			<th style="width:180px;text-align:center;">学院</th>
-        			<th class="name">电话</th>
-        			<th class="name_l">mail</th>
+        			<th class="name_l">专业</th>
+        			<th class="name_l">学院</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
@@ -52,12 +49,10 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.name}</td>
-        			<td style="width:180px;text-align:center;">${item.college.name}</td>
-        			<td class="name">${item.phone}</td>
-        			<td class="name">${item.email}</td>
+        			<td class="name">${item.college.name}</td>
         			<td class="app">
-        				<a class="btn btn-info btn-mini" href="/mentor/add?mentorid=${item.id}">详情与修改</a>
-        				<a class="btn btn-danger btn-mini" href="/mentor/del?mentorid=${item.id}">删除</a>
+        				<a class="btn btn-info" href="/faculty/add?facultyid=${item.id}">编辑</a>
+        				<a class="btn btn-danger" href="/faculty/del?facultyid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor

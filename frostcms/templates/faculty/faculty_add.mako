@@ -41,7 +41,7 @@
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange= "document.all.college.submit();">
+  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange= "">
 						<option disabled="disabled">--------请选择学院--------</option>
 						% for li in lis:
 						<option value="${li.id}" 
@@ -65,7 +65,7 @@
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange= "document.all.college.submit();">
+  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange= "">
 						<option disabled="disabled" selected="selected" >--------请选择学院--------</option>
 						% for li in lis:
 						<option value="${li.id}" >${li.name}</option>
