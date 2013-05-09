@@ -48,10 +48,6 @@
 </head>
 
 <body>
-	<!-- 登录模块 -->
-    <%include file="/login/login.mako" />
-	<!-- 顶部固定栏 -->
-    <!--<%include file="/main/head.mako" />-->
 	<!-- 导航栏部分 -->
     <%include file="/main/nav_admin.mako" />
     <!-- 主体部分 -->
@@ -168,5 +164,7 @@
         </div>               
         
     </div>
+	<!-- 登录模块 -->
+    <%include file="/login/login.mako" />
 </body>
 </html>

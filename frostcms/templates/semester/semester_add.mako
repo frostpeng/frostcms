@@ -29,10 +29,6 @@
 </head>
 
 <body onload="noneDays();">
-	<!-- 登录模块 -->
-    <%include file="/login/login.mako" />
-	<!-- 顶部固定栏 -->
-    <!--<%include file="/main/head.mako" />-->
 	<!-- 导航栏部分 -->
     <%include file="/main/nav_admin.mako" />
     <!-- 主体部分 -->
@@ -95,22 +91,24 @@
  				%endif
  		<script type="text/javascript">
     		$('.form_datetime').datetimepicker({
-        		language:  'zh-CN',
-        		weekStart: 0,
+        		language:'zh-CN',
+        		weekStart:0,
         		format:'yyyy-mm-dd',
-        		todayBtn:  0,
-        		daysOfWeekDisabled: '1,2,3,4,5,6',
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				minView: 2,
-				forceParse: 0,
-        		showMeridian: 1
+        		todayBtn:0,
+        		daysOfWeekDisabled:'1,2,3,4,5,6',
+				autoclose:1,
+				todayHighlight:1,
+				startView:2,
+				minView:2,
+				forceParse:0,
+        		showMeridian:1
    	 		});
 		</script>
  			</form>
         </div>               
         
     </div>
+	<!-- 登录模块 -->
+    <%include file="/login/login.mako" />
 </body>
 </html>
