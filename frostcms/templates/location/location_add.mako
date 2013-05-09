@@ -79,6 +79,17 @@
   					<input class="span2" id="prependedInput" type="text" name="location.perrow" placeholder="" />
 				</div>
 				<br />
+					<div class="input-prepend">
+  					<span class="add-on">校区</span>
+  					<select name="location.area" class="span2  input-large" id="appendedPrependedDropdownButton">
+					<option disabled="disabled" selected="selected" value="-1">--------请选择校区--------</option>
+					<option value="0" >主校区</option>
+					<option value="1" >东校区</option>
+					<option value="2" >西校区</option>
+					<option value="3" >同济校区</option>
+				</select>
+				</div>
+				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
  				%endif
  			</form>

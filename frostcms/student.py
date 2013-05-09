@@ -98,9 +98,11 @@ def savestudent(request):
           user.password = hashlib.new("md5",student.identity).hexdigest()
           user.role = 2
           conn.add(user)
+          conn.flush()
           cc = conn.query(User).filter(User.name == student.identity).first()
           student.account = cc.id
           conn.add(student)
+          conn.flush()
      return HTTPFound(location=request.route_url('student_list'))
  
 @view_config(route_name='student_del', renderer='student/student_del.mako', permission='admin')
@@ -110,6 +112,7 @@ def delstudent(request):
      if request.params.get('student.id'):
          student = conn.query(Student).filter(Student.id == request.params.get('student.id')).first()
          conn.delete(student)
+         conn.flush()
          return HTTPFound(location=request.route_url('student_list'))
      return dict(student=student)
 
@@ -202,7 +205,7 @@ def operateexcel(filepath=None):
                 student.account=user.id
                 conn.add(student)
     
-    transaction.commit()                  
+    conn.flush()                  
     return None
     
     

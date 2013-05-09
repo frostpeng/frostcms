@@ -58,6 +58,7 @@ def savefaculty(request):
          faculty.name = request.params.get('faculty.name')
          faculty.collegeid = request.params.get('faculty.collegeid')
          conn.add(faculty)
+         conn.flush()
          return HTTPFound(location=request.route_url('faculty_list'))
      return HTTPFound(location=request.route_url('faculty_list'))
  
@@ -68,6 +69,7 @@ def delfaculty(request):
     if request.params.get('faculty.id'):
         faculty = conn.query(Faculty).filter(Faculty.id==request.params.get('faculty.id')).first()
         conn.delete(faculty)
+        conn.flush()
         return HTTPFound(location=request.route_url('faculty_list'))
     lis = conn.query(College).order_by(College.id)
     return dict(faculty=faculty,lis=lis)

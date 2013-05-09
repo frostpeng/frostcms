@@ -47,6 +47,7 @@ def savelocation(request):
           location.address=request.params.get('location.address')
           location.totalrows=request.params.get('location.totalrows')
           location.perrow=request.params.get('location.perrow')
+          location.area=request.params.get('location.area')
           conn.flush()
           return HTTPFound(location=request.route_url('location_list'))
      else:
@@ -55,7 +56,9 @@ def savelocation(request):
          location.address = request.params.get('location.address')
          location.totalrows = request.params.get('location.totalrows')
          location.perrow = request.params.get('location.perrow')
+         location.area=request.params.get('location.area')
          conn.add(location)
+         conn.flush()
          return HTTPFound(location=request.route_url('location_list'))
      return HTTPFound(location=request.route_url('location_list'))
  
@@ -66,6 +69,7 @@ def dellocation(request):
     if request.params.get('location.id'):
         location = conn.query(Location).filter(Location.id==request.params.get('location.id')).first()
         conn.delete(location)
+        conn.flush()
         return HTTPFound(location=request.route_url('location_list'))
     return dict(location=location)
 

@@ -74,9 +74,11 @@ def savementor(request):
          user.password = hashlib.new("md5",mentor.identity).hexdigest()
          user.role = 1
          conn.add(user)
+         conn.flush()
          t = conn.query(User).filter(User.name == str(mentor.identity)).first()
          mentor.account = t.id
          conn.add(mentor)
+         conn.flush()
      return HTTPFound(location=request.route_url('mentor_list'))
  
 @view_config(route_name='mentor_del', renderer='mentor/mentor_del.mako',permission='admin')
@@ -86,6 +88,7 @@ def delfaculty(request):
     if request.params.get('mentor.id'):
         mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentor.id')).first()
         conn.delete(mentor)
+        conn.flush()
         return HTTPFound(location=request.route_url('mentor_list'))
     lis = conn.query(College).order_by(College.id)
     return dict(mentor=mentor,lis=lis)

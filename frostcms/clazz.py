@@ -116,6 +116,7 @@ def saveclazz(request):
          clazz.num = request.params.get('num')
          clazz.facultyid = request.params.get('facultyid')
          conn.add(clazz)
+         conn.flush()
      return HTTPFound(location=request.route_url('clazz_list'))
  
 @view_config(route_name='clazz_del', renderer='clazz/clazz_del.mako',permission='admin')
@@ -125,6 +126,7 @@ def delclazz(request):
     if request.params.get('clazz.id'):
         clazz = conn.query(Clazz).filter(Clazz.id==request.params.get('clazz.id')).first()
         conn.delete(clazz)
+        conn.flush()
         return HTTPFound(location=request.route_url('clazz_list'))
     lis = conn.query(College).order_by(Clazz.id)
     return dict(clazz=clazz,lis=lis)

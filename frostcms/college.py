@@ -50,6 +50,7 @@ def savecollege(request):
          college = College()
          college.name = request.params.get('college.name')
          conn.add(college)
+         conn.flush()
          return HTTPFound(location=request.route_url('college_list'))
      return HTTPFound(location=request.route_url('college_list'))
  
@@ -60,5 +61,6 @@ def delcollege(request):
     if request.params.get('college.id'):
         college= conn.query(College).filter(College.id==request.params.get('college.id')).first()
         conn.delete(college)
+        conn.flush()
         return HTTPFound(location=request.route_url('college_list'))
     return dict(college=college)

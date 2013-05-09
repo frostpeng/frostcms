@@ -102,6 +102,7 @@ def savelesson(request):
          lesson.name = request.params.get('lesson.name')
          lesson.collegeid = request.params.get('lesson.collegeid')
          conn.add(lesson)
+         conn.flush()
      return HTTPFound(location=request.route_url('lesson_list'))
  
 @view_config(route_name='lesson_del', renderer='lesson/lesson_del.mako',permission='admin')
@@ -111,6 +112,7 @@ def dellesson(request):
     if request.params.get('lesson.id'):
         lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('lesson.id')).first()
         conn.delete(lesson)
+        conn.flush()
         return HTTPFound(location=request.route_url('lesson_list'))
     lis = conn.query(Semester).order_by(Semester.id)
     return dict(lesson=lesson,lis=lis)

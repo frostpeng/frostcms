@@ -90,6 +90,7 @@ def savesemester(request):
          semester.start=start
          semester.weeks=getWeeks
          conn.add(semester)
+         conn.flush()
      return HTTPFound(location=request.route_url('semester_list'))
  
 @view_config(route_name='semester_del', renderer='semester/semester_del.mako',permission='admin')
@@ -120,5 +121,6 @@ def dellocation(request):
     if request.params.get('semester.id'):
         semester = conn.query(Semester).filter(Semester.id==request.params.get('semester.id')).first()
         conn.delete(semester)
+        conn.flush()
         return HTTPFound(location=request.route_url('semester_list'))
     return dict(semester=semester)
