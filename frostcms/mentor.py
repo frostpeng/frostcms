@@ -8,6 +8,7 @@ from .token import Token
 import time
 import cgi, uuid
 import webhelpers.paginate as paginate
+import hashlib
 
 log = getLogger(__name__)
 
@@ -70,7 +71,7 @@ def savementor(request):
          mentor.decription = request.params.get('mentor.decription')
          user = User()
          user.name = str(mentor.identity)
-         user.password = str(mentor.identity)
+         user.password = hashlib.new("md5",mentor.identity).hexdigest()
          user.role = 1
          conn.add(user)
          t = conn.query(User).filter(User.name == str(mentor.identity)).first()

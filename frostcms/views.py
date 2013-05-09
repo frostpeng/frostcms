@@ -23,7 +23,7 @@ def login(request):
     if request.method == "POST":
         name, password = [request.params.get(x, '').strip() for x in ['username', 'password']]
         conn = DBSession()
-        user = conn.query(User).filter(and_(User.name==name, User.password == password)).first()
+        user = conn.query(User).filter(and_(User.name==name, User.password == hashlib.new("md5",password).hexdigest())).first()
         if user:
             user.lastlogin=time.time()
             conn.flush()

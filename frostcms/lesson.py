@@ -27,7 +27,7 @@ def listlesson(request):
      semesters = conn.query(Semester).order_by(Semester.id)
      if request.method == "POST":
          semesterid = request.params.get('semesterid')
-         items = conn.query(Lesson).filter(Lesson.course.semester.id==semesterid)
+         items = conn.query(Lesson).filter(Lesson.course.semesterid==semesterid)
      else :
          items = conn.query(Lesson).order_by(Lesson.id)
      lists = conn.query(Semester).order_by(Semester.id)

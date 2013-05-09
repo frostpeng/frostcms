@@ -8,6 +8,19 @@
     <script src="../../static/js/bootstrap.js"></script>
     <script src="../../static/js/jquery.js"></script>
     <script src="../../static/js/ccms.js"></script>
+    <script>
+		function setArea(){
+			var area = document.form1.area.value;
+			for(i=0;i<4;i++){
+			close = "option.location_"+i.toString();
+			$(close).hide();
+			}
+			open = "option.location_"+area.toString();
+			$(open).show();
+			document.form1.locationid.value = -1;
+		}
+		
+	</script>
 </head>
 
 <body>
@@ -27,10 +40,17 @@
 			<div class="input-append">
         		<input type="text" class="span2 search-query" name="startweek" placeholder="开始周"/>
         		<input type="text" class="span2" id="appendedPrependedDropdownButton" name="endweek" placeholder="到此周"/>
-        		<select name="locationid" class="span2  input-large" id="appendedPrependedDropdownButton">
-					<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
+				<select name="area" class="span2  input-large" id="appendedPrependedDropdownButton" onchange="setArea();">
+					<option disabled="disabled" selected="selected" value="-1">--------请选择校区--------</option>
+					<option value="0" >主校区</option>
+					<option value="1" >东校区</option>
+					<option value="2" >西校区</option>
+					<option value="3" >同济校区</option>
+				</select>
+				<select name="locationid" class="span2  input-large" id="appendedPrependedDropdownButton">
+					<option disabled="disabled" selected="selected" value="-1">--------请选择实验室--------</option>
 					% for li in locationdictionary:
-					<option value="${li.id}" >${li.name}</option>
+					<option value="${li.id}" class="location_${li.area}" style="display:none;">${li.name}</option>
 					% endfor
 				</select>
          		<input type="submit" name="submit" class="btn dropdown-toggle" value="查询" />

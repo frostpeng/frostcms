@@ -12,6 +12,8 @@ from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from .authentication import AuthenticationPolicy
 from .security import groupfinder
 from .models import initialize_sql,DBSession,User
+import hashlib
+import transaction
 
 class MainRequest(Request):
     @reify
@@ -52,5 +54,12 @@ def main(global_config, **settings):
     config.include("frostcms.clazz")
     config.include("frostcms.public")
     config.include("frostcms.lesson")
+#     conn=DBSession()
+#     user=User()
+#     user.name="admin"
+#     user.role=0
+#     user.password=hashlib.new("md5","admin").hexdigest() 
+#     conn.add(user)
+#     transaction.commit()
    # config.include("frostccms.admin")
     return config.make_wsgi_app()

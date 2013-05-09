@@ -8,6 +8,7 @@ from .token import Token
 import time
 import cgi, uuid
 import webhelpers.paginate as paginate
+import hashlib
 
 log = getLogger(__name__)
 
@@ -36,7 +37,7 @@ def listuser(request):
 def resetpsd(request):
     conn = DBSession();
     user = conn.query(User).filter(User.id == request.params.get('userid')).first()
-    user.password=user.name
+    user.password=hashlib.new("md5",user.name).hexdigest()
     conn.flush()
     return HTTPFound(location=request.route_url('user_list'))
         

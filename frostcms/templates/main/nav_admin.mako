@@ -3,8 +3,7 @@
 <div class="left">
     	<ul class="nav nav-tabs nav-stacked" id="main_nav">
         	<li class="disabled"><a href="#">公共查询</a></li>
-            <li><a href="/public/lesson_list">按日期查询</a></li>
-            <li><a href="#">近期课表</a></li>
+            <li><a href="/public/lesson_list">课堂查询</a></li>
             <li class="disabled"><a href="#">管理</a></li>
             <li><a href="/location/list">实验室</a></li>
             <li><a href="/mentor/list">教师</a></li>
@@ -21,8 +20,7 @@
 <div class="left">
     	<ul class="nav nav-tabs nav-stacked" id="main_nav">
         	<li class="disabled"><a href="#">公共查询</a></li>
-            <li><a href="/public/lesson_list">按日期查询</a></li>
-            <li><a href="#">近期课表</a></li>
+            <li><a href="/public/lesson_list">课堂查询</a></li>
             <li class="disabled"><a href="#">教师</a></li>
             <li><a href="#">我的课程</a></li>
             <li><a href="#">我的作业</a></li>
@@ -33,8 +31,7 @@
 <div class="left">
     	<ul class="nav nav-tabs nav-stacked" id="main_nav">
         	<li class="disabled"><a href="#">公共查询</a></li>
-            <li><a href="/public/lesson_list">按日期查询</a></li>
-            <li><a href="#">近期课表</a></li>
+            <li><a href="/public/lesson_list">课堂查询</a></li>
             <li class="disabled"><a href="#">学生</a></li>
             <li><a href="#">我的课程</a></li>
             <li><a href="#">我的作业</a></li>
@@ -45,8 +42,7 @@
 <div class="left">
     	<ul class="nav nav-tabs nav-stacked" id="main_nav">
         	<li class="disabled"><a href="#">公共查询</a></li>
-            <li><a href="/public/lesson_list">按日期查询</a></li>
-            <li><a href="#">近期课表</a></li>
+            <li><a href="/public/lesson_list">课堂查询</a></li>
 		</ul>
 </div>
 % endif

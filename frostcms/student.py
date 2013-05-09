@@ -95,7 +95,7 @@ def savestudent(request):
           user = User()
           user.name = student.identity
 #md5加密           
-          user.password = hashlib.new("md5",student.identity)
+          user.password = hashlib.new("md5",student.identity).hexdigest()
           user.role = 2
           conn.add(user)
           cc = conn.query(User).filter(User.name == student.identity).first()
@@ -187,7 +187,7 @@ def operateexcel(filepath=None):
                 if not user:
                     user=User()
                     user.name=identitynum
-                    user.password=hashlib.new("md5",identitynum)
+                    user.password=hashlib.new("md5",identitynum).hexdigest()
                     user.regtime=time.time()
                     user.logintimes=0
                     user.lastlogin=time.time()
