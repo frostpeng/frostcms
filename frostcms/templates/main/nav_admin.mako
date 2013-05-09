@@ -12,7 +12,7 @@
             <li><a href="/college/list">院系</a></li>
             <li><a href="/faculty/list">专业</a></li>
             <li><a href="/clazz/list">班级</a></li>
-            <li><a href="/lesson/list">课程</a></li>
+            <li><a href="/lesson/list">课堂</a></li>
             <li><a href="#">课程申请</a></li>
 		</ul>
 </div>

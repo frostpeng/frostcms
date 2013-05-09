@@ -25,14 +25,14 @@ def listlesson(request):
      locationid=request.params.get('locationid')
      area=request.params.get("area")
      locationdictionary=conn.query(Location).order_by(Location.id)
-     items=conn.query(Lesson)
-     if startweek or endweek or locationid:
+     items=conn.query(Lesson,Location)
+     if startweek or endweek or locationid or area:
         if startweek:
              items=items.filter(Lesson.week>=startweek)
         if endweek:
             items=items.filter(Lesson.week<=endweek) 
         if area:
-            items=items.filter(Lesson.location.area==area)
+            items=items.filter(and_(Lesson.locationid==Location.id,Location.area==area))
         if locationid:
             items=items.filter(Lesson.locationid==locationid)
      else:
