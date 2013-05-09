@@ -7,6 +7,7 @@ from .models import *
 from .token import Token
 import time
 import cgi,uuid
+import hashlib 
 
 log = getLogger(__name__)
 
@@ -27,31 +28,31 @@ def login(request):
             user.lastlogin=time.time()
             conn.flush()
             headers = remember(request, user.id)
-            return HTTPFound(location=request.route_url('index'), headers=headers)
+            return HTTPFound(location=request.route_url('public_lesson_list'), headers=headers)
         else:
-            return dict(error=u'用户名密码不匹配')
-    return {}
+            return HTTPFound(location=request.route_url('public_lesson_list'))
+    return dict(error=u'用户名密码不匹配')
 
-@view_config(route_name='index', renderer='login/login.mako')
-@view_config(route_name='home', renderer='login/login.mako')
+@view_config(route_name='index', renderer='public/class_list.mako')
+@view_config(route_name='home', renderer='public/class_list.mako')
 def index(request):
     if  request.user:
         #管理员
         if request.user.role==0:
-            return HTTPFound(location=request.route_url('location_list'))
+            return HTTPFound(location=request.route_url('public_lesson_list'))
         #教师
         elif request.user.role==1:
-            return HTTPFound(location=request.route_url('location_list'))
+            return HTTPFound(location=request.route_url('public_lesson_list'))
         #学生
         elif request.user.role==2:
-            return HTTPFound(location=request.route_url('location_list'))
-    return HTTPFound(location=request.route_url('login'))
+            return HTTPFound(location=request.route_url('public_lesson_list'))
+    return HTTPFound(location=request.route_url('public_lesson_list'))
 
 @view_config(route_name='logout',permission='user')
 def logout(request):
     headers=forget(request)
     request.session.clear()
-    return HTTPFound(location=request.route_url('login'),
+    return HTTPFound(location=request.route_url('public_lesson_list'),
                      headers=headers)
 
 

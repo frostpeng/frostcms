@@ -22,6 +22,10 @@ div.head{
 	float:right;
 	margin:5px 15px 0 0;	
 }
+#btn_logout{
+	float:right;
+	margin:5px 15px 0 0;	
+}
 div.title{
 	float:left;
 	width:180px;
@@ -158,7 +162,6 @@ div.login{
 	padding:0;
 	background-color:#000;
 	opacity:0.85;
-	display:none;
 }
 form.login{
 	margin:200px auto;	

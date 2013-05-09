@@ -27,10 +27,31 @@ def listlesson(request):
      semesters = conn.query(Semester).order_by(Semester.id)
      if request.method == "POST":
          semesterid = request.params.get('semesterid')
-         items = conn.query(Lesson).filter(Lesson.semesterid==semesterid)
+         items = conn.query(Lesson).filter(Lesson.course.semester.id==semesterid)
      else :
          items = conn.query(Lesson).order_by(Lesson.id)
-     lis = conn.query(Semester).order_by(Semester.id)
+     lists = conn.query(Semester).order_by(Semester.id)
+     lis = []
+     class List_semester():
+         def __init__(self):
+             self.id = 0
+             self.name = ""
+             self.time = ""
+             self.weeks = 0
+     for list in lists:
+         t = List_semester()
+         t.id = list.id
+         t.time = date.fromtimestamp(list.start)
+         t.weeks = list.weeks
+         time = t.time
+         name = str(time.year)
+         mon = time.month
+         if  mon >7 :
+             name += "年秋季"
+         else :
+             name += "年春季"
+         t.name = name 
+         lis.append(t)
      page_url = paginate.PageURL_WebOb(request)
      items = paginate.Page(
             items,
@@ -44,7 +65,28 @@ def listlesson(request):
 def addlesson(request):
      conn = DBSession()
      lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('lessonid')).first()
-     lis = conn.query(Lesson).order_by(Lesson.id)
+     lists = conn.query(Semester).order_by(Semester.id)
+     lis = []
+     class List_semester():
+         def __init__(self):
+             self.id = 0
+             self.name = ""
+             self.time = ""
+             self.weeks = 0
+     for list in lists:
+         t = List_semester()
+         t.id = list.id
+         t.time = date.fromtimestamp(list.start)
+         t.weeks = list.weeks
+         time = t.time
+         name = str(time.year)
+         mon = time.month
+         if  mon >7 :
+             name += "年秋季"
+         else :
+             name += "年春季"
+         t.name = name 
+         lis.append(t)
      return dict(lesson=lesson,lis=lis)    
  
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')

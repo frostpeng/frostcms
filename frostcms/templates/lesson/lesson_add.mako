@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>ccms</title>
+    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/ccms.js"></script>
+</head>
+
+<body>
+	<!-- 登录模块 -->
+    <%include file="/login/login.mako" />
+	<!-- 顶部固定栏 -->
+    <!--<%include file="/main/head.mako" />-->
+	<!-- 导航栏部分 -->
+    <%include file="/main/nav_admin.mako" />
+    <!-- 主体部分 -->
+	<div class="right">
+    	
+        <!-- 主体头部 -->
+		<div class="right_head">
+			<div class="title_2">专业管理</div>
+			<a class="btn btn-primary" id="btn_head" href="/lesson/list">返回课程列表</a>   
+		</div>
+        
+        <!-- 主体信息表 -->
+        <div class="right_main">
+        	<form action="/lesson/save" class="add">
+ 				%if lesson:
+ 				<div class="app_name">
+        		课程信息/编辑
+        		</div>
+ 				<input type="hidden" name="lesson.id" value="${lesson.id}"/>
+ 				<div class="input-prepend">
+  					<span class="add-on">课程名称</span>
+  					<input class="span2" id="prependedInput" type="text" placeholder="" name="faculty.name" value="${lesson.course.name}"/>
+				</div>
+				<br />
+				<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">学期</span>
+  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange="" >
+						<option disabled="disabled">--------请选择学期--------</option>
+						% for li in lis:
+						<option value="${li.id}" 
+							% if lesson.course.semesterid == li.id :
+								selected="selected"
+							% endif
+							>${li.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+ 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				%else:
+ 				<div class="app_name">
+        		添加课程
+        		</div>
+  				<div class="input-prepend">
+  					<span class="add-on">课程名称</span>
+  					<input class="span2" id="prependedInput" type="text" name="lesson.name" placeholder="" />
+				</div>
+				<br />
+				<div class="input-prepend">
+  					<span class="add-on">周次</span>
+  					<input class="span2" id="prependedInput" type="text" name="lesson.week" placeholder="" />
+				</div>
+				<br />
+				<div class="input-prepend">
+  					<span class="add-on">课程名称</span>
+  					<input class="span2" id="prependedInput" type="text" name="lesson.name" placeholder="" />
+				</div>
+				<br />
+				<div class="input-prepend"   id="add_adress">
+  					<span class="add-on">学期</span>
+  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange="" >
+						<option disabled="disabled" selected="selected" >--------请选择学学期--------</option>
+						% for li in lis:
+						<option value="${li.id}" >${li.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+ 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				%endif
+ 			</form>
+        </div>               
+        
+    </div>
+</body>
+</html>

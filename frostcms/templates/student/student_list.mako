@@ -34,12 +34,14 @@
 			</div>	
 			<a class="btn btn-primary" id="btn_head" href="/student/add" >添加新学生</a>
 			
-			
+			<div class="search">
 			<form enctype="multipart/form-data"  action="/student/upload" method="post">
-			<input type="file" name="file"/>
-			<input type="submit" name="submit" class="btn" value="从xls文件导入" />
+			<div class="input-append">
+				<input type="file"  accept="xls" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" class="btn" name="file"/>
+				<input type="submit" name="submit" class="btn" value="从xls文件导入" />
+			</div>
 			</form>
-            
+            </div>
 		</div>
         
         <!-- 主体信息表 -->

@@ -13,6 +13,10 @@
      			</div>
      		% endif
         </div>
-        <input type="submit" name="submit" class="login_submit" value="登录" />
+        % if request.user.role==0 :
+    	<a id="btn_logout" class="btn" type="button" href="/logout">${request.user.name}</a>
+    	% else :
+    	<button id="btn_login" class="btn" type="button">登录</button>
+    	% endif
 	</form>
 </div>

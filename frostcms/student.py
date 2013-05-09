@@ -95,7 +95,7 @@ def savestudent(request):
           user = User()
           user.name = student.identity
 #md5加密           
-          user.password = hashlib.new("md5",student.indentity)
+          user.password = hashlib.new("md5",student.identity)
           user.role = 2
           conn.add(user)
           cc = conn.query(User).filter(User.name == student.identity).first()

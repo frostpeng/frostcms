@@ -24,7 +24,7 @@
 		<div class="right_head">
 			<div class="title_2">课程管理</div>
 			<form action="/lesson/list" class="search" name="college" method="post">
-				按院系查询
+				按学期查询
 				<select name="collegeid" size="1" onchange= "document.all.college.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 					% for li in lis:
@@ -32,7 +32,7 @@
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/faculty/add">添加专业</a> 
+			<a class="btn btn-primary" id="btn_head" href="/lesson/add">添加课程</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -40,19 +40,31 @@
         	<table class="table table-bordered table-hover" id="main_table">
             <thead>
       			<tr>     
-        			<th class="name_l">专业</th>
-        			<th class="name_l">学院</th>
+        			<th class="name">课程</th>
+        			<th class="name">教师</th>
+        			<th class="name_l">班级</th>
+        			<th class="name">学期</th>
+        			<th class="app">课堂</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="name">${item.name}</td>
-        			<td class="name">${item.college.name}</td>
+        			<td class="name">${item.course.name}</td>
+        			<td class="name">${item.course.mentor.name}</td>
+        			<td class="name_l"></td>
+        			<td class="name">
+        			% for li in lis :
+        				% if item.course.semesterid == li.id :
+        				${li.name}
+        				% endif
+        			% endfor 
+        			</td>
+        			<td class="app">课堂</td>
         			<td class="app">
-        				<a class="btn btn-info" href="/faculty/add?facultyid=${item.id}">编辑</a>
-        				<a class="btn btn-danger" href="/faculty/del?facultyid=${item.id}">删除</a>
+        				<a class="btn btn-info" href="/lesson/add?lessonid=${item.id}">编辑</a>
+        				<a class="btn btn-danger" href="/lesson/del?lessonid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor

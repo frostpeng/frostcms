@@ -1,7 +1,9 @@
+% if request.user :
+	% if request.user.role == 0:
 <div class="left">
     	<ul class="nav nav-tabs nav-stacked" id="main_nav">
         	<li class="disabled"><a href="#">公共查询</a></li>
-            <li><a href="#">按日期查询</a></li>
+            <li><a href="/public/lesson_list">按日期查询</a></li>
             <li><a href="#">近期课表</a></li>
             <li class="disabled"><a href="#">管理</a></li>
             <li><a href="/location/list">实验室</a></li>
@@ -15,3 +17,36 @@
             <li><a href="#">课程申请</a></li>
 		</ul>
 </div>
+	% elif request.user.role == 1:
+<div class="left">
+    	<ul class="nav nav-tabs nav-stacked" id="main_nav">
+        	<li class="disabled"><a href="#">公共查询</a></li>
+            <li><a href="/public/lesson_list">按日期查询</a></li>
+            <li><a href="#">近期课表</a></li>
+            <li class="disabled"><a href="#">教师</a></li>
+            <li><a href="#">我的课程</a></li>
+            <li><a href="#">我的作业</a></li>
+            <li><a href="#">课堂申请</a></li>
+		</ul>
+</div>
+	% elif request.user.role == 2:
+<div class="left">
+    	<ul class="nav nav-tabs nav-stacked" id="main_nav">
+        	<li class="disabled"><a href="#">公共查询</a></li>
+            <li><a href="/public/lesson_list">按日期查询</a></li>
+            <li><a href="#">近期课表</a></li>
+            <li class="disabled"><a href="#">学生</a></li>
+            <li><a href="#">我的课程</a></li>
+            <li><a href="#">我的作业</a></li>
+		</ul>
+</div>
+	% endif
+% else :
+<div class="left">
+    	<ul class="nav nav-tabs nav-stacked" id="main_nav">
+        	<li class="disabled"><a href="#">公共查询</a></li>
+            <li><a href="/public/lesson_list">按日期查询</a></li>
+            <li><a href="#">近期课表</a></li>
+		</ul>
+</div>
+% endif

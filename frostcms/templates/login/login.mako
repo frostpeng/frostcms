@@ -2,11 +2,21 @@
     <div class="title">
    	 实验室管理系统
     </div>
-	<button id="btn_login" class="btn" type="button">登录</button>
+	% if request.user :
+    	<a id="btn_logout" class="btn" type="button" href="/logout">${request.user.name} __<i class="icon-remove"></i></a>
+    % else :
+    	<button id="btn_login" class="btn" type="button">登录</button>
+    % endif
 </div>
-<div class="login" id="login">
+<div class="login" id="login"
+% if request:
+style="display:none;"
+% else :
+style=""
+% endif
+>
 	
-	<form class="login" action="" method="post">
+	<form class="login" action="/login" method="post">
     	<div class="frame_login">
     		<button id="btn_close" class="btn btn-danger" type="button">关闭</button>
         	<div class="input-prepend">
@@ -21,9 +31,9 @@
   				<input type="checkbox" name="max_age" autocomplete="off" class="login_age" value="1209600"/>
             	记住用户名？
             </div>	
-            % if error:
+            % if request == -1 :
 	  			<div class="error">
-       				${error}
+       				用户名密码不匹配
      			</div>
      		% endif
      		<div id="login_submit">
