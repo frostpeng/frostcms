@@ -9,6 +9,11 @@ import time
 import cgi, uuid
 import webhelpers.paginate as paginate
 import hashlib
+import os
+import xlrd
+import thread
+import cgitb
+cgitb.enable()
 
 log = getLogger(__name__)
 
@@ -18,6 +23,7 @@ def includeme(config):
     config.add_route('mentor_add', '/mentor/add')
     config.add_route('mentor_save', '/mentor/save')
     config.add_route('mentor_del', '/mentor/del')
+    config.add_route('mentor_upload', '/mentor/upload')
     
 @view_config(route_name='mentor_list', renderer='mentor/mentor_list.mako',permission='admin')
 def listmentor(request):
@@ -93,3 +99,57 @@ def delfaculty(request):
     lis = conn.query(College).order_by(College.id)
     return dict(mentor=mentor,lis=lis)
  
+ 
+@view_config(route_name='mentor_upload', renderer="mentor/mentor_list.mako")
+def upload(request):
+    upload = request.params.get('file')
+    path = "frostcms/upload/exceltmp"
+#     if  os.path.exists(path):
+#         os.makedirs(path)
+#          
+    if isinstance(upload, cgi.FieldStorage) and upload.file:
+        extension = upload.filename.split('.')[-1:][0]  
+        if extension == "xls" or extension == "xlsx":
+               filename = "%s.%s" % (uuid.uuid1(), extension)
+               filepath = os.path.join(path, filename).replace("\\", "/")
+               myfile = open(filepath, 'wb')
+               upload.file.seek(0)
+               while 1:
+                   tmp = upload.file.read(2 << 16)
+                   if not tmp:
+                       break
+                   myfile.write(tmp)
+               myfile.close()
+#                新开线程处理excel
+               operateexcel(filepath)     
+    return HTTPFound(location=request.route_url('mentor_list'))
+
+def operateexcel(filepath=None):
+    data = xlrd.open_workbook(filepath)
+    table = data.sheets()[0] 
+    conn = DBSession()
+    for rownum in range(1,table.nrows):
+        identitynum=table.row(rownum)[0].value.strip()
+        name=table.row(rownum)[1].value.strip()
+        collegename=table.row(rownum)[2].value.strip()
+        title=table.row(rownum)[3].value.strip()
+        if(identitynum and name and collegename and title):
+            college=conn.query(College).filter(College.name==collegename).first()
+            if not college:
+                 college = College()
+                 college.name =collegename
+                 conn.add(college)
+            college=conn.query(College).filter(College.name==collegename).first()
+            mentor=conn.query(Mentor).filter(and_(and_(Mentor.name==name,Mentor.collegeid==college.id),and_(Mentor.title==Mentor.title,Mentor.identity==identitynum))).first()
+            if not mentor:
+                 mentor = Mentor()
+                 mentor.identity=identitynum
+                 mentor.name=name
+                 mentor.collegeid=college.id
+                 mentor.title=title
+                 conn.add(mentor)
+                 
+    conn.flush()
+    os.remove(filepath)
+                              
+    return None

@@ -84,7 +84,11 @@
   					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
 						% for college in colleges:
-						<option value="${college.id}">${college.name}</option>
+						<option value="${college.id}" 
+						%if college.id == student.clazz.faculty.collegeid :
+						selected="selected"
+						%endif
+						>${college.name}</option>
 						% endfor
 					</select>
 				</div>
@@ -94,7 +98,11 @@
   					<select class="span2" style="width:180px" name="facultyid" onchange="setClazz();" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
 						% for faculty in facultys:
-						<option value="${faculty.id}" class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
+						<option value="${faculty.id}" class="college_${faculty.collegeid}" style="display:none;"
+						%if faculty.id == student.clazz.facultyid :
+						selected="selected"
+						%endif
+						>${faculty.name}</option>
 						% endfor
 					</select>
 				</div>

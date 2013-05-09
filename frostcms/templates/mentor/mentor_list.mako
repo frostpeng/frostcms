@@ -33,7 +33,14 @@
 				</select>
 			</form>
 			<a class="btn btn-primary" id="btn_head" href="/mentor/add">添加教师</a> 
-			<a class="btn btn-primary" id="btn_head" href="/mentor/xls">从xls文件导入</a> 
+			<div class="search">
+			<form enctype="multipart/form-data"  action="/mentor/upload" method="post">
+			<div class="input-append">
+				<input type="file"  accept="xls" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" class="btn" name="file"/>
+				<input type="submit" name="submit" class="btn btn-primary" value="从xls文件导入" />
+			</div>
+			</form>
+            </div>
 		</div>
         
         <!-- 主体信息表 -->

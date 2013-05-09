@@ -58,7 +58,7 @@
  				<div class="app_name">
         		添加课程
         		</div>
-  				<div class="input-prepend">
+        		<div class="input-prepend">
   					<span class="add-on">课程名称</span>
   					<input class="span2" id="prependedInput" type="text" name="lesson.name" placeholder="" />
 				</div>
@@ -68,15 +68,10 @@
   					<input class="span2" id="prependedInput" type="text" name="lesson.week" placeholder="" />
 				</div>
 				<br />
-				<div class="input-prepend">
-  					<span class="add-on">课程名称</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.name" placeholder="" />
-				</div>
-				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学期</span>
   					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择学学期--------</option>
+						<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 						% for li in lis:
 						<option value="${li.id}" >${li.name}</option>
 						% endfor

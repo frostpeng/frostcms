@@ -12,6 +12,7 @@ import xlrd
 import thread
 import hashlib 
 import cgitb
+import os
 cgitb.enable()
 
 log = getLogger(__name__)
@@ -122,6 +123,9 @@ def delstudent(request):
 def upload(request):
     upload = request.params.get('file')
     path = "frostcms/upload/exceltmp"
+#     if  os.path.exists(path):
+#         os.makedirs(path)
+         
     if isinstance(upload, cgi.FieldStorage) and upload.file:
         extension = upload.filename.split('.')[-1:][0]  
         if extension == "xls" or extension == "xlsx":
@@ -136,7 +140,7 @@ def upload(request):
                    myfile.write(tmp)
                myfile.close()
 #                新开线程处理excel
-               thread.start_new_thread(operateexcel, (filepath,))     
+               operateexcel(filepath)      
     return HTTPFound(location=request.route_url('student_list'))
 
 #excel处理
@@ -144,12 +148,11 @@ def operateexcel(filepath=None):
     data = xlrd.open_workbook(filepath)
     table = data.sheets()[0] 
     conn = DBSession()
-    for rownum in range(0,table.nrows):
+    for rownum in range(1,table.nrows):
         identitynum=table.row(rownum)[0].value.strip()
         name=table.row(rownum)[1].value.strip()
-        clazzname=table.row(rownum)[2].value.strip()
-        collegename=table.row(rownum)[4].value.strip()
-        log.debug(identitynum+" "+name+" "+clazzname+" "+collegename)
+        clazzname=table.row(rownum)[5].value.strip()
+        collegename=table.row(rownum)[3].value.strip()
         if(identitynum and name and clazzname and collegename):
             clazznum=clazzname[len(clazzname)-3:len(clazzname)-1]
             grade=clazzname[len(clazzname)-7:len(clazzname)-3]
@@ -205,7 +208,14 @@ def operateexcel(filepath=None):
                 student.account=user.id
                 conn.add(student)
     
-    conn.flush()                  
+    conn.flush()
+    os.remove(filepath)
+#     for root, dirs, files in os.walk("frostcms/upload/exceltmp", topdown=False): 
+#          for name in files:
+#              os.remove(os.path.join(root, name))
+#          for name in dirs:
+#              os.rmdir(os.path.join(root, name))
+                              
     return None
     
     
