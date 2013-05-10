@@ -14,6 +14,8 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
+    'xlrd',
+    'pyExcelerator'
     ]
 
 setup(name='frostcms',
