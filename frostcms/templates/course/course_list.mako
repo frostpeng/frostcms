@@ -18,8 +18,8 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">课堂管理</div>
-			<form action="/lesson/list" class="search" name="college" method="post">
+			<div class="title_2">课程管理</div>
+			<form action="/course/list" class="search" name="college" method="post">
 				按学期查询
 				<select name="collegeid" size="1" onchange= "document.all.college.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
@@ -28,7 +28,7 @@
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/lesson/add">添加课程</a> 
+			<a class="btn btn-primary" id="btn_head" href="/course/add">添加课程</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -38,26 +38,22 @@
       			<tr>     
         			<th class="name">课程</th>
         			<th class="name">教师</th>
-        			<th class="name_l">班级</th>
         			<th class="name">学期</th>
-        			<th class="app">课堂</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="name">${item.course.name}</td>
-        			<td class="name">${item.course.mentor.name}</td>
-        			<td class="name_l"></td>
+        			<td class="name">${item.name}</td>
+        			<td class="name">${item.mentor.name}</td>
         			<td class="name">
         			% for li in lis :
-        				% if item.course.semesterid == li.id :
+        				% if item.semesterid == li.id :
         				${li.name}
         				% endif
         			% endfor 
         			</td>
-        			<td class="app">课堂</td>
         			<td class="app">
         				<a class="btn btn-info" href="/lesson/add?lessonid=${item.id}">编辑</a>
         				<a class="btn btn-danger" href="/lesson/del?lessonid=${item.id}">删除</a>

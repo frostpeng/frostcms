@@ -18,30 +18,40 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">课堂管理</div>
-			<a class="btn btn-primary" id="btn_head" href="/lesson/list">返回课堂列表</a>   
+			<div class="title_2">课程管理</div>
+			<a class="btn btn-primary" id="btn_head" href="/course/list">返回课程列表</a>   
 		</div>
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/lesson/save" class="add">
- 				%if lesson:
+        	<form action="/course/save" class="add">
+ 				%if course:
  				<div class="app_name">
         		课程信息/编辑
         		</div>
- 				<input type="hidden" name="lesson.id" value="${lesson.id}"/>
+ 				<input type="hidden" name="course.id" value="${course.id}"/>
  				<div class="input-prepend">
   					<span class="add-on">课程名称</span>
-  					<input class="span2" id="prependedInput" type="text" placeholder="" name="faculty.name" value="${lesson.course.name}"/>
+  					<input class="span2" id="prependedInput" type="text" placeholder="" name="course.name" value="${course.name}"/>
+				</div>
+				<br />
+				<div class="input-prepend">
+  					<span class="add-on">教师</span>
+  					<select class="span2" style="width:200px" name="course.mentorid" size="1">
+						<option disabled="disabled" selected="selected" >--------请选择教师--------</option>
+						% for li in mentordictionary:
+						<option value="${li.id}" >${li.name}</option>
+						% endfor
+					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学期</span>
-  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="course.semesterid" size="1">
 						<option disabled="disabled">--------请选择学期--------</option>
 						% for li in lis:
 						<option value="${li.id}" 
-							% if lesson.course.semesterid == li.id :
+							% if course.semesterid == li.id :
 								selected="selected"
 							% endif
 							>${li.name}</option>
@@ -56,17 +66,22 @@
         		</div>
         		<div class="input-prepend">
   					<span class="add-on">课程名称</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.name" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="course.name" placeholder="" />
 				</div>
 				<br />
 				<div class="input-prepend">
-  					<span class="add-on">周次</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.week" placeholder="" />
+  					<span class="add-on">教师</span>
+  					<select class="span2" style="width:200px" name="course.mentorid" size="1" >
+						<option disabled="disabled" selected="selected" >--------请选择教师--------</option>
+						% for li in mentordictionary:
+						<option value="${li.id}" >${li.name}</option>
+						% endfor
+					</select>
 				</div>
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学期</span>
-  					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="course.semesterid" size="1" onchange="" >
 						<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 						% for li in lis:
 						<option value="${li.id}" >${li.name}</option>
