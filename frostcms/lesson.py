@@ -66,6 +66,8 @@ def addlesson(request):
      conn = DBSession()
      lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('lessonid')).first()
      lists = conn.query(Semester).order_by(Semester.id)
+     locations = conn.query(Location).order_by(Location.id)
+     courses = conn.query(Course).order_by(Course.id)
      lis = []
      class List_semester():
          def __init__(self):
@@ -87,20 +89,40 @@ def addlesson(request):
              name += "年春季"
          t.name = name 
          lis.append(t)
-     return dict(lesson=lesson,lis=lis)    
+     return dict(lesson=lesson,lis=lis,locations=locations,courses=courses)    
  
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
      conn = DBSession()
      if request.params.get('lesson.id'):
           lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('Lesson.id')).first()
-          lesson.name = request.params.get('lesson.name')
-          lesson.collegeid = request.params.get('lesson.collegeid')
+          lesson.courseid = request.params.get('lesson.courseid')
+          lesson.week = request.params.get('lesson.week')
+          lesson.dow = request.params.get('lesson.dow')
+          lesson.locationid = request.params.get('lesson.locationid')
+          lesson.firstrow = request.params.get('lesson.firstrow')
+          lesson.lastrow = request.params.get('lesson.lastrow')
+          lesson.ext_firstrow = request.params.get('lesson.ext_firstrow')
+          lesson.ext_lastrow = request.params.get('lesson.ext_lastrow')
+          lesson.ext_location = request.params.get('lesson.ext_location')
+          lesson.starttime = request.params.get('lesson.starttime')
+          lesson.endtime = request.params.get('lesson.endtime')
+          lesson.monopolize = request.params.get('lesson.monopolize')
           conn.flush()
      else:
          lesson = Lesson()
-         lesson.name = request.params.get('lesson.name')
-         lesson.collegeid = request.params.get('lesson.collegeid')
+         lesson.courseid = request.params.get('lesson.courseid')
+         lesson.week = request.params.get('lesson.week')
+         lesson.dow = request.params.get('lesson.dow')
+         lesson.locationid = request.params.get('lesson.locationid')
+         lesson.firstrow = request.params.get('lesson.firstrow')
+         lesson.lastrow = request.params.get('lesson.lastrow')
+         lesson.ext_firstrow = request.params.get('lesson.ext_firstrow')
+         lesson.ext_lastrow = request.params.get('lesson.ext_lastrow')
+         lesson.ext_location = request.params.get('lesson.ext_location')
+         lesson.starttime = request.params.get('lesson.starttime')
+         lesson.endtime = request.params.get('lesson.endtime')
+         lesson.monopolize = request.params.get('lesson.monopolize')
          conn.add(lesson)
          conn.flush()
      return HTTPFound(location=request.route_url('lesson_list'))
@@ -114,5 +136,28 @@ def dellesson(request):
         conn.delete(lesson)
         conn.flush()
         return HTTPFound(location=request.route_url('lesson_list'))
-    lis = conn.query(Semester).order_by(Semester.id)
-    return dict(lesson=lesson,lis=lis)
+    lists = conn.query(Semester).order_by(Semester.id)
+    locations = conn.query(Location).order_by(Location.id)
+    courses = conn.query(Course).order_by(Course.id)
+    lis = []
+    class List_semester():
+        def __init__(self):
+            self.id = 0
+            self.name = ""
+            self.time = ""
+            self.weeks = 0
+    for list in lists:
+        t = List_semester()
+        t.id = list.id
+        t.time = date.fromtimestamp(list.start)
+        t.weeks = list.weeks
+        time = t.time
+        name = str(time.year)
+        mon = time.month
+        if  mon >7 :
+            name += "年秋季"
+        else :
+            name += "年春季"
+        t.name = name 
+        lis.append(t)
+    return dict(lesson=lesson,lis=lis,locations=locations,courses=courses)

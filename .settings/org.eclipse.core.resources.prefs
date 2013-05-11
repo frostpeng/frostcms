@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//frostcms/authentication.py=utf-8
 encoding//frostcms/clazz.py=utf-8
 encoding//frostcms/college.py=utf-8
+encoding//frostcms/course.py=utf-8
 encoding//frostcms/faculty.py=utf-8
 encoding//frostcms/lesson.py=utf-8
 encoding//frostcms/location.py=utf-8

@@ -28,7 +28,7 @@
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/lesson/add">添加课程</a> 
+			<a class="btn btn-primary" id="btn_head" href="/lesson/add">添加课堂</a> 
 		</div>
         
         <!-- 主体信息表 -->

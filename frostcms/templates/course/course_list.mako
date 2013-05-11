@@ -21,7 +21,7 @@
 			<div class="title_2">课程管理</div>
 			<form action="/course/list" class="search" name="college" method="post">
 				按学期查询
-				<select name="collegeid" size="1" onchange= "document.all.college.submit();">
+				<select name="semesterid" size="1" onchange= "document.all.college.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 					% for li in lis:
 					<option value="${li.id}" >${li.name}</option>

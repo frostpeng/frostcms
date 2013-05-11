@@ -61,15 +61,15 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/lesson/save" class="add" name="course">
+        	<form action="/lesson/del" class="add" name="course">
  				%if lesson:
  				<input type="hidden" name="lesson.id" value="${lesson.id}"/>
  				<div class="app_name">
-        		课堂信息/编辑
+        		课堂删除
         		</div>
         		<div class="input-prepend"   id="add_adress">
   					<span class="add-on">课程</span>
-  					<select class="span2" style="width:200px" name="lesson.courseid" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="lesson.courseid" size="1" onchange="" readOnly="true">
 						<option disabled="disabled" selected="selected" >--------请选择课程--------</option>
 						% for course in courses:
 							% if course.id == lesson.courseid :
@@ -83,7 +83,7 @@
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学期</span>
-  					<select class="span2" style="width:200px" name="lesson.collegeid" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="lesson.collegeid" size="1" onchange="" readOnly="true">
 						<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
 						% for li in lis:
 							% if li.id == lesson.course.semesterid :
@@ -97,12 +97,12 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">周次</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.week" value="${lesson.week}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.week" value="${lesson.week}" placeholder="" readOnly="true" />
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">星期</span>
-  					<select class="span2" style="width:200px" name="lesson.dow" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="lesson.dow" size="1" onchange="" readOnly="true">
 						<option value="0" 
 						% if lesson.dow == 0 :
 						selected="selected"
@@ -143,7 +143,7 @@
 				<hr />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">实验室</span>
-  					<select class="span2" style="width:200px" name="lesson.locationid" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="lesson.locationid" size="1" onchange="" readOnly="true">
 						<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
 						% for location in locations:
 							% if location.id == lesson.locationid :
@@ -157,17 +157,17 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">座次第一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.firstrow" value="${lesson.firstrow}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.firstrow" value="${lesson.firstrow}" placeholder="" readOnly="true"/>
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">座次最后一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.lastrow" value="${lesson.lastrow}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.lastrow" value="${lesson.lastrow}" placeholder="" readOnly="true"/>
 				</div>
 				<hr />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">备用实验室</span>
-  					<select class="span2" style="width:200px" name="lesson.ext_location" size="1" onchange="" >
+  					<select class="span2" style="width:200px" name="lesson.ext_location" size="1" onchange="" readOnly="true">
 						<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
 						% for location in locations:
 							% if location.id == lesson.ext_location :
@@ -181,35 +181,35 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">备用座次第一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_firstrow" value="${lesson.ext_firstrow}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_firstrow" value="${lesson.ext_firstrow}" placeholder="" readOnly="true"/>
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">备用座次最后一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_lastrow" value="${lesson.ext_lastrow}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_lastrow" value="${lesson.ext_lastrow}" placeholder="" readOnly="true"/>
 				</div>
 				<hr />
 				<div class="input-prepend">
   					<span class="add-on">开始节数</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.starttime" value="${lesson.starttime}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.starttime" value="${lesson.starttime}" placeholder="" readOnly="true"/>
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">结束节数</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.endtime" value="${lesson.endtime}" placeholder="" />
+  					<input class="span2" id="prependedInput" type="text" name="lesson.endtime" value="${lesson.endtime}" placeholder="" readOnly="true"/>
 				</div>
 				<br />
 				<div class="input-prepend" style="float:left;">
   					<span class="add-on">是否独占实验室</span>
 				</div>
 				<div style="float:left;margin:5px;">
-					<input type="radio" name="lesson.monopolize" id="optionsRadios1" value="1" 
+					<input type="radio" name="lesson.monopolize" id="optionsRadios1" value="1" readOnly="true"
 					% if lesson.monopolize == 1:
 					checked
 					% endif
 					>
   					是&nbsp;&nbsp;&nbsp;&nbsp;
-  					<input type="radio"name="lesson.monopolize" id="optionsRadios1" value="0" 
+  					<input type="radio"name="lesson.monopolize" id="optionsRadios1" value="0" readOnly="true"
   					% if lesson.monopolize != 1:
 					checked
 					% endif
@@ -217,110 +217,7 @@
   					否
 				</div>
 				<br /><hr />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
- 				%else:
- 				<div class="app_name">
-        		添加课堂
-        		</div>
-        		<div class="input-prepend"   id="add_adress">
-  					<span class="add-on">课程</span>
-  					<select class="span2" style="width:200px" name="lesson.courseid" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择课程--------</option>
-						% for course in courses:
-						<option value="${course.id}" >${course.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend"   id="add_adress">
-  					<span class="add-on">学期</span>
-  					<select class="span2" style="width:200px" name="lesson.semesterid" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
-						% for li in lis:
-						<option value="${li.id}" >${li.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">周次</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.week" placeholder="" />
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">星期</span>
-  					<select class="span2" style="width:200px" name="lesson.dow" size="1" onchange="" >
-						<option value="0" >星期日</option>
-						<option value="1" >星期一</option>
-						<option value="2" >星期二</option>
-						<option value="3" >星期三</option>
-						<option value="4" >星期四</option>
-						<option value="5" >星期五</option>
-						<option value="6" >星期六</option>
-					</select>
-				</div>
-				<hr />
-				<div class="input-prepend"   id="add_adress">
-  					<span class="add-on">实验室</span>
-  					<select class="span2" style="width:200px" name="lesson.locationid" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
-						% for location in locations:
-						<option value="${location.id}" >${location.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">座次第一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.firstrow" placeholder="" />
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">座次最后一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.lastrow" placeholder="" />
-				</div>
-				<hr />
-				<div class="input-prepend"   id="add_adress">
-  					<span class="add-on">备用实验室</span>
-  					<select class="span2" style="width:200px" name="lesson.ext_location" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择实验室--------</option>
-						% for location in locations:
-						<option value="${location.id}" >${location.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">备用座次第一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_firstrow" placeholder="" />
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">备用座次最后一行</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.ext_lastrow" placeholder="" />
-				</div>
-				<hr />
-				<div class="input-prepend">
-  					<span class="add-on">开始节数</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.starttime" placeholder="" />
-				</div>
-				<br />
-				<div class="input-prepend">
-  					<span class="add-on">结束节数</span>
-  					<input class="span2" id="prependedInput" type="text" name="lesson.endtime" placeholder="" />
-				</div>
-				<br />
-				<div class="input-prepend" style="float:left;">
-  					<span class="add-on">是否独占实验室</span>
-				</div>
-				<div style="float:left;margin:5px;">
-					<input type="radio" name="mentor.gender" id="optionsRadios1" value="1" />
-  					是&nbsp;&nbsp;&nbsp;&nbsp;
-  					<input type="radio"name="mentor.gender" id="optionsRadios1" value="0" checked>
-  					否
-				</div>
-				<br /><hr />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-danger" id="add_submit" type="submit">确认删除</button>
  				%endif
  			</form>
         </div>               
