@@ -3,10 +3,31 @@
    	 实验室管理系统
     </div>
 	% if request.user :
-    	<a id="btn_logout" class="btn" type="button" href="/logout">${request.user.name} __<i class="icon-remove"></i></a>
+	<div class="topNav">
+	<ul>
+    <a href="#">
+      <li>
+        <img src="/static/img/user.png" alt="" />
+            <p>${request.user.name}</p>
+      </li>
+    </a>
+    <a href="/user/change_password" title="修改密码">
+      <li>
+        <img src="/static/img/修改密码.png" alt="" />
+          <p>密码</p>
+      </li>
+    </a>
+    <a href="/logout" title="退出登录">
+      <li>
+        <img src="/static/img/退出.png" alt="" />
+          <p>退出</p>
+      </li>
+    </a>
+  </ul>
+  </div>
     % else :
-    	<button id="btn_login" class="btn" type="button">登录</button>
-    % endif
+    	<button id="btn_login" class="btn btn-primary" type="button">登录</button>
+    %endif
 </div>
 <div class="login" id="login"
 % if request:
@@ -16,30 +37,53 @@ style=""
 % endif
 >
 	
-	<form class="login" action="/login" method="post">
+	<form class="login" action="" method="post">
     	<div class="frame_login">
     		<button id="btn_close" class="btn btn-danger" type="button">关闭</button>
         	<div class="input-prepend">
   				<span class="add-on">用户名</span>
-        		<input type="text" name="username" id="n" autocomplete="off" class="login_box" />
+        		<input type="text" name="username" id="username" autocomplete="off" class="login_box" />
         	</div>
         	<div class="input-prepend">
   				<span class="add-on">密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
-            	<input type="password" name="password" autocomplete="off" class="login_box" />
+            	<input type="password" id="password" name="password" autocomplete="off" class="login_box" />
             </div>
             <div class="check_box">
-  				<input type="checkbox" name="max_age" autocomplete="off" class="login_age" value="1209600"/>
+  				<input type="checkbox" id="remember" autocomplete="off" class="login_age" value="1209600"/>
             	记住用户名？
             </div>	
-            % if request == -1 :
-	  			<div class="error">
-       				用户名密码不匹配
-     			</div>
-     		% endif
+            <div id="add_error">
+     		</div>
      		<div id="login_submit">
-     			<input type="submit" name="submit" class="btn btn-primary"  value="登录" />
+     			<input id="login_btn"  class="btn btn-primary"  value="登录" />
      		</div>
         </div>
         
 	</form>
 </div>
+<script>
+$(document).ready(function(){
+     $("#login_btn").click(function(){
+     	$.ajax({
+			url:"/api/user/login",
+			type: "post",
+			data: {username:$('#username').val(), password:$('#password').val(),
+				remember:document.getElementById('remember').checked},
+			dataType: "json",
+			success: function(data){
+				if(data.code == 0){
+					$("#add_error").html(data.error);
+				}
+				if(data.code==1){
+					window.location.href =data.return_url;
+				}
+			},
+			error: function(data){
+				alert("系统错误，请联系管理员");
+			},
+			complete: function(){
+			}
+		});
+    });
+});
+</script>

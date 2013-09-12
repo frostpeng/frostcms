@@ -15,7 +15,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'xlrd',
-    'pyExcelerator'
+    'pyExcelerator',
+    'pyramid_simpleform'
     ]
 
 setup(name='frostcms',

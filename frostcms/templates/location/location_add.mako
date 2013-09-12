@@ -50,6 +50,11 @@
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.perrow" value="${location.perrow}"/>
 				</div>
 				<br />
+				<div class="input-prepend">
+  					<span class="add-on">总位数</span>
+  					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.seatnum" value="${location.seatnum}"/>
+				</div>
+				<br />
 					<div class="input-prepend">
   					<span class="add-on">校区</span>
   					<select name="location.area" class="span2  input-large" id="location_area" value="${location.area}">
@@ -84,6 +89,11 @@
 				<div class="input-prepend">
   					<span class="add-on">列数</span>
   					<input class="span2" id="prependedInput" type="text" name="location.perrow" placeholder="" />
+				</div>
+				<br />
+				<div class="input-prepend">
+  					<span class="add-on">总位数</span>
+  					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.seatnum"/>
 				</div>
 				<br />
 					<div class="input-prepend">

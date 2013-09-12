@@ -87,10 +87,10 @@
 				<br />
  				<div class="input-prepend">
   					<span class="add-on">年级</span>
-  					<select class="span2" style="width:180px" name="grade" onchange="" >
+  					<select class="span2" style="width:180px" name="year" onchange="" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择年级--------</option>
-						% for grade in range(time.year-4,time.year+5):
-						<option value="${grade}">${grade}</option>
+						% for year in range(time.year-4,time.year+5):
+						<option value="${year}">${year}</option>
 						% endfor
 					</select>
 				</div>
@@ -98,6 +98,12 @@
 				<div class="input-prepend">
   					<span class="add-on">班号</span>
   					<input class="span2" id="prependedInput" type="text" name="num" placeholder="请输入班级号">
+				</div>
+				<br />
+				<div class="input-prepend">
+  					<span class="add-on">位置浮动率</span>
+  					<input class="span2" id="prependedInput" type="text" name="mulfloat" placeholder="请输入班级号">
+  					<span class="add-on">%</span>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>

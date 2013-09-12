@@ -89,7 +89,7 @@
 				<div >
 				描述：
 				<br />
-				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.decription">${mentor.decription}</textarea>
+				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.description">${mentor.description}</textarea>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
@@ -145,7 +145,7 @@
 				<div >
 				描述：
 				<br />
-				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.decription"></textarea>
+				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.description"></textarea>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>

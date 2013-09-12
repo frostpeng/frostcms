@@ -80,7 +80,7 @@
   					<select class="span2" style="width:180px" name="clazzid" onchange="document.all.clazz.submit();" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 						% for clazz in clazzs:
-						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.grade}级${clazz.num}班</option>
+						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
 						% endfor
 					</select>
 				</div>

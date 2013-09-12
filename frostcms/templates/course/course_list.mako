@@ -55,8 +55,9 @@
         			% endfor 
         			</td>
         			<td class="app">
-        				<a class="btn btn-info" href="/lesson/add?lessonid=${item.id}">编辑</a>
-        				<a class="btn btn-danger" href="/lesson/del?lessonid=${item.id}">删除</a>
+        				<a class="btn btn-info" href="/course/add?courseid=${item.id}">编辑</a>
+        				<a class="btn btn-info" href="/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
+        				<a class="btn btn-danger" href="/course/del?lessonid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor

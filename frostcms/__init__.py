@@ -26,6 +26,7 @@ class MainRequest(Request):
         else:
             return None
 
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
@@ -41,6 +42,8 @@ def main(global_config, **settings):
                           authorization_policy=authorization_policy,
                           session_factory = my_session_factory,
                           request_factory=MainRequest)
+    jsonp_renderer = JSONP(param_name='callback')
+    config.add_renderer('jsonp', jsonp_renderer)
     config.add_static_view('static', 'frostcms:static', cache_max_age=3600)
     config.add_static_view('upload', 'frostcms:upload')
     config.include("frostcms.views")
@@ -55,12 +58,4 @@ def main(global_config, **settings):
     config.include("frostcms.public")
     config.include("frostcms.lesson")
     config.include("frostcms.course")
-#     conn=DBSession()
-#     user=User()
-#     user.name="admin"
-#     user.role=0
-#     user.password=hashlib.new("md5","admin").hexdigest() 
-#     conn.add(user)
-#     transaction.commit()
-   # config.include("frostccms.admin")
     return config.make_wsgi_app()

@@ -22,7 +22,7 @@ div.head{
 	float:right;
 	margin:5px 15px 0 0;	
 }
-#btn_logout{
+.action_user{
 	float:right;
 	margin:5px 15px 0 0;	
 }
@@ -247,4 +247,75 @@ form.search{
 	font-size:16px;
 	color:#000;
 	margin:0 0 0 15px;
+}
+
+.topNav{
+	height: 32px;
+	border: 10px solid #dcdcdc;
+	border-width: 0 0 10px 0;
+	margin-bottom: 5px;
+	z-index: 10;
+}
+
+.topNav ul{
+	float: right;
+	display: inline;
+	margin-right: 20px;
+}
+
+.topNav ul li{
+	float: left;
+	display: inline;
+	margin: 0 20px 0 0;
+}
+
+.topNav ul li img{
+	float: left;
+	height: 23px;
+	width: 23px;
+	margin: 5px 8px 0 0;
+}
+
+.topNav ul li div{
+	float: left;
+	font-size: 8px;
+	color: #bebdbd;
+}
+
+.topNav{
+	height: 32px;
+	border: 10px solid #dcdcdc;
+	border-width: 0 0 10px 0;
+	margin-bottom: 5px;
+	z-index: 10;
+}
+
+.topNav ul{
+	float: right;
+	display: inline;
+	margin-right: 20px;
+}
+
+.topNav ul li{
+	float: left;
+	display: inline;
+	margin: 0 20px 0 0;
+}
+
+.topNav ul li img{
+	float: left;
+	height: 23px;
+	width: 23px;
+	margin: 5px 8px 0 0;
+}
+
+.topNav ul li p{
+    margin-top:5px;
+	float: left;
+	font-size: 8px;
+	color: #bebdbd;
+}
+
+#add_error{
+color:red;
 }

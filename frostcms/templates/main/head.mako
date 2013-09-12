@@ -3,7 +3,8 @@
     实验室管理系统
     </div>
     % if request.user :
-    <button id="btn_logout" class="btn" type="button">${request.user.name}</button>
+    <div>${request.user.name}</div>
+    <button id="btn_logout" class="btn" type="button">注销</button>
     % else :
     <button id="btn_login" class="btn" type="button">登录</button>
     % endif

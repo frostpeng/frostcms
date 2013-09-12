@@ -1,18 +1,15 @@
 # coding=utf-8
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPFound, HTTPNotFound
-from pyramid.security import remember, forget
+from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
 from .models import *
-from .token import Token
-import time
+from frostcms.utils import md5
 import cgi, uuid
 import webhelpers.paginate as paginate
-import hashlib
 import os
 import xlrd
-import thread
 import cgitb
+import time
 cgitb.enable()
 
 log = getLogger(__name__)
@@ -27,77 +24,85 @@ def includeme(config):
     
 @view_config(route_name='mentor_list', renderer='mentor/mentor_list.mako',permission='admin')
 def listmentor(request):
-     page = int(request.params.get('page', 1))
-     conn = DBSession()
-     if request.method == "POST":
-         collegeid = request.params.get('collegeid')
-         items = conn.query(Mentor).filter(Mentor.collegeid==collegeid)
-     else :
-         items = conn.query(Mentor).order_by(Mentor.id)
-     lis = conn.query(College).order_by(College.id)
-     page_url = paginate.PageURL_WebOb(request)
-     items = paginate.Page(
+    page = int(request.params.get('page', 1))
+    collegeid = request.params.get('collegeid')
+    conn = DBSession()
+    if collegeid:
+        items = conn.query(Mentor).filter(Mentor.collegeid==collegeid,Mentor.state!=-1)
+    else:
+        items=conn.query(Mentor).filter(Mentor.state!=-1)
+    lis = conn.query(College).order_by(College.id)
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
             items,
             page=int(page),
             items_per_page=10,
             url=page_url,
             )
-     return dict(items=items,lis=lis) 
+    return dict(items=items,lis=lis) 
  
 @view_config(route_name='mentor_add', renderer='mentor/mentor_add.mako',permission='admin')
 def addmentor(request):
-     conn = DBSession()
-     mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentorid')).first()
-     lis = conn.query(College).order_by(College.id)
-     return dict(mentor=mentor,lis=lis)    
+    conn = DBSession()
+    mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentorid')).first()
+    lis = conn.query(College).order_by(College.id)
+    return dict(mentor=mentor,lis=lis)    
  
 @view_config(route_name='mentor_save', renderer='mentor/mentor_add.mako',permission='admin')
 def savementor(request):
-     conn = DBSession()
-     if request.params.get('mentor.id'):
-          mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentor.id')).first()
-          mentor.name = request.params.get('mentor.name')
-          mentor.identity = request.params.get('mentor.identity')
-          mentor.gender = request.params.get('mentor.gender')
-          mentor.collegeid = request.params.get('mentor.collegeid')
-          mentor.title = request.params.get('mentor.title')
-          mentor.email = request.params.get('mentor.email')
-          mentor.phone = request.params.get('mentor.phone')
-          mentor.decription = request.params.get('mentor.decription')
-          conn.flush()
-     else :
-         mentor = Mentor()
-         mentor.name = request.params.get('mentor.name')
-         mentor.identity = request.params.get('mentor.identity')
-         mentor.gender = request.params.get('mentor.gender')
-         mentor.collegeid = request.params.get('mentor.collegeid')
-         mentor.title = request.params.get('mentor.title')
-         mentor.email = request.params.get('mentor.email')
-         mentor.phone = request.params.get('mentor.phone')
-         mentor.decription = request.params.get('mentor.decription')
-         user = User()
-         user.name = str(mentor.identity)
-         user.password = hashlib.new("md5",mentor.identity).hexdigest()
-         user.role = 1
-         conn.add(user)
-         conn.flush()
-         t = conn.query(User).filter(User.name == str(mentor.identity)).first()
-         mentor.account = t.id
-         conn.add(mentor)
-         conn.flush()
-     return HTTPFound(location=request.route_url('mentor_list'))
+    conn = DBSession()
+    mentor_id=request.params.get('mentor.id')
+    param_tuples = ( "mentor.name", "mentor.identity", "mentor.gender", "mentor.collegeid",\
+                      "mentor.title" ,"mentor.email","mentor.phone","mentor.description")
+    name, identity, gender, collegeid, title,email,phone,description= [request.params.get( x, '' ).strip() for x in param_tuples]
+    mentor = conn.query(Mentor).filter(Mentor.id==mentor_id).first()
+    if mentor:
+        mentor.name=name
+        mentor.identity = identity
+        mentor.gender = gender
+        mentor.collegeid = collegeid
+        mentor.title = title
+        mentor.email = email
+        mentor.phone = phone
+        mentor.description = description
+        mentor.updatetime=time.time()
+    else :
+        mentor = Mentor()
+        mentor.name=name
+        mentor.identity = identity
+        mentor.gender = gender
+        mentor.collegeid = collegeid
+        mentor.title = title
+        mentor.email = email
+        mentor.phone = phone
+        mentor.description = description
+        mentor.state=0
+        mentor.createtime=time.time()
+        mentor.updatetime=time.time()
+        user = User()
+        user.name = str(identity)
+        user.password = md5(identity)
+        user.role = 1
+        user.regtime=time.time()
+        user.logintimes=0
+        userid=conn.add(user)
+        conn.flush()
+        mentor.userid =user.id
+        conn.add(mentor)
+        
+    conn.flush()
+    return HTTPFound(location=request.route_url('mentor_list'))
  
 @view_config(route_name='mentor_del', renderer='mentor/mentor_del.mako',permission='admin')
-def delfaculty(request):
+def delmentor(request):
     conn = DBSession()
-    mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentorid')).first()
-    if request.params.get('mentor.id'):
-        mentor = conn.query(Mentor).filter(Mentor.id==request.params.get('mentor.id')).first()
-        conn.delete(mentor)
+    mentor_id=request.params.get('mentorid')
+    mentor = conn.query(Mentor).filter(Mentor.id==mentor_id).first()
+    if mentor:
+        mentor.state=-1
         conn.flush()
         return HTTPFound(location=request.route_url('mentor_list'))
-    lis = conn.query(College).order_by(College.id)
-    return dict(mentor=mentor,lis=lis)
+    return dict(code=0,error=u'不存在该教师')
  
  
 @view_config(route_name='mentor_upload', renderer="mentor/mentor_list.mako")
@@ -110,18 +115,18 @@ def upload(request):
     if isinstance(upload, cgi.FieldStorage) and upload.file:
         extension = upload.filename.split('.')[-1:][0]  
         if extension == "xls" or extension == "xlsx":
-               filename = "%s.%s" % (uuid.uuid1(), extension)
-               filepath = os.path.join(path, filename).replace("\\", "/")
-               myfile = open(filepath, 'wb')
-               upload.file.seek(0)
-               while 1:
-                   tmp = upload.file.read(2 << 16)
-                   if not tmp:
-                       break
-                   myfile.write(tmp)
-               myfile.close()
+            filename = "%s.%s" % (uuid.uuid1(), extension)
+            filepath = os.path.join(path, filename).replace("\\", "/")
+            myfile = open(filepath, 'wb')
+            upload.file.seek(0)
+            while 1:
+                tmp = upload.file.read(2 << 16)
+                if not tmp:
+                    break
+                myfile.write(tmp)
+            myfile.close()
 #                新开线程处理excel
-               operateexcel(filepath)     
+            operateexcel(filepath)     
     return HTTPFound(location=request.route_url('mentor_list'))
 
 def operateexcel(filepath=None):
@@ -133,23 +138,38 @@ def operateexcel(filepath=None):
         name=table.row(rownum)[1].value.strip()
         collegename=table.row(rownum)[2].value.strip()
         title=table.row(rownum)[3].value.strip()
+        phone=long(table.row(rownum)[4].value)
+        email=table.row(rownum)[5].value.strip()
         if(identitynum and name and collegename and title):
             college=conn.query(College).filter(College.name==collegename).first()
             if not college:
-                 college = College()
-                 college.name =collegename
-                 conn.add(college)
+                college = College()
+                college.name =collegename
+                conn.add(college)
             college=conn.query(College).filter(College.name==collegename).first()
             mentor=conn.query(Mentor).filter(and_(and_(Mentor.name==name,Mentor.collegeid==college.id),and_(Mentor.title==Mentor.title,Mentor.identity==identitynum))).first()
             if not mentor:
-                 mentor = Mentor()
-                 mentor.identity=identitynum
-                 mentor.name=name
-                 mentor.collegeid=college.id
-                 mentor.title=title
-                 conn.add(mentor)
-                 
+                user = User()
+                user.name = str(identitynum)
+                user.password = md5(identitynum)
+                user.role = 1
+                user.regtime=time.time()
+                user.logintimes=0
+                conn.add(user)
+                conn.flush()
+                mentor = Mentor()
+                mentor.identity=identitynum
+                mentor.name=name
+                mentor.userid=user.id
+                mentor.collegeid=college.id
+                mentor.title=title
+                mentor.phone=phone
+                mentor.email=email
+                mentor.state=0
+                mentor.createtime=time.time()
+                mentor.updatetime=time.time()
+                conn.add(mentor)  
+                      
     conn.flush()
-    os.remove(filepath)
-                              
+    os.remove(filepath)                         
     return None

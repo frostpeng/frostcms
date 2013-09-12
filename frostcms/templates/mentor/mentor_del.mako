@@ -89,7 +89,7 @@
 				<div >
 				描述：
 				<br />
-				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" readOnly="true" name="mentor.decription">${mentor.decription}</textarea>
+				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" readOnly="true" name="mentor.description">${mentor.description}</textarea>
 				</div>
 				<br />
  				<button class="btn btn-danger" id="add_submit" type="submit">确认删除</button>
