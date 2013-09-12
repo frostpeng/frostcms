@@ -96,7 +96,6 @@
 					<table>
 						<tr>
 							<td>班级</td>
-						
 						</tr>
 					</table>
 				</div>
