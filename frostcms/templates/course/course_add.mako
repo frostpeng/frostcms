@@ -89,6 +89,18 @@
 					</select>
 				</div>
 				<br />
+				<div class="input-prepend"   id="add_adress">
+  					<span class="add-on">班级</span>
+  					<span align="right" width="50%"><input type="button"
+							class="buttong" onclick="addMoreClass()" value="添加" /></span>
+					<table>
+						<tr>
+							<td>班级</td>
+						
+						</tr>
+					</table>
+				</div>
+				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
  				%endif
  			</form>
@@ -98,4 +110,9 @@
 	<!-- 登录模块 -->
     <%include file="/login/login.mako" />
 </body>
+<script type="text/javascript">
+		function addMoreYh() {
+		
+	}
+</script>
 </html>

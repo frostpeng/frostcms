@@ -18,7 +18,6 @@ def includeme(config):
 @view_config(route_name='clazz_list', renderer='clazz/clazz_list.mako',permission='admin')
 def listclazz(request):
     page = int(request.params.get('page', 1))
-    clazzif=request.params.get('clazzid')
     conn = DBSession()
     class infoClazz():
         def __init__(self):
@@ -36,7 +35,7 @@ def listclazz(request):
     info.clazz = ""
     info.collegeNum = 0
     info.facultyNum = 0
-    info.clazzNum = 0 
+    info.clazzNum = 0
     colleges = conn.query(College).order_by(College.id)
     facultys = conn.query(Faculty).order_by(Faculty.id)
     clazzs = conn.query(Clazz).order_by(Clazz.id)
