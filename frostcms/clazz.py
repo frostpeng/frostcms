@@ -37,6 +37,9 @@ def listclazz(request):
     info.collegeNum = 0
     info.facultyNum = 0
     info.clazzNum = 0 
+    colleges = conn.query(College).order_by(College.id)
+    facultys = conn.query(Faculty).order_by(Faculty.id)
+    clazzs = conn.query(Clazz).order_by(Clazz.id)
     if request.method == "POST":
         clazzid = request.params.get('clazzid')
         items = conn.query(Student).filter(Student.clazzid==clazzid)
@@ -46,9 +49,6 @@ def listclazz(request):
         info.clazz = str(clazzs[0].year)+"级"+str(clazzs[0].num)+"班"
     else :
         items = []
-        colleges = conn.query(College).order_by(College.id)
-        facultys = conn.query(Faculty).order_by(Faculty.id)
-        clazzs = conn.query(Clazz).order_by(Clazz.id)
         for college in colleges :
             if college.id > info.collegeNum :
                 info.collegeNum = college.id

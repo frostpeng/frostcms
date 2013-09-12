@@ -109,9 +109,9 @@
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 						% for clazz in clazzs:
 							% if clazz.id == student.clazzid :
-							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" selected="selected">${clazz.grade}级${clazz.num}班</option>
+							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" selected="selected">${clazz.year}级${clazz.num}班</option>
 							% else :
-							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.grade}级${clazz.num}班</option>
+							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
 							% endif
 						% endfor
 					</select>
@@ -157,7 +157,7 @@
   					<select class="span2" style="width:180px" name="clazzid" onchange="" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 						% for clazz in clazzs:
-						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.grade}级${clazz.num}班</option>
+						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
 						% endfor
 					</select>
 				</div>

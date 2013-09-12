@@ -32,7 +32,7 @@ class Student(Base):
     id = Column(Integer,primary_key=True)
     userid = Column(Integer,ForeignKey('user.id'))
     identity = Column(String(12))
-    realname = Column(String(20))
+    name = Column(String(20))
     clazzid = Column(Integer,ForeignKey('clazz.id'))
     state=Column(Integer)
     createtime=Column(Integer)

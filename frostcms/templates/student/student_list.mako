@@ -56,7 +56,7 @@
       			<tr>
         			<td class="stdn">${item.identity}</td>
         			<td class="name">${item.name}</td>
-        			<td class="name">${item.clazz.grade}</td>
+        			<td class="name">${item.clazz.year}</td>
         			<td class="app">
         			<a class="btn btn-info" href="/student/add?studentid=${item.id}">修改学生信息</a>
         			<a class="btn btn-danger" href="/student/del?studentid=${item.id}">删除</a>
