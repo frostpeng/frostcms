@@ -1,2 +1,4 @@
-/development.ini
+/.DS_Store
+/.pydevproject
 *.pyc
+*.ini
