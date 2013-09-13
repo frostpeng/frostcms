@@ -127,9 +127,7 @@ def savecourse(request):
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid=request.params.get('course.semesterid')
-        cics = conn.query(Course_Class).filter(Course_Class.courseid==courseid)
-        for cic in cics :
-            conn.delete(cic)
+        conn.query(Course_Class).filter(Course_Class.courseid==courseid).delete()
     else:
         course = Course()
         course.name = request.params.get('course.name')
