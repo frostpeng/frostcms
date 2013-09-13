@@ -319,3 +319,43 @@ form.search{
 #add_error{
 color:red;
 }
+
+a {
+	text-indent:0;
+}
+/********************************************************************************************
+	部件
+*******************************************************************************************/
+div.ClassBox {
+	margin:0 0 30px 26px;
+	width:60%;
+	height:300px;
+	border:solid 1px #ccc;
+	border-radius:5px;
+	text-indent:0;
+}
+div.ClassBoxLeft{
+	float:left;
+	width:220px;
+	height:100%;
+	border-right:solid 1px #ccc;
+	text-align:center;
+}
+div.ClassBoxLeftHead{
+	background-color:#0099CC;
+	color:#fff;
+	font-size:14px;
+	font-family:"微软雅黑","黑体";
+	width:100%;
+	height:20px;
+	line-height:20px;
+	border-buttom:solid 20px #ccc;
+	text-align:center;
+}
+div.ClassBoxRight{
+	text-align:center;
+}
+
+a.classBoxSingle{
+	margin:5px 0 0 0;
+}

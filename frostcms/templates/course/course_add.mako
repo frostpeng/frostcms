@@ -8,6 +8,42 @@
     <script src="../../static/js/bootstrap.js"></script>
     <script src="../../static/js/jquery.js"></script>
     <script src="../../static/js/ccms.js"></script>
+    <script src="../../static/js/course_add.js"></script>
+    	<script>
+		function setFaculty(){
+			var collegeid = document.student.collegeid.value;
+			% for info in infos:
+			var collegeNum = ${info.collegeNum};
+			% endfor
+			var i = 0;
+			var open = "option.college_"+collegeid.toString();
+			var close = "";
+			for (i=0;i<=collegeNum;i++)
+			{
+				close = "option.college_"+i.toString();
+				$(close).hide();
+			}
+			$(open).show();
+			document.student.facultyid.value = -1;
+		}
+		
+		function setClazz(){
+			var facultyid = document.student.facultyid.value;
+			% for info in infos:
+			var facultyNum = ${info.facultyNum};
+			% endfor
+			var i = 0;
+			var open = "option.faculty_"+facultyid.toString();
+			var close = "";
+			for (i=0;i<=facultyNum;i++)
+			{
+				close = "option.faculty_"+i.toString();
+				$(close).hide();
+			}
+			$(open).show();
+			document.student.clazzid.value = -1;
+		}
+	</script>
 </head>
 
 <body>
@@ -24,7 +60,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/course/save" class="add">
+        	<form action="/course/save" class="add" name="student">
  				%if course:
  				<div class="app_name">
         		课程信息/编辑
@@ -91,13 +127,59 @@
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">班级</span>
-  					<span align="right" width="50%"><input type="button"
-							class="buttong" onclick="addMoreClass()" value="添加" /></span>
+  					<input class="btn btn-blue" style="display:none;" id="classlist" type="text" placeholder="" onkeyup=""/>
+  					<a class="btn btn-info" onclick="showClassBox()"><<添加班级</a>
 					<table>
 						<tr>
 							<td>班级</td>
 						</tr>
 					</table>
+				</div>
+				<div class="dClassBox">
+					<span id="dClassBox"></span>
+				</div>
+				<div class="ClassBox">
+					<div class="ClassBoxLeft">
+						<div class="ClassBoxLeftHead">添加班级</div>
+						<span id="ClassListHave"></span>
+					</div>
+					<div class="ClassBoxRight">
+					
+					
+					<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">学院</span>
+  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
+						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
+						% for college in colleges:
+						<option value="${college.id}">${college.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+				<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">专业</span>
+  					<select class="span2" id="faculyBoxName" style="width:180px" name="facultyid" onchange="setClazz();" >
+						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
+						% for faculty in facultys:
+						<option value="${faculty.id}" id="faculty${faculty.id}"class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+				<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">班级</span>
+  					<select class="span2" id="classBoxName" style="width:180px" onchange="addClass(this.value,document.student.facultyid.value)">
+						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
+						% for clazz in clazzs:
+						<option value="${clazz.id}" id="class${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;" >${clazz.year}级${clazz.num}班</option>
+						% endfor
+					</select>
+				</div>
+				
+					</div>
+				</div>
+				<div class="" id="">
+					<span id="ClassBox"></span>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>

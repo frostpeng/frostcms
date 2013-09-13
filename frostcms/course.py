@@ -2,11 +2,11 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
-from .models import DBSession,Course,Semester,Mentor,Clazz
+from .models import *
+#DBSession,Course,Semester,Mentor
 import time
 import webhelpers.paginate as paginate
 from datetime import date  
-from frostcms.models import Course_Class
 
 log = getLogger(__name__)
 
@@ -62,6 +62,26 @@ def listcourse(request):
 @view_config(route_name='course_add', renderer='course/course_add.mako',permission='admin')
 def addcourse(request):
     conn = DBSession()
+    #colleges = conn.query(College).order_by(College.id)
+    #facultys = conn.query(Faculty).order_by(Faculty.id)
+    #clazzs = conn.query(Clazz).order_by(Clazz.id)
+    class infoClazz():
+        def __init__(self):
+            college = ""
+            faculty = ""
+            clazz = ""
+            collegeNum = 0
+            facultyNum = 0
+            clazzNum = 0 
+            
+    infos = []
+    info = infoClazz()
+    info.college = ""
+    info.faculty = ""
+    info.clazz = ""
+    info.collegeNum = 0
+    info.facultyNum = 0
+    info.clazzNum = 0 
     course = conn.query(Course).filter(Course.id==request.params.get('courseid')).first()
     semesters = conn.query(Semester).order_by(Semester.id)
     mentordictionary=conn.query(Mentor).order_by(Mentor.id)
@@ -80,32 +100,32 @@ def addcourse(request):
             name += u"年春季"
         t.name = name 
         lis.append(t)
-    return dict(course=course,mentordictionary=mentordictionary,lis=lis)    
+    colleges = conn.query(College).order_by(College.id)
+    facultys = conn.query(Faculty).order_by(Faculty.id)
+    clazzs = conn.query(Clazz).order_by(Clazz.id)
+    for college in colleges :
+        if college.id > info.collegeNum :
+            info.collegeNum = college.id
+    for faculty in facultys :
+        if faculty.id > info.facultyNum :
+            info.facultyNum = faculty.id
+    infos.append(info)
+    return dict(course=course,mentordictionary=mentordictionary,lis=lis,colleges=colleges, facultys=facultys, clazzs=clazzs, infos=infos)    
  
 @view_config(route_name='course_save', renderer='course/course_add.mako',permission='admin')
 def savecourse(request):
     conn = DBSession()
-    courseid=request.params.get('course.id')
-    clazzlist=request.params.getall('clazzid')
-    course = conn.query(Course).filter(Course.id==courseid).first()
-    if course:
+    if request.params.get('course.id'):
+        course = conn.query(Course).filter(Course.id==request.params.get('course.id')).first()
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid=request.params.get('course.semesterid')
+        conn.flush()
     else:
         course = Course()
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid = request.params.get('course.semesterid')
         conn.add(course)
-        
-    conn.flush()
-    #add clazz
-    for clazzid in clazzlist:
-        course_class=Course_Class()
-        course_class.courseid=course.id
-        course_class.clazzid=clazzid
-        conn.add(course_class)
-        
-    conn.flush()
+        conn.flush()
     return HTTPFound(location=request.route_url('course_list'))
