@@ -22,6 +22,7 @@ def listlessonsbycourse(request):
     page = int(request.params.get('page', 1))
     courseid=request.params.get('courseid')
     conn = DBSession()
+    course=conn.query(Course).filter(Course.id==courseid)
     items=conn.query(Lesson).filter(Lesson.courseid==courseid)
     for item in items:
         lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.lessonid)
@@ -34,7 +35,7 @@ def listlessonsbycourse(request):
             items_per_page=10,
             url=page_url,
             )
-    return dict(items=items)
+    return dict(items=items,course=course)
     
 @view_config(route_name='lesson_list', renderer='lesson/lesson_list.mako',permission='admin')
 def listlesson(request):
@@ -87,6 +88,7 @@ def lesson_addtocourse(request):
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
     conn = DBSession()
+    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow']
     if request.params.get('lesson.id'):
         lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('Lesson.id')).first()
         lesson.courseid = request.params.get('lesson.courseid')
