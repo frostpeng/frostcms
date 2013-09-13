@@ -26,6 +26,7 @@ def listlessonsbycourse(request):
     for item in items:
         lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.lessonid)
         item.lesson_locations=lesson_locations
+        
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
