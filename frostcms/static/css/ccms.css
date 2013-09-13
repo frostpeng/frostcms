@@ -70,6 +70,7 @@ div.left{
 div.right{
 	float:left;
 	width:70%;	
+	min-width:800px;
 	height:auto;
 	margin:60px 0 60px 0;
 	background-color:transparent;
@@ -328,7 +329,8 @@ a {
 *******************************************************************************************/
 div.ClassBox {
 	margin:0 0 30px 26px;
-	width:60%;
+	width:55%;
+	min-width:500px;
 	height:300px;
 	border:solid 1px #ccc;
 	border-radius:5px;
@@ -342,12 +344,21 @@ div.ClassBoxLeft{
 	text-align:center;
 }
 div.ClassBoxLeftHead{
-	background-color:#0099CC;
-	color:#fff;
+	background-color:#eee;
+	color:#000;
+	font-size:16px;
+	font-family:"微软雅黑","黑体";
+	width:100%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+}
+div.classBoxLeftContent{
+	overflow-y:scroll;
 	font-size:14px;
 	font-family:"微软雅黑","黑体";
 	width:100%;
-	height:20px;
+	height:270px;
 	line-height:20px;
 	border-buttom:solid 20px #ccc;
 	text-align:center;

@@ -125,6 +125,7 @@
 					</select>
 				</div>
 				<br />
+				<!--
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">班级</span>
   					<input class="btn btn-blue" style="display:none;" id="classlist" type="text" placeholder="" onkeyup=""/>
@@ -135,17 +136,20 @@
 						</tr>
 					</table>
 				</div>
+				-->
 				<div class="dClassBox">
 					<span id="dClassBox"></span>
 				</div>
 				<div class="ClassBox">
 					<div class="ClassBoxLeft">
-						<div class="ClassBoxLeftHead">添加班级</div>
+						<div class="ClassBoxLeftHead">班级</div>
+						<div class="classBoxLeftContent">
 						<span id="ClassListHave"></span>
+						</div>
 					</div>
 					<div class="ClassBoxRight">
-					
-					
+					<div class="ClassBoxLeftHead">添加班级</div>
+					<br /><br />
 					<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
   					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
