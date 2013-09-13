@@ -90,38 +90,36 @@ def lesson_addtocourse(request):
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
     conn = DBSession()
-    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow']
-    if request.params.get('lesson.id'):
-        lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('Lesson.id')).first()
-        lesson.courseid = request.params.get('lesson.courseid')
-        lesson.week = request.params.get('lesson.week')
-        lesson.dow = request.params.get('lesson.dow')
-        lesson.locationid = request.params.get('lesson.locationid')
-        lesson.firstrow = request.params.get('lesson.firstrow')
-        lesson.lastrow = request.params.get('lesson.lastrow')
-        lesson.ext_firstrow = request.params.get('lesson.ext_firstrow')
-        lesson.ext_lastrow = request.params.get('lesson.ext_lastrow')
-        lesson.ext_location = request.params.get('lesson.ext_location')
-        lesson.starttime = request.params.get('lesson.starttime')
-        lesson.endtime = request.params.get('lesson.endtime')
-        lesson.monopolize = request.params.get('lesson.monopolize')
+    locations=request.params.getall('locationid')
+    studentnums=request.params.getall('studentnum')
+    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow','lesson.start','lesson.end']
+    lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
+    lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
+    if lesson:
+        lesson.courseid = courseid
+        lesson.week = week
+        lesson.dow = dow
+        lesson.start = start
+        lesson.end = end
+        lesson.state = 0
         conn.flush()
     else:
         lesson = Lesson()
-        lesson.courseid = request.params.get('lesson.courseid')
-        lesson.week = request.params.get('lesson.week')
-        lesson.dow = request.params.get('lesson.dow')
-        lesson.locationid = request.params.get('lesson.locationid')
-        lesson.firstrow = request.params.get('lesson.firstrow')
-        lesson.lastrow = request.params.get('lesson.lastrow')
-        lesson.ext_firstrow = request.params.get('lesson.ext_firstrow')
-        lesson.ext_lastrow = request.params.get('lesson.ext_lastrow')
-        lesson.ext_location = request.params.get('lesson.ext_location')
-        lesson.starttime = request.params.get('lesson.starttime')
-        lesson.endtime = request.params.get('lesson.endtime')
-        lesson.monopolize = request.params.get('lesson.monopolize')
+        lesson.courseid = courseid
+        lesson.week = week
+        lesson.dow = dow
+        lesson.start = start
+        lesson.end = end
+        lesson.state = 0
         conn.add(lesson)
-        conn.flush()
+    conn.flush()
+    for i in range(0,locations.count()):
+        lesson_location=Lesson_Location()
+        lesson_location.lessonid=lesson_id
+        lesson_location.locationid=locations.get(i)
+        lesson_location.studentnum=studentnums.get(i)
+        conn.add(lesson_location)
+    conn.flush()
     return HTTPFound(location=request.route_url('lesson_list'))
  
 @view_config(route_name='lesson_del', renderer='lesson/lesson_del.mako',permission='admin')
