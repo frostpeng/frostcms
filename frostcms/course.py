@@ -110,7 +110,12 @@ def addcourse(request):
         if faculty.id > info.facultyNum :
             info.facultyNum = faculty.id
     infos.append(info)
-    return dict(course=course,mentordictionary=mentordictionary,lis=lis,colleges=colleges, facultys=facultys, clazzs=clazzs, infos=infos)    
+    if request.method == "GET":
+        courseid = request.params.get('courseid')
+        ClassInCourse = conn.query(Course_Class).filter(Course_Class.courseid==courseid).order_by(Course_Class.id)
+    else :
+        ClassInCourse = []
+    return dict(course=course,mentordictionary=mentordictionary,lis=lis,colleges=colleges, facultys=facultys, clazzs=clazzs, infos=infos,ClassInCourse=ClassInCourse)    
  
 @view_config(route_name='course_save', renderer='course/course_add.mako',permission='admin')
 def savecourse(request):
@@ -122,6 +127,9 @@ def savecourse(request):
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid=request.params.get('course.semesterid')
+        cics = conn.query(Course_Class).filter(Course_Class.courseid==courseid)
+        for cic in cics :
+            conn.delete(cic)
     else:
         course = Course()
         course.name = request.params.get('course.name')

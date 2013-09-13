@@ -41,7 +41,7 @@
 				$(close).hide();
 			}
 			$(open).show();
-			document.student.clazzid.value = -1;
+			document.student.clazzbox.value = -1;
 		}
 	</script>
 </head>
@@ -74,9 +74,13 @@
 				<div class="input-prepend">
   					<span class="add-on">教师</span>
   					<select class="span2" style="width:200px" name="course.mentorid" size="1">
-						<option disabled="disabled" selected="selected" >--------请选择教师--------</option>
+						<option disabled="disabled" >--------请选择教师--------</option>
 						% for li in mentordictionary:
-						<option value="${li.id}" >${li.name}</option>
+						<option value="${li.id}" 
+							% if course.mentorid == li.id :
+								selected="selected"
+							% endif
+						>${li.name}</option>
 						% endfor
 					</select>
 				</div>
@@ -93,6 +97,56 @@
 							>${li.name}</option>
 						% endfor
 					</select>
+				</div>
+				<div class="dClassBox">
+					<span id="dClassBox"></span>
+				</div>
+				<div class="ClassBox">
+					<div class="ClassBoxLeft">
+						<div class="ClassBoxLeftHead">班级</div>
+						<div class="classBoxLeftContent">
+						<span id="ClassListHave">
+						% for cic in ClassInCourse:
+							<input type="text" id="sign${cic.clazzid}" name="clazzid" value="${cic.clazzid}" style="display:none;"/>
+							<a class="btn btn-mini classBoxSingle" id="sign${cic.clazzid}" onclick="deleteClass(this.id);">${cic.clazz.faculty.name} ${cic.clazz.year}级${cic.clazz.num}班   <i class="icon-remove"></i></a>
+						% endfor
+						</span>
+						</div>
+					</div>
+					<div class="ClassBoxRight">
+					<div class="ClassBoxLeftHead">添加班级</div>
+					<br /><br />
+					<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">学院</span>
+  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
+						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
+						% for college in colleges:
+						<option value="${college.id}">${college.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+				<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">专业</span>
+  					<select class="span2" id="faculyBoxName" style="width:180px" name="facultyid" onchange="setClazz();" >
+						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
+						% for faculty in facultys:
+						<option value="${faculty.id}" id="faculty${faculty.id}"class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
+						% endfor
+					</select>
+				</div>
+				<br />
+				<div class="input-prepend"  id="add_adress">
+  					<span class="add-on">班级</span>
+  					<select class="span2" id="classBoxName" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
+						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
+						% for clazz in clazzs:
+						<option value="${clazz.id}" id="class${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;" >${clazz.year}级${clazz.num}班</option>
+						% endfor
+					</select>
+				</div>
+				
+					</div>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
@@ -172,7 +226,7 @@
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" id="classBoxName" style="width:180px" onchange="addClass(this.value,document.student.facultyid.value)">
+  					<select class="span2" id="classBoxName" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 						% for clazz in clazzs:
 						<option value="${clazz.id}" id="class${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;" >${clazz.year}级${clazz.num}班</option>
@@ -181,9 +235,6 @@
 				</div>
 				
 					</div>
-				</div>
-				<div class="" id="">
-					<span id="ClassBox"></span>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
