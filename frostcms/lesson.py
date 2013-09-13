@@ -5,6 +5,7 @@ from logging import getLogger
 from .models import DBSession,Semester,Lesson,Course,and_,Location
 import webhelpers.paginate as paginate
 from datetime import date  
+from frostcms.models import Lesson_Location
 
 log = getLogger(__name__)
 
@@ -22,6 +23,9 @@ def listlessonsbycourse(request):
     courseid=request.params.get('courseid')
     conn = DBSession()
     items=conn.query(Lesson).filter(Lesson.courseid==courseid)
+    for item in items:
+        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.lessonid)
+        item.lesson_locations=lesson_locations
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
