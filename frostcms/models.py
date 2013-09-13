@@ -138,7 +138,9 @@ class Lesson(Base):     #Lesson
     dow = Column(Integer) #DayOfWeek
     start = Column(Integer)
     end = Column(Integer)
-    monopolize = Column(Boolean) 
+    state=Column(Integer,default=0)
+    createtime=Column(Integer)
+    updatetime=Column(Integer)
     course = relationship("Course")
     
 class Lesson_Location(Base):
