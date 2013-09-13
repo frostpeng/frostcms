@@ -114,7 +114,7 @@
 						</div>
 					</div>
 					<div class="ClassBoxRight">
-					<div class="ClassBoxLeftHead">添加班级</div>
+					<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
 					<br /><br />
 					<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
@@ -202,7 +202,7 @@
 						</div>
 					</div>
 					<div class="ClassBoxRight">
-					<div class="ClassBoxLeftHead">添加班级</div>
+					<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
 					<br /><br />
 					<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
