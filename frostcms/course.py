@@ -115,17 +115,27 @@ def addcourse(request):
 @view_config(route_name='course_save', renderer='course/course_add.mako',permission='admin')
 def savecourse(request):
     conn = DBSession()
-    if request.params.get('course.id'):
-        course = conn.query(Course).filter(Course.id==request.params.get('course.id')).first()
+    courseid=request.params.get('course.id')
+    clazzlist=request.params.getall('clazzid')
+    course = conn.query(Course).filter(Course.id==courseid).first()
+    if course:
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid=request.params.get('course.semesterid')
-        conn.flush()
     else:
         course = Course()
         course.name = request.params.get('course.name')
         course.mentorid = request.params.get('course.mentorid')
         course.semesterid = request.params.get('course.semesterid')
         conn.add(course)
-        conn.flush()
+        
+    conn.flush()
+    #add clazz
+    for clazzid in clazzlist:
+        course_class=Course_Class()
+        course_class.courseid=course.id
+        course_class.clazzid=clazzid
+        conn.add(course_class)
+        
+    conn.flush()
     return HTTPFound(location=request.route_url('course_list'))
