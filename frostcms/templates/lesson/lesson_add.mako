@@ -28,7 +28,12 @@
         <!-- 主体信息表 -->
         <div class="right_main">
         	<form action="/lesson/save" class="add" name="course">
+        	 	%if lesson:
+        	 	<input type="hidden" name="lesson.id" value="${lesson.id}" />
+        	 	%endif
         			% if course :
+        			<input type="hidden" name="lesson.courseid" value="${course.id}"/>
+        			
 						<a class="btn btn-primary disabled"><i class="icon-book icon-white"></i> ${course.name}</a>
 						<a class="btn disabled"><i class=" icon-user"></i> ${course.mentor.name}</a>
 						<a class="btn btn-info disabled"><i class="icon-user icon-white"></i> 课堂总人数： ${studentnum}</a>

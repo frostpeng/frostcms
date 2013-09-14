@@ -7,6 +7,7 @@ import webhelpers.paginate as paginate
 from datetime import date  
 from frostcms.models import Lesson_Location, Course_Class
 from frostcms.utils import getStudentnumOfCourse,getLeftSeatByLocation
+import time
 
 log = getLogger(__name__)
 
@@ -29,7 +30,7 @@ def listlessonsbycourse(request):
     course.course_classes=course_classes
     items=conn.query(Lesson).filter(Lesson.courseid==courseid)
     for item in items:
-        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.lessonid)
+        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id)
         item.lesson_locations=lesson_locations
         
     page_url = paginate.PageURL_WebOb(request)
@@ -95,7 +96,7 @@ def savelesson(request):
     conn = DBSession()
     locations=request.params.getall('locationid')
     studentnums=request.params.getall('studentnum')
-    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow','lesson.start','lesson.end']
+    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow','lesson.starttime','lesson.endtime']
     lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
     lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
     if lesson:
@@ -104,7 +105,8 @@ def savelesson(request):
         lesson.dow = dow
         lesson.start = start
         lesson.end = end
-        lesson.state = 0
+        lesson.state = 1
+        lesson.updatetime=time.time()
         conn.flush()
     else:
         lesson = Lesson()
@@ -113,52 +115,31 @@ def savelesson(request):
         lesson.dow = dow
         lesson.start = start
         lesson.end = end
-        lesson.state = 0
+        lesson.state = 1
+        lesson.createtime=time.time()
+        lesson.updatetime=time.time()
         conn.add(lesson)
     conn.flush()
-    for i in range(0,locations.count()):
+    for i in range(0,len(locations)):
         lesson_location=Lesson_Location()
-        lesson_location.lessonid=lesson_id
-        lesson_location.locationid=locations.get(i)
-        lesson_location.studentnum=studentnums.get(i)
+        lesson_location.lessonid=lesson.id
+        lesson_location.locationid=int(locations[i])
+        lesson_location.studentnum=int(studentnums[i])
         conn.add(lesson_location)
     conn.flush()
-    return HTTPFound(location=request.route_url('lesson_list'))
+    return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
  
 @view_config(route_name='lesson_del', renderer='lesson/lesson_del.mako',permission='admin')
 def dellesson(request):
     conn = DBSession()
-    lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('lessonid')).first()
-    if request.params.get('lesson.id'):
-        lesson = conn.query(Lesson).filter(Lesson.id==request.params.get('lesson.id')).first()
+    lessonid=request.params.get('lessonid')
+    lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
+    courseid=lesson.courseid
+    if lesson:
         conn.delete(lesson)
         conn.flush()
         return HTTPFound(location=request.route_url('lesson_list'))
-    semesters = conn.query(Semester).order_by(Semester.id)
-    locations = conn.query(Location).order_by(Location.id)
-    courses = conn.query(Course).order_by(Course.id)
-    lis = []
-    class List_semester():
-        def __init__(self):
-            self.id = 0
-            self.name = ""
-            self.time = ""
-            self.weeks = 0
-    for semester in semesters:
-        t = List_semester()
-        t.id = semester.id
-        t.time = date.fromtimestamp(semester.start)
-        t.weeks = semester.weeks
-        time = t.time
-        name = str(time.year)
-        mon = time.month
-        if  mon >7 :
-            name += u"年秋季"
-        else :
-            name += u"年春季"
-        t.name = name 
-        lis.append(t)
-    return dict(lesson=lesson,lis=lis,locations=locations,courses=courses)
+    return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
 
 @view_config(route_name='api_location_studentnum_list', renderer='jsonp',permission='admin')
 def api_location_studentnum_list(request):

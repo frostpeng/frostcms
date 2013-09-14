@@ -30,10 +30,10 @@ class Student(Base):
     """
     __tablename__ = 'student'
     id = Column(Integer,primary_key=True)
-    userid = Column(Integer,ForeignKey('user.id'))
+    userid = Column(Integer,ForeignKey('user.id',onupdate="CASCADE", ondelete="SET NULL"))
     identity = Column(String(12))
     name = Column(String(20))
-    clazzid = Column(Integer,ForeignKey('clazz.id'))
+    clazzid = Column(Integer,ForeignKey('clazz.id',onupdate="CASCADE", ondelete="SET NULL"))
     state=Column(Integer)
     createtime=Column(Integer)
     updatetime=Column(Integer)
@@ -45,11 +45,11 @@ class Mentor(Base):
     """
     __tablename__ = 'mentor'
     id = Column(Integer,primary_key=True)
-    userid = Column(Integer,ForeignKey('user.id'))
+    userid = Column(Integer,ForeignKey('user.id',onupdate="CASCADE", ondelete="SET NULL"))
     identity = Column(String(12))
     name = Column(String(20))
     gender = Column(String(1))
-    collegeid = Column(Integer,ForeignKey('college.id'))
+    collegeid = Column(Integer,ForeignKey('college.id',onupdate="CASCADE", ondelete="SET NULL"))
     title = Column(String(15))
     email = Column(String(30))
     phone = Column(String(15))
@@ -68,7 +68,7 @@ class Assignment(Base):     #Assignment
     id = Column(Integer, primary_key=True)
     description = Column(String(2000))
     duedate = Column(Integer)
-    lessonid = Column(Integer,ForeignKey('lesson.id'))
+    lessonid = Column(Integer,ForeignKey('lesson.id',onupdate="CASCADE", ondelete="SET NULL"))
     lesson = relationship("Lesson")
     
 class AssignUpload(Base):   #AssignmentUpload
@@ -76,8 +76,8 @@ class AssignUpload(Base):   #AssignmentUpload
     """
     __tablename__ = 'assignupload'
     id = Column(Integer, primary_key=True)
-    assignmentid = Column(Integer,ForeignKey('assignment.id'))
-    studentid = Column(Integer,ForeignKey('student.id'))
+    assignmentid = Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"))
+    studentid = Column(Integer,ForeignKey('student.id',onupdate="CASCADE", ondelete="SET NULL"))
     filepath = Column(String(300))
     subtime = Column(Integer)
     lastmodified = Column(Integer)
@@ -94,7 +94,7 @@ class Clazz(Base):  #Class
     num = Column(Integer)
     year = Column(Integer)
     mulfloat=Column(Float,default=1)
-    facultyid = Column(Integer,ForeignKey('faculty.id'))
+    facultyid = Column(Integer,ForeignKey('faculty.id',onupdate="CASCADE", ondelete="SET NULL"))
     faculty = relationship("Faculty")
 
 class Course(Base):
@@ -103,8 +103,8 @@ class Course(Base):
     __tablename__ = 'course'
     id = Column(Integer,primary_key=True)
     name = Column(String(100))
-    mentorid = Column(Integer,ForeignKey('mentor.id'))
-    semesterid = Column(Integer,ForeignKey('semester.id'))
+    mentorid = Column(Integer,ForeignKey('mentor.id',onupdate="CASCADE", ondelete="SET NULL"))
+    semesterid = Column(Integer,ForeignKey('semester.id',onupdate="CASCADE", ondelete="SET NULL"))
     mentor = relationship("Mentor")
     semester = relationship("Semester")
  
@@ -113,8 +113,8 @@ class Course_Class(Base):   #CourseClassMap
     """
     __tablename__ = 'course_class'
     id = Column(Integer,primary_key=True)
-    courseid = Column(Integer,ForeignKey('course.id'))
-    clazzid = Column(Integer,ForeignKey('clazz.id')) 
+    courseid = Column(Integer,ForeignKey('course.id',onupdate="CASCADE", ondelete="SET NULL"))
+    clazzid = Column(Integer,ForeignKey('clazz.id',onupdate="CASCADE", ondelete="SET NULL")) 
     course = relationship("Course")
     clazz = relationship("Clazz")
     
@@ -124,7 +124,7 @@ class Faculty(Base):    #Faculty
     """
     id = Column(Integer,primary_key=True)
     name = Column(String(30))
-    collegeid = Column(Integer,ForeignKey('college.id')) #SchoolID
+    collegeid = Column(Integer,ForeignKey('college.id',onupdate="CASCADE", ondelete="SET NULL")) #SchoolID
     college = relationship("College")
     
 class Lesson(Base):     #Lesson
@@ -133,7 +133,7 @@ class Lesson(Base):     #Lesson
     """
     __tablename__ = 'lesson'
     id = Column(Integer,primary_key=True)
-    courseid = Column(Integer,ForeignKey('course.id'))
+    courseid = Column(Integer,ForeignKey('course.id',onupdate="CASCADE", ondelete="SET NULL"))
     week = Column(Integer)
     dow = Column(Integer) #DayOfWeek
     start = Column(Integer)
@@ -148,8 +148,8 @@ class Lesson_Location(Base):
     """
     __tablename__ = 'lesson_location'
     id = Column(Integer,primary_key=True)
-    lessonid = Column(Integer,ForeignKey('lesson.id'))
-    locationid = Column(Integer,ForeignKey('location.id'))
+    lessonid = Column(Integer,ForeignKey('lesson.id',onupdate="CASCADE", ondelete="SET NULL"))
+    locationid = Column(Integer,ForeignKey('location.id',onupdate="CASCADE", ondelete="SET NULL"))
     studentnum=Column(Integer,default=0)
     firstrow = Column(Integer,default=0)
     lastrow = Column(Integer,default=0)
