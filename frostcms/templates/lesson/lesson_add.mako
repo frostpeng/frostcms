@@ -19,12 +19,32 @@
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">课堂管理</div>
-			<a class="btn btn-primary" id="btn_head" href="/lesson/list">返回课堂列表</a>   
+			% if course:
+			<a class="btn btn-primary" id="btn_head" href="/lesson/listbycourse?courseid=${course.id}"><i class="icon-share-alt icon-white"></i> 课堂列表</a>   			
+			% endif
 		</div>
         
         <!-- 主体信息表 -->
         <div class="right_main">
         	<form action="/lesson/save" class="add" name="course">
+        			% if course :
+						<a class="btn btn-primary disabled"><i class="icon-book icon-white"></i> ${course.name}</a>
+						<a class="btn disabled"><i class=" icon-user"></i> ${course.mentor.name}</a>
+						<%! 
+							import time
+							from datetime import date
+							
+							 
+						%>
+						<a class="btn btn-inverse disabled "><i class="icon-time icon-white"></i> ${date.fromtimestamp(course.semester.start).year}
+						% if date.fromtimestamp(course.semester.start).month>7 :
+							年秋季
+						% else :
+							年春季	
+						% endif
+						</a>
+					% endif
+				<br /><br />
 				<div class="input-prepend">
   					<span class="add-on">周次</span>
   					<input class="span2" id="prependedInput" type="text" name="lesson.week" placeholder="" />
@@ -32,7 +52,7 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">星期</span>
-  					<select class="span2" style="width:200px" name="lesson.dow" size="1" onchange="" >
+  					<select class="span2" style="width:140px" name="lesson.dow" size="1" onchange="" >
 						<option value="0" >星期日</option>
 						<option value="1" 
 						
@@ -54,6 +74,7 @@
 						>星期六</option>
 					</select>
 				</div>
+				<br />
 				<div class="input-prepend">
   					<span class="add-on">开始节数</span>
   					<input class="span2" id="prependedInput" type="text" name="lesson.starttime"  placeholder="" />
@@ -63,8 +84,10 @@
   					<span class="add-on">结束节数</span>
   					<input class="span2" id="prependedInput" type="text" name="lesson.endtime" placeholder="" />
 				</div>
+				
+				
 				<br /><hr />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="submit"><i class="icon-ok icon-white"></i>  提交</button>
  			</form>
         </div>               
         

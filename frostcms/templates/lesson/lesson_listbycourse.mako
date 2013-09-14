@@ -18,14 +18,40 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">课堂管理</div>
-			<a class="btn btn-primary" id="btn_head" href="/lesson/add">添加课堂</a> 
+			<div class="title_2">课堂管理</div>	
+			% if course:	
+			<a class="btn btn-primary" id="btn_head" href="/lesson/addtocourse?courseid=${course.id}"><i class="icon-plus icon-white"></i> 添加课堂</a>
+			% endif
 		</div>
         
         <!-- 主体信息表 -->
         <div class="right_main">
         	<table class="table table-bordered table-hover" id="main_table">
             <thead>
+            	<tr>
+            		<th colspan="6">
+            		% if course :
+						<a class="btn btn-primary disabled" style="margin:0 0 8px 0;"><i class="icon-book icon-white"></i> ${course.name}</a>
+						<a class="btn disabled" style="margin:0 0 8px 5px;"><i class=" icon-user"></i> ${course.mentor.name}</a>
+						<%! 
+							import time
+							from datetime import date 
+						%>
+						<a class="btn btn-inverse disabled " style="float:right;margin:0 0 8px 0;"><i class="icon-time icon-white"></i> ${date.fromtimestamp(course.semester.start).year}
+						% if date.fromtimestamp(course.semester.start).month>7 :
+							年秋季
+						% else :
+							年春季	
+						% endif
+						</a>
+						<br />
+						<a class="btn btn-info disabled" style="margin:5px 5px 0 0;"><i class="icon-tags icon-white"></i> 班级</a>
+						% for aclazz in course.course_classes :
+							<a class="btn disabled" style="margin:5px 0 0 0;"><i class="icon-tag"></i> ${aclazz.clazz.faculty.name} ${aclazz.clazz.year-2000}(${aclazz.clazz.num})班</a>
+						% endfor
+					% endif
+            		</th>
+            	</tr>
       			<tr>     
         			<th class="name">课程</th>
         			<th class="name">教师</th>
@@ -44,6 +70,13 @@
       			</tr>
       			% endfor
     		</tbody>
+    		<!--
+    		<tfoot >
+    			<tr>
+    				<th colspan="6"><a class="btn btn-primary" id="btn_head" href="/lesson/add" style="margin:0;width:97%;"><i class="icon-plus-sign icon-white"></i> 添加课堂</a> </th>
+    			</tr>
+    		</tfoot>
+    		-->
             </table>
             <div class="right_foot">
             	<div class="pagination">
