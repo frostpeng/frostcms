@@ -5,7 +5,8 @@ from logging import getLogger
 from .models import DBSession,Semester,Lesson,Course,and_,Location
 import webhelpers.paginate as paginate
 from datetime import date  
-from frostcms.models import Lesson_Location, Course_Class, Clazz,Student
+from frostcms.models import Lesson_Location, Course_Class
+from frostcms.utils import getStudentnumOfCourse,getLeftSeatByLocation
 
 log = getLogger(__name__)
 
@@ -16,6 +17,7 @@ def includeme(config):
     config.add_route('lesson_addtocourse', '/lesson/addtocourse')
     config.add_route('lesson_save', '/lesson/save')
     config.add_route('lesson_del', '/lesson/del')
+    config.add_route('api_location_studentnum_list','api/location_studentnum/list')
     
 @view_config(route_name='lesson_listbycourse', renderer='lesson/lesson_listbycourse.mako',permission='admin')
 def listlessonsbycourse(request):
@@ -158,14 +160,26 @@ def dellesson(request):
         lis.append(t)
     return dict(lesson=lesson,lis=lis,locations=locations,courses=courses)
 
+@view_config(route_name='api_location_studentnum_list', renderer='jsonp',permission='admin')
+def api_location_studentnum_list(request):
+    """返回位置学生总数，需要传入week,dow,start,end
+    """
+    params_tuple=['week','dow','start','end']
+    week,dow,start,end=[request.params.get(x) for x in params_tuple]
+    conn = DBSession()
+    if end-start>2:
+        lessonnum1=start/2
+        lessonnum2=end/2-1
+        locations=conn.query(Location).all()
+        for location in locations:
+            location.leftnum=min(getLeftSeatByLocation(location.id, lessonnum1, week, dow),\
+                                 getLeftSeatByLocation(location.id, lessonnum2, week, dow))
+            
+    else:
+        lessonnum=end/2-1
+        locations=conn.query(Location).all()
+        for location in locations:
+            location.leftnum=getLeftSeatByLocation(location.id, lessonnum, week, dow)
+    return dict(locations=locations)
 
-def getStudentnumOfCourse(courseid):
-    conn=DBSession()
-    courseclasses=conn.query(Course_Class).filter(Course_Class.courseid==courseid)
-    studentnum=0
-    for courseclass in courseclasses:
-        students=conn.query(Student).filter(Student.clazzid==courseclass.clazzid)
-        studentnum=studentnum+students.count()
-        
-    return studentnum
     
