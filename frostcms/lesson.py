@@ -5,7 +5,7 @@ from logging import getLogger
 from .models import DBSession,Semester,Lesson,Course,and_,Location
 import webhelpers.paginate as paginate
 from datetime import date  
-from frostcms.models import Lesson_Location, Course_Class
+from frostcms.models import Lesson_Location, Course_Class, Clazz,Student
 
 log = getLogger(__name__)
 
@@ -84,8 +84,9 @@ def listlesson(request):
 def lesson_addtocourse(request):
     conn = DBSession()
     courseid=request.params.get('courseid')
-    course=conn.query(Course).filter(Course.id==courseid)
-    return dict(course=course)    
+    course=conn.query(Course).filter(Course.id==courseid).first()
+    studentnum=getStudentnumOfCourse(courseid)
+    return dict(course=course,studentnum=studentnum)    
  
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
@@ -156,3 +157,15 @@ def dellesson(request):
         t.name = name 
         lis.append(t)
     return dict(lesson=lesson,lis=lis,locations=locations,courses=courses)
+
+
+def getStudentnumOfCourse(courseid):
+    conn=DBSession()
+    courseclasses=conn.query(Course_Class).filter(Course_Class.courseid==courseid)
+    studentnum=0
+    for courseclass in courseclasses:
+        students=conn.query(Student).filter(Student.clazzid==courseclass.clazzid)
+        studentnum=studentnum+students.count()
+        
+    return studentnum
+    
