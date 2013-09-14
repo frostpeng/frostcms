@@ -23,12 +23,12 @@ def getStudentnumOfCourse(courseid):
     """获得某门课程所有学生总数
     """
     conn=DBSession()
-    classlist=conn.query(Course_Class.clazzid).filter(Course_Class.courseid==courseid)
+    courseclasslist=conn.query(Course_Class).filter(Course_Class.courseid==courseid).all()
     studentnum=0
-    for clazzid in classlist:
-        students=conn.query(Student).filter(Student.clazzid==clazzid)
-        mulfloat=conn.query(Clazz.mulfloat).filter_by(id==clazzid)
-        studentnum=studentnum+students.count()*mulfloat    
+    for courseclazz in courseclasslist:
+        students=conn.query(Student).filter(Student.clazzid==courseclazz.clazzid)
+        clazz=conn.query(Clazz).filter(Clazz.id==courseclazz.clazzid).first()
+        studentnum=studentnum+students.count()*(clazz.mulfloat)
     return studentnum
 
 def getLeftSeatByLocation(locationid,lessonnum,week,dow):
