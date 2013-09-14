@@ -167,19 +167,21 @@ def api_location_studentnum_list(request):
     params_tuple=['week','dow','start','end']
     week,dow,start,end=[request.params.get(x) for x in params_tuple]
     conn = DBSession()
-    if end-start>2:
-        lessonnum1=start/2
-        lessonnum2=end/2-1
-        locations=conn.query(Location).all()
+    loclist=[]
+    locations=conn.query(Location).all()
+    if int(end)-int(start)>2:
+        lessonnum1=int(start)/2
+        lessonnum2=int(end)/2-1
+        
         for location in locations:
             location.leftnum=min(getLeftSeatByLocation(location.id, lessonnum1, week, dow),\
                                  getLeftSeatByLocation(location.id, lessonnum2, week, dow))
+            loclist.append({'id':location.id,'leftnum':location.leftnum,'name':location.name})
             
     else:
-        lessonnum=end/2-1
-        locations=conn.query(Location).all()
+        lessonnum=int(end)/2-1
         for location in locations:
             location.leftnum=getLeftSeatByLocation(location.id, lessonnum, week, dow)
-    return dict(locations=locations)
+    return dict(locations=loclist)
 
     

@@ -29,7 +29,7 @@ def getStudentnumOfCourse(courseid):
         students=conn.query(Student).filter(Student.clazzid==courseclazz.clazzid)
         clazz=conn.query(Clazz).filter(Clazz.id==courseclazz.clazzid).first()
         studentnum=studentnum+students.count()*(clazz.mulfloat)
-    return studentnum
+    return int(studentnum)
 
 def getLeftSeatByLocation(locationid,lessonnum,week,dow):
     """由位置和开始结束时间获取座位数,lessonnum为课堂的节数
@@ -37,7 +37,9 @@ def getLeftSeatByLocation(locationid,lessonnum,week,dow):
     conn=DBSession()
     startclass=lessonnum*2+1
     endclass=lessonnum*2+2
-    seatnum=conn.query(Location.seatnum).filter_by(id==locationid).first()
+    location=conn.query(Location).filter(Location.id==locationid).first();
+    seatnum=location.seatnum;
+    log.debug(seatnum)
     studentnums=conn.query(Lesson_Location.studentnum).filter(Lesson_Location.lessonid.in_
                     (conn.query(Lesson.id).filter(Lesson.start<=startclass,\
                     Lesson.end>=endclass,Lesson.week==week,Lesson.dow==dow)),\

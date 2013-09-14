@@ -370,3 +370,84 @@ div.ClassBoxRight{
 a.classBoxSingle{
 	margin:5px 0 0 0;
 }
+
+
+div.locationBox{
+	margin:0 0 30px 26px;
+	width:55%;
+	min-width:500px;
+	height:300px;
+	border:solid 1px #ccc;
+	border-radius:5px;
+	text-indent:0;
+}
+div.locationSelect{
+	float:left;
+	width:220px;
+	height:100%;
+	border-right:solid 1px #ccc;
+	text-align:center;
+}
+div.locationSelectHead{
+	background-color:#eee;
+	color:#000;
+	font-size:16px;
+	font-family:"微软雅黑","黑体";
+	width:100%;
+	height:30px;
+	line-height:30px;
+	text-align:center;	
+}
+div.locationSelectContent{
+	overflow-y:scroll;
+	font-size:14px;
+	font-family:"微软雅黑","黑体";
+	width:100%;
+	height:270px;
+	line-height:20px;
+	border-buttom:solid 20px #ccc;
+	text-align:center;	
+}
+div.locationAdd{
+	float:left;
+	width:279px;
+	height:100%;
+	text-align:center;
+}
+
+div.singleLocationBox{
+	width:240px;
+	height:60px;
+	margin:8px 10px 0 10px;
+	border:solid 1px #ccc;
+	border-radius:5px;
+	text-align:center;
+	background-color:#eee;
+}
+div.singleLocationTitle{
+	width:240px;
+	height:29px;
+	border-bottom:solid 1px #ccc;
+	background-color:#eee;
+	font-size:14px;
+	line-height:29px;
+	font-family:"微软雅黑","黑体";
+}
+div.singleLocationCan{
+	float:left;
+	width:117px;
+	height:30px;
+	border-right:solid 1px #ccc;
+	border-bottom-left-radius:5px;
+	background-color:#eee;
+	background-color:#eee;
+	font-size:14px;
+	line-height:29px;
+	font-family:"微软雅黑","黑体";
+}
+input.singleLocationUse{
+	float:left;
+	width:108px;
+	height:20px;
+	border-radius:5px;
+}
