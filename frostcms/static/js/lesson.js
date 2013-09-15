@@ -77,27 +77,6 @@ function checkTime(){
 	}
 	
 	if (week!="" && starttime!="" && endtime!=""){
-		/**var xmlhttp;
-		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp=new XMLHttpRequest();
-		}
-		else{// code for IE6, IE5
-			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-	
-		xmlhttp.open("GET","../api/location_studentnum/list?week="+week+"&dow="+dow+"&start="+starttime+"&end="+endtime,true);
-		xmlhttp.send();
-		xmlDoc=xmlhttp.responseXML;
-		
-		//应用列表：添加实验室
-		document.getElementById("locationHave").innerHTML = "";
-		document.getElementById("locationCan").innerHTML = "";
-		
-		var locations = xmlhttp.responseText;
-		var location;
-		for (location in locations)
-			addSingleBox(location);
-		**/
 		document.getElementById("locationHave").innerHTML = "";
 		document.getElementById("locationCan").innerHTML = "";
 		 $.ajax({
@@ -166,14 +145,17 @@ function addLocations(){
 
 function deleteLocation(id){
 	var Box = document.getElementById("locationHave");
+	var number = parseInt(document.getElementById("sNumHave").innerHTML);
 	var beDel = document.getElementById(id);
 	Box.removeChild(beDel);
 	beDel = document.getElementById(id);
+	number -= parseInt(beDel.getAttribute("value"));
 	Box.removeChild(beDel);
 	beDel = document.getElementById(id);
 	Box.removeChild(beDel);
+	document.getElementById("sNumHave").innerHTML = number;
 }
 
-function sumStudentNum(needNum){
+function sumStudentNum(thisId){
 	
 }
