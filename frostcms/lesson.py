@@ -13,6 +13,9 @@ log = getLogger(__name__)
 
 def includeme(config):
     config.scan(__name__)
+    config.add_route('admin_lesson_undolist', '/admin/lesson/undolist')
+    config.add_route('admin_lesson_agree', '/admin/lesson/agree')
+    config.add_route('admin_lesson_disagree', '/admin/lesson/disagree')
     config.add_route('lesson_listbycourse', '/lesson/listbycourse')
     config.add_route('mentor_lesson_listbycourse', '/mentor/lesson/listbycourse')
     config.add_route('lesson_list', '/lesson/list')
@@ -30,11 +33,11 @@ def listlessonsbycourse(request):
     courseid=request.params.get('courseid')
     conn = DBSession()
     course=conn.query(Course).filter(Course.id==courseid).first()
-    course_classes=conn.query(Course_Class).filter(Course_Class.courseid==courseid)
+    course_classes=conn.query(Course_Class).filter(Course_Class.courseid==courseid).all()
     course.course_classes=course_classes
-    items=conn.query(Lesson).filter(Lesson.courseid==courseid)
+    items=conn.query(Lesson).filter(Lesson.courseid==courseid).all()
     for item in items:
-        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id)
+        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
         item.lesson_locations=lesson_locations
         
     page_url = paginate.PageURL_WebOb(request)
@@ -46,6 +49,46 @@ def listlessonsbycourse(request):
             )
     return dict(items=items,course=course)
 
+@view_config(route_name='admin_lesson_undolist', renderer='lesson/admin_lesson_undolist.mako',permission='admin')
+def admin_lesson_undolist(request):
+    page = int(request.params.get('page', 1))
+    conn = DBSession()
+    items=conn.query(Lesson).filter(Lesson.state==0).all()
+    for item in items:
+        lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
+        item.lesson_locations=lesson_locations
+        
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
+            items,
+            page=int(page),
+            items_per_page=10,
+            url=page_url,
+            )
+    return dict(items=items)
+
+@view_config(route_name='admin_lesson_agree', renderer='lesson/lesson_add.mako',permission='admin')
+def admin_lesson_agree(request):
+    conn = DBSession()
+    lessonid=request.params.get('lessonid')
+    lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
+    if lesson:
+        lesson.state=1
+        conn.flush()
+        return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
+    return HTTPFound(location=request.route_url('admin_lesson_undolist'))
+
+@view_config(route_name='admin_lesson_disagree', renderer='lesson/lesson_add.mako',permission='admin')
+def admin_lesson_disagree(request):
+    conn = DBSession()
+    lessonid=request.params.get('lessonid')
+    lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
+    if lesson:
+        lesson.state=2
+        conn.flush()
+        return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
+    return HTTPFound(location=request.route_url('admin_lesson_undolist'))
+
 @view_config(route_name='mentor_lesson_listbycourse', renderer='lesson/mentor_lesson_listbycourse.mako',permission='mentor')
 def mentor_lesson_listbycourse(request):
     page = int(request.params.get('page', 1))
@@ -53,13 +96,16 @@ def mentor_lesson_listbycourse(request):
     conn = DBSession()
     course=conn.query(Course).filter(Course.id==courseid,Course.mentorid.in_(\
             conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
+    log.debug(course.id)
     if course:
-        course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id)
+        log.debug('king')
+        course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id).all()
         course.course_classes=course_classes
         items=conn.query(Lesson).filter(Lesson.courseid==course.id).all()
         for item in items:
-            lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id)
+            lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
             item.lesson_locations=lesson_locations
+            
         page_url = paginate.PageURL_WebOb(request)
         items = paginate.Page(items,page=int(page),items_per_page=10,url=page_url,)
         return dict(items=items,course=course)
@@ -74,10 +120,10 @@ def listlesson(request):
     semesters = conn.query(Semester).order_by(Semester.id)
     if request.method == "POST":
         semesterid = request.params.get('semesterid')
-        items = conn.query(Lesson,Course).filter(and_(Lesson.courseid==Course.id,Course.semesterid==semesterid))
+        items = conn.query(Lesson,Course).filter(and_(Lesson.courseid==Course.id,Course.semesterid==semesterid)).all()
     else :
-        items = conn.query(Lesson).order_by(Lesson.id)
-    semesters = conn.query(Semester).order_by(Semester.id)
+        items = conn.query(Lesson).order_by(Lesson.id).all()
+    semesters = conn.query(Semester).order_by(Semester.id).all()
     lis = []
     class List_semester():
         def __init__(self):
