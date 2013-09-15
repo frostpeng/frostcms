@@ -13,7 +13,6 @@
             <li><a href="/faculty/list">专业</a></li>
             <li><a href="/clazz/list">班级</a></li>
             <li><a href="/course/list">课程</a></li>
-            <li><a href="/lesson/list">课堂</a></li>
             <li><a href="#">课堂申请</a></li>
 		</ul>
 </div>
@@ -23,7 +22,7 @@
         	<li class="disabled"><a href="#">公共查询</a></li>
             <li><a href="/public/lesson_list">课堂查询</a></li>
             <li class="disabled"><a href="#">教师</a></li>
-            <li><a href="#">我的课程</a></li>
+            <li><a href="/mentor/course/list">我的课程</a></li>
             <li><a href="#">我的作业</a></li>
             <li><a href="#">课堂申请</a></li>
 		</ul>
