@@ -2,7 +2,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
-from .models import DBSession,Semester,Lesson,Course,and_,Location
+from .models import DBSession,Semester,Lesson,Course,and_,Location,Mentor
 import webhelpers.paginate as paginate
 from datetime import date  
 from frostcms.models import Lesson_Location, Course_Class
@@ -14,10 +14,14 @@ log = getLogger(__name__)
 def includeme(config):
     config.scan(__name__)
     config.add_route('lesson_listbycourse', '/lesson/listbycourse')
+    config.add_route('mentor_lesson_listbycourse', '/mentor/lesson/listbycourse')
     config.add_route('lesson_list', '/lesson/list')
     config.add_route('lesson_addtocourse', '/lesson/addtocourse')
+    config.add_route('mentor_lesson_addtocourse', '/mentor/lesson/addtocourse')
     config.add_route('lesson_save', '/lesson/save')
+    config.add_route('mentor_lesson_save', '/mentor/lesson/save')
     config.add_route('lesson_del', '/lesson/del')
+    config.add_route('mentor_lesson_del', '/mentor/lesson/del')
     config.add_route('api_location_studentnum_list','api/location_studentnum/list')
     
 @view_config(route_name='lesson_listbycourse', renderer='lesson/lesson_listbycourse.mako',permission='admin')
@@ -41,6 +45,27 @@ def listlessonsbycourse(request):
             url=page_url,
             )
     return dict(items=items,course=course)
+
+@view_config(route_name='mentor_lesson_listbycourse', renderer='lesson/mentor_lesson_listbycourse.mako',permission='mentor')
+def mentor_lesson_listbycourse(request):
+    page = int(request.params.get('page', 1))
+    courseid=request.params.get('courseid')
+    conn = DBSession()
+    course=conn.query(Course).filter(Course.id==courseid,Course.mentorid.in_(\
+            conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
+    if course:
+        course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id)
+        course.course_classes=course_classes
+        items=conn.query(Lesson).filter(Lesson.courseid==course.id).all()
+        for item in items:
+            lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id)
+            item.lesson_locations=lesson_locations
+        page_url = paginate.PageURL_WebOb(request)
+        items = paginate.Page(items,page=int(page),items_per_page=10,url=page_url,)
+        return dict(items=items,course=course)
+    return dict(code=0,error=u"课程不存在")
+
+
     
 @view_config(route_name='lesson_list', renderer='lesson/lesson_list.mako',permission='admin')
 def listlesson(request):
@@ -89,7 +114,18 @@ def lesson_addtocourse(request):
     courseid=request.params.get('courseid')
     course=conn.query(Course).filter(Course.id==courseid).first()
     studentnum=getStudentnumOfCourse(courseid)
-    return dict(course=course,studentnum=studentnum)    
+    return dict(course=course,studentnum=studentnum)   
+
+@view_config(route_name='mentor_lesson_addtocourse', renderer='lesson/mentor_lesson_addtocourse.mako',permission='mentor')
+def mentor_lesson_addtocourse(request):
+    conn = DBSession()
+    courseid=request.params.get('courseid')
+    course=conn.query(Course).filter(Course.id==courseid,Course.mentorid.in_(\
+            conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
+    if course:
+        studentnum=getStudentnumOfCourse(courseid)
+        return dict(course=course,studentnum=studentnum) 
+    return dict(code=0,error=u'课程不存在')   
  
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
@@ -128,6 +164,44 @@ def savelesson(request):
         conn.add(lesson_location)
     conn.flush()
     return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
+
+@view_config(route_name='mentor_lesson_save', renderer='lesson/mentor_lesson_addtocourse.mako',permission='mentor')
+def mentor_lesson_save(request):
+    conn = DBSession()
+    locations=request.params.getall('locationid')
+    studentnums=request.params.getall('studentnum')
+    params_tuple=['lesson.id','lesson.courseid','lesson.week','lesson.dow','lesson.starttime','lesson.endtime']
+    lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
+    lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
+    if lesson:
+        lesson.courseid = courseid
+        lesson.week = week
+        lesson.dow = dow
+        lesson.start = start
+        lesson.end = end
+        lesson.state = 0
+        lesson.updatetime=time.time()
+        conn.flush()
+    else:
+        lesson = Lesson()
+        lesson.courseid = courseid
+        lesson.week = week
+        lesson.dow = dow
+        lesson.start = start
+        lesson.end = end
+        lesson.state = 0
+        lesson.createtime=time.time()
+        lesson.updatetime=time.time()
+        conn.add(lesson)
+    conn.flush()
+    for i in range(0,len(locations)):
+        lesson_location=Lesson_Location()
+        lesson_location.lessonid=lesson.id
+        lesson_location.locationid=int(locations[i])
+        lesson_location.studentnum=int(studentnums[i])
+        conn.add(lesson_location)
+    conn.flush()
+    return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
  
 @view_config(route_name='lesson_del', renderer='lesson/lesson_del.mako',permission='admin')
 def dellesson(request):
@@ -138,10 +212,24 @@ def dellesson(request):
     if lesson:
         conn.delete(lesson)
         conn.flush()
-        return HTTPFound(location=request.route_url('lesson_list'))
+        return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
     return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
 
-@view_config(route_name='api_location_studentnum_list', renderer='jsonp',permission='admin')
+@view_config(route_name='mentor_lesson_del', renderer='lesson/lesson_add.mako',permission='mentor')
+def mentor_lesson_del(request):
+    conn = DBSession()
+    lessonid=request.params.get('lessonid')
+    lesson = conn.query(Lesson).filter(Lesson.id==lessonid,Lesson.courseid.in_(\
+            conn.query(Course.id).filter(Course.mentorid.in_(\
+                conn.query(Mentor.id).filter(Mentor.userid==request.user.id))))).first()
+    courseid=lesson.courseid
+    if lesson:
+        conn.delete(lesson)
+        conn.flush()
+        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
+    return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
+
+@view_config(route_name='api_location_studentnum_list', renderer='jsonp',permission='user')
 def api_location_studentnum_list(request):
     """返回位置学生总数，需要传入week,dow,start,end
     """
