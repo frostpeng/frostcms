@@ -109,7 +109,7 @@ function addLocations(){
 		var button = document.createElement("a");
 		var imgT = document.createElement("i");
 		
-		if (document.course.locationUse[lx].value == "" || document.course.locationUse[lx].value== "0")
+		if (locationUse[lx].value == "" || locationUse[lx].value== "0")
 			continue;
 		
 		imgT.setAttribute("class","icon-remove");
@@ -123,13 +123,13 @@ function addLocations(){
 		
 		input_num.setAttribute("name","studentnum");
 		input_num.setAttribute("id","location"+locationUse[lx].getAttribute("id"));
-		input_num.setAttribute("value",document.course.locationUse[lx].value);
+		input_num.setAttribute("value",locationUse[lx].value);
 		input_num.setAttribute("type","text");
 		input_num.setAttribute("style","display:none;");
 			
 		button.setAttribute("id","location"+locationUse[lx].getAttribute("id"));
 		button.setAttribute("class","btn");
-		button.appendChild(document.createTextNode(locationUse[lx].getAttribute("placeholder")+" : "+ document.course.locationUse[lx].value + "人  "));
+		button.appendChild(document.createTextNode(locationUse[lx].getAttribute("placeholder")+" : "+locationUse[lx].value + "人  "));
 		button.setAttribute("onclick","deleteLocation(\"location"+locationUse[lx].getAttribute("id")+"\")");
 		button.setAttribute("style","margin:5px 5px 0 0;");
 		button.appendChild(imgT);

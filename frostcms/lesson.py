@@ -163,6 +163,7 @@ def api_location_studentnum_list(request):
         lessonnum=int(end)/2-1
         for location in locations:
             location.leftnum=getLeftSeatByLocation(location.id, lessonnum, week, dow)
+            loclist.append({'id':location.id,'leftnum':location.leftnum,'name':location.name})
     return dict(locations=loclist)
 
     

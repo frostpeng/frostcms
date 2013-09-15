@@ -18,23 +18,21 @@ def includeme(config):
 def listlesson(request):
     page = int(request.params.get('page', 1))
     conn = DBSession()
-    startweek=request.params.get('startweek')
-    endweek=request.params.get('endweek')
-    locationid=request.params.get('locationid')
-    area=request.params.get("area")
+    params_tuple=['startweek','endweek','locationid',"area"]
+    startweek,endweek,locationid,area=[request.params.get(x) for x in params_tuple]
     locationdictionary=conn.query(Location).order_by(Location.id)
-    items=conn.query(Lesson,Location)
+    items=None
     if startweek or endweek or locationid or area:
+        items=conn.query(Lesson)
         if startweek:
             items=items.filter(Lesson.week>=startweek)
         if endweek:
             items=items.filter(Lesson.week<=endweek) 
         if area:
-            items=items.filter(and_(Lesson.locationid==Location.id,Location.area==area))
+            items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter\
+                    (Lesson_Location.locationid.in_(conn.query(Location.id).filter(Location.area==area)))))
         if locationid:
-            items=items.filter(Lesson.locationid==locationid)
-        else:
-            items=None
+            items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter(Lesson_Location.locationid==locationid)))
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
