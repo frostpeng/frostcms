@@ -39,7 +39,6 @@ def getLeftSeatByLocation(locationid,lessonnum,week,dow):
     endclass=lessonnum*2+2
     location=conn.query(Location).filter(Location.id==locationid).first();
     seatnum=location.seatnum;
-    log.debug(seatnum)
     lessonlocations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid.in_
                     (conn.query(Lesson.id).filter(Lesson.start<=startclass,\
                     Lesson.end>=endclass,Lesson.week==week,Lesson.dow==dow)),\
