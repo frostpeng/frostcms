@@ -47,7 +47,7 @@
 						<br />
 						<a class="btn btn-info disabled" style="margin:5px 5px 0 0;"><i class="icon-tags icon-white"></i> 班级</a>
 						% for aclazz in course.course_classes :
-							<a class="btn disabled" style="margin:5px 0 0 0;"><i class="icon-tag"></i> ${aclazz.clazz.faculty.name} ${aclazz.clazz.year-2000}(${aclazz.clazz.num})班</a>
+							<a class="btn disabled" style="margin:5px 0 0 0;"><i class="icon-tag"></i> ${aclazz.clazz.faculty.name} ${aclazz.clazz.year}(${aclazz.clazz.num})班</a>
 						% endfor
 					% endif
             		</th>
@@ -55,9 +55,11 @@
       			<tr>     
         			<th class="name">周数</th>
         			<th class="name">天数</th>
-        			<th class="name_l">开始节数</th>
+        			<th class="name">开始节数</th>
         			<th class="name">结束节数</th>
-        			<th class="app">操作</th>
+        			<th class="name_l">教室安排</th>
+        			<th class="name">状态</th>
+        			<th class="name">操作</th>
       			</tr>
     		</thead>
             <tbody>
@@ -65,9 +67,24 @@
       			<tr>
         			<td class="name">${item.week}</td>
         			<td class="name">${item.dow+1}</td>
-        			<td class="name_l">${item.start}</td>
+        			<td class="name">${item.start}</td>
         			<td class="name">${item.end}</td>
-        			<td class="name_l"><a class="btn btn-danger" href="/mentor/lesson/del?lessonid=${item.id}">删除</a></td>
+        			<td class="name">
+        			% for lessonlocation in item.lesson_locations:
+        				${lessonlocation.location.name}—${lessonlocation.studentnum}人
+        				<br/>
+        			%endfor
+        			</td>
+        			<td class="name">
+        			%if item.state==0:
+        			申请中
+        			%elif item.state==1:
+        			申请成功
+        			%elif item.state==2:
+        			申请失败
+        			%endif
+					</td>
+        			<td class="name"><a class="btn btn-danger" href="/mentor/lesson/del?lessonid=${item.id}">删除</a></td>
       			</tr>
       			% endfor
     		</tbody>
