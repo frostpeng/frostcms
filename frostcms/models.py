@@ -186,6 +186,21 @@ class Semester(Base):
     start = Column(Integer)
     weeks = Column(Integer)
     
+class LessonWorkItem(Base):
+    """用于记录lesson的处理情况，需要包括lessonid,请求处理人的userid，处理人的id，操作，阅读状态(0为未读，1为已读)，处理时间
+        action状态定义为0为申请行为（mentor->admin），1为批准(admin->mentor)，2为拒绝(admin->mentor),3为编辑并批准(admin->mentor)
+    """
+    __tablename__ = 'lessonworkitem'
+    id = Column(Integer,primary_key=True)
+    lessonid = Column(Integer,ForeignKey('lesson.id',onupdate="CASCADE", ondelete="SET NULL"))
+    acceptuserid=Column(Integer,ForeignKey('user.id',onupdate="CASCADE", ondelete="SET NULL"))
+    senduserid=Column(Integer,ForeignKey('user.id',onupdate="CASCADE", ondelete="SET NULL"))
+    viewstate=Column(Integer,default=0)
+    action=Column(Integer,default=0)
+    actiontime=Column(INTEGER)
+    lesson = relationship("Lesson")
+    acceptuser=relationship("User",foreign_keys=[acceptuserid])
+    senduser=relationship("User",foreign_keys=[senduserid])
     
 
 def initialize_sql(engine):

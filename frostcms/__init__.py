@@ -11,9 +11,12 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from .authentication import AuthenticationPolicy
 from .security import groupfinder
-from .models import initialize_sql,DBSession,User
+from .models import initialize_sql,DBSession,User,Lesson
 import hashlib
 import transaction
+from logging import getLogger
+
+log = getLogger(__name__)
 
 class MainRequest(Request):
     @reify
@@ -25,6 +28,12 @@ class MainRequest(Request):
             return user
         else:
             return None
+        
+    @reify
+    def undocount(self):
+        conn=DBSession()
+        lessons=conn.query(Lesson).filter(Lesson.state==0).all()
+        return len(lessons)
 
 
 def main(global_config, **settings):
