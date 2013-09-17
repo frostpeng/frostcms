@@ -11,6 +11,7 @@ log = getLogger(__name__)
 def includeme(config):
     config.scan(__name__)
     config.add_route('clazz_list', '/clazz/list')
+    config.add_route('api_clazz_list','/api/clazz/list')
     config.add_route('clazz_add', '/clazz/add')
     config.add_route('clazz_save', '/clazz/save')
     config.add_route('clazz_del', '/clazz/del')
@@ -63,6 +64,16 @@ def listclazz(request):
             url=page_url,
     )
     return dict(items=items,colleges=colleges,facultys=facultys,clazzs=clazzs,infos=infos)
+ 
+@view_config(route_name='api_clazz_list', renderer='jsonp',permission='user')
+def api_clazz_list(request):
+    conn = DBSession()
+    facultyid = request.params.get('facultyid')
+    if facultyid:
+        clazzes = conn.query(Clazz).filter(Clazz.facultyid==facultyid).order_by(Clazz.id)
+    else :
+        clazzes = conn.query(Clazz).order_by(Clazz.id)
+    return dict(clazzes=clazzes) 
  
 @view_config(route_name='clazz_add', renderer='clazz/clazz_add.mako',permission='admin')
 def addclazz(request):

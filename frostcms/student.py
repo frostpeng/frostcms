@@ -128,8 +128,8 @@ def delstudent(request):
 def upload(request):
     upload = request.params.get('file')
     path = "frostcms/upload/exceltmp"
-#     if  os.path.exists(path):
-#         os.makedirs(path)
+    if not os.path.exists(path):
+        os.makedirs(path)
          
     if isinstance(upload, cgi.FieldStorage) and upload.file:
         extension = upload.filename.split('.')[-1:][0]  

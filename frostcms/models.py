@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 from zope.sqlalchemy import ZopeTransactionExtension
+from webhelpers.html.tags import password
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
@@ -25,6 +26,11 @@ class User(Base):   #Account
     lastlogin=Column(Integer)
     logintimes=Column(Integer)
     
+    def __json__(self,request):
+        return dict(id=self.id,name=self.name,password=self.password,role=self.role,\
+                    regtime=self.regtime,lastlogin=self.lastlogin,logintimes=self.logintimes)
+        
+    
 class Student(Base):
     """包含id，userid，学号，真名，班级id，用户状态
     """
@@ -39,6 +45,11 @@ class Student(Base):
     updatetime=Column(Integer)
     user = relationship("User")
     clazz = relationship("Clazz")
+    
+    def __json__(self,request):
+        return dict(id=self.id,userid=self.userid,identity=self.identity,name=self.name,\
+             clazzid=self.clazzid,state=self.state,createtime=self.createtime,updatetime=\
+             self.updatetime)
     
 class Mentor(Base):
     """包含id，userid，工号，真名，性别，学院，头衔，邮件，电话，描述,状态（0为正常，1为锁定，-1为删除）
@@ -60,6 +71,12 @@ class Mentor(Base):
     user = relationship("User")
     college = relationship("College")
     
+    def __json__(self,request):
+        return dict(id=self.id,userid=self.userid,identity=self.identity,name=self.name,\
+             gender=self.gender,collegeid=self.collegeid,title=self.title,email=self.email,\
+             phone=self.phone,description=self.description,state=self.state,createtime=self.createtime,updatetime=\
+             self.updatetime)
+    
 
 class Assignment(Base):     #Assignment
     """作业包含id，描述，提交时间，对应课堂
@@ -70,6 +87,9 @@ class Assignment(Base):     #Assignment
     duedate = Column(Integer)
     lessonid = Column(Integer,ForeignKey('lesson.id',onupdate="CASCADE", ondelete="SET NULL"))
     lesson = relationship("Lesson")
+    
+    def __json__(self,request):
+        return dict(id=self.id,description=self.description,duedate=self.duedate,lessonid=self.lessonid)
     
 class AssignUpload(Base):   #AssignmentUpload
     """作业提交包含作业id，学生id，文件路径，提交时间，最后修改时间，修改次数，分数
@@ -85,6 +105,10 @@ class AssignUpload(Base):   #AssignmentUpload
     grade = Column(Integer)
     assignment = relationship("Assignment")
     student = relationship("Student")
+    
+    def __json__(self,request):
+        return dict(id=self.id,studentid=self.studentid,filepath=self.filepath,subtime=self.subtime,\
+             lastmodified=self.lastmodified,modifiedtimes=self.modifiedtimes,grade=self.grade)
 
 class Clazz(Base):  #Class
     """班级包含班级号，年级，院系id,浮动率
@@ -96,6 +120,9 @@ class Clazz(Base):  #Class
     mulfloat=Column(Float,default=1)
     facultyid = Column(Integer,ForeignKey('faculty.id',onupdate="CASCADE", ondelete="SET NULL"))
     faculty = relationship("Faculty")
+    
+    def __json__(self,request):
+        return dict(id=self.id,num=self.num,year=self.year,mulfloat=self.mulfloat,facultyid=self.facultyid)
 
 class Course(Base):
     """课程包含id，课程名，老师名，学期名
@@ -107,6 +134,9 @@ class Course(Base):
     semesterid = Column(Integer,ForeignKey('semester.id',onupdate="CASCADE", ondelete="SET NULL"))
     mentor = relationship("Mentor")
     semester = relationship("Semester")
+    
+    def __json__(self,request):
+        return dict(id=self.id,name=self.name,mentorid=self.mentorid,semesterid=self.semesterid)
  
 class Course_Class(Base):   #CourseClassMap
     """课程与班级对应关系包含id，课程id，班级id
@@ -118,6 +148,9 @@ class Course_Class(Base):   #CourseClassMap
     course = relationship("Course")
     clazz = relationship("Clazz")
     
+    def __json__(self,request):
+        return dict(id=self.id,courseid=self.courseid,clazzid=self.clazzid)
+    
 class Faculty(Base):    #Faculty
     __tablename__ = 'faculty'
     """院系包含院系名和学院id
@@ -126,6 +159,9 @@ class Faculty(Base):    #Faculty
     name = Column(String(30))
     collegeid = Column(Integer,ForeignKey('college.id',onupdate="CASCADE", ondelete="SET NULL")) #SchoolID
     college = relationship("College")
+    
+    def __json__(self,request):
+        return dict(id=self.id,name=self.name,collegeid=self.collegeid)
     
 class Lesson(Base):     #Lesson
     """课堂包含课程id，周次，周几，(实验室id，第一行，最后一行,人数)的数组，开始节数，结束节数,课程状态(包括申请中，申请结束，被拒绝)
@@ -143,6 +179,10 @@ class Lesson(Base):     #Lesson
     updatetime=Column(Integer)
     course = relationship("Course")
     
+    def __json__(self,request):
+        return dict(id=self.id,courseid=self.courseid,week=self.week,dow=self.dow,start=self.start,\
+            end=self.end,state=self.state,createtime=self.createtime,updatetime=self.updatetime)
+    
 class Lesson_Location(Base):
     """课堂和位置对应关系包含课程id，locationid以及需要占用的位置数量
     """
@@ -155,6 +195,10 @@ class Lesson_Location(Base):
     lastrow = Column(Integer,default=0)
     lesson = relationship("Lesson")
     location = relationship("Location")
+    
+    def __json__(self,request):
+        return dict(id=self.id,lessonid=self.lessonid,locationid=self.locationid,studentnum=\
+            self.studentnum,firstrow=self.firstrow,lastrow=self.lastrow)
 
     
 class Location(Base):   #Location
@@ -169,6 +213,9 @@ class Location(Base):   #Location
     seatnum=Column(Integer,nullable=False,default=0)
     area = Column(Integer)
     
+    def __json__(self,request):
+        return dict(id=self.id,name=self.name,address=self.address,perrow=self.perrow,\
+                    totalrows=self.totalrows,seatnum=self.seatnum,area=self.area)
 
     
 class College(Base):    #School
@@ -178,6 +225,9 @@ class College(Base):    #School
     id = Column(Integer,primary_key=True)
     name = Column(String(20))
     
+    def __json__(self,request):
+        return dict(id=self.id,name=self.name)
+    
 class Semester(Base):
     """学期包括开始时间和周数，需要自动生成为最佳，凡是查找不到或者需要依靠的地方都会自动生成
     """
@@ -185,6 +235,9 @@ class Semester(Base):
     id = Column(Integer,primary_key=True)
     start = Column(Integer)
     weeks = Column(Integer)
+    
+    def __json__(self,request):
+        return dict(id=self.id,start=self.start,weeks=self.weeks)
     
 class LessonWorkItem(Base):
     """用于记录lesson的处理情况，需要包括lessonid,请求处理人的userid，处理人的id，操作，阅读状态(0为未读，1为已读)，处理时间
@@ -201,6 +254,11 @@ class LessonWorkItem(Base):
     lesson = relationship("Lesson")
     acceptuser=relationship("User",foreign_keys=[acceptuserid])
     senduser=relationship("User",foreign_keys=[senduserid])
+    
+    def __json__(self,request):
+        return dict(id=self.id,lessonid=self.lessonid,acceptuserid=self.acceptuserid,senduserid\
+                    =self.senduserid,viewstate=self.viewstate,action=self.action,actiontime=\
+                    self.actiontime)
     
 
 def initialize_sql(engine):

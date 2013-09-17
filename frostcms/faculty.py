@@ -10,6 +10,7 @@ log = getLogger(__name__)
 def includeme(config):
     config.scan(__name__)
     config.add_route('faculty_list', '/faculty/list')
+    config.add_route('api_faculty_list','/api/faculty/list')
     config.add_route('faculty_add', '/faculty/add')
     config.add_route('faculty_save', '/faculty/save')
     config.add_route('faculty_del', '/faculty/del')
@@ -32,6 +33,16 @@ def listfaculty(request):
             url=page_url,
             )
     return dict(items=items,lis=lis)
+
+@view_config(route_name='api_faculty_list', renderer='jsonp',permission='user')
+def api_faculty_list(request):
+    conn = DBSession()
+    collegeid = request.params.get('collegeid')
+    if collegeid:
+        faculties = conn.query(Faculty).filter(Faculty.collegeid==collegeid)
+    else :
+        faculties = conn.query(Faculty).order_by(Faculty.id)
+    return dict(faculties=faculties)
  
 @view_config(route_name='faculty_add', renderer='faculty/faculty_add.mako',permission='admin')
 def addfaculty(request):

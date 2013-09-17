@@ -109,14 +109,14 @@ def delmentor(request):
 def upload(request):
     upload = request.params.get('file')
     path = "frostcms/upload/exceltmp"
-#     if  os.path.exists(path):
-#         os.makedirs(path)
-#          
+    if not os.path.exists(path):
+        os.makedirs(path)
+          
     if isinstance(upload, cgi.FieldStorage) and upload.file:
         extension = upload.filename.split('.')[-1:][0]  
         if extension == "xls" or extension == "xlsx":
             filename = "%s.%s" % (uuid.uuid1(), extension)
-            filepath = os.path.join(path, filename).replace("\\", "/")
+            filepath = os.path.join(path, filename)                         .replace("\\", "/")
             myfile = open(filepath, 'wb')
             upload.file.seek(0)
             while 1:
