@@ -84,7 +84,8 @@
         			申请失败
         			%endif
 					</td>
-        			<td class="name"><a class="btn btn-danger" href="/mentor/lesson/del?lessonid=${item.id}">删除</a></td>
+        			<td class="name">
+        			<a class="btn btn-danger" href="/mentor/lesson/del?lessonid=${item.id}">删除</a></td>
       			</tr>
       			% endfor
     		</tbody>

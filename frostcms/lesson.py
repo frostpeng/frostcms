@@ -2,7 +2,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
-from .models import DBSession,Semester,Lesson,Course,and_,Location,Mentor
+from .models import DBSession,Semester,Lesson,Course,and_,Location,Mentor,Lesson_Location
 import webhelpers.paginate as paginate
 from datetime import date  
 from frostcms.models import Lesson_Location, Course_Class
@@ -21,6 +21,7 @@ def includeme(config):
     config.add_route('lesson_list', '/lesson/list')
     config.add_route('lesson_addtocourse', '/lesson/addtocourse')
     config.add_route('mentor_lesson_addtocourse', '/mentor/lesson/addtocourse')
+    config.add_route('admin_lesson_edit', '/admin/lesson/edit')
     config.add_route('lesson_save', '/lesson/save')
     config.add_route('mentor_lesson_save', '/mentor/lesson/save')
     config.add_route('lesson_del', '/lesson/del')
@@ -98,7 +99,6 @@ def mentor_lesson_listbycourse(request):
             conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
     log.debug(course.id)
     if course:
-        log.debug('king')
         course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id).all()
         course.course_classes=course_classes
         items=conn.query(Lesson).filter(Lesson.courseid==course.id).all()
@@ -172,6 +172,18 @@ def mentor_lesson_addtocourse(request):
         studentnum=getStudentnumOfCourse(courseid)
         return dict(course=course,studentnum=studentnum) 
     return dict(code=0,error=u'课程不存在')   
+
+@view_config(route_name='admin_lesson_edit', renderer='lesson/lesson_add.mako',permission='admin')
+def admin_lesson_edit(request):
+    conn = DBSession()
+    lessonid=request.params.get('lessonid')
+    lesson=conn.query(Lesson).filter(Lesson.id==lessonid).first()
+    if lesson:
+        lessonlocations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lessonid).all()
+        lesson.lessonlocations=lessonlocations
+        studentnum=getStudentnumOfCourse(lesson.courseid)
+        return dict(lesson=lesson,studentnum=studentnum,course=lesson.course) 
+    return dict(code=0,error=u'课堂不存在')   
  
 @view_config(route_name='lesson_save', renderer='lesson/lesson_add.mako',permission='admin')
 def savelesson(request):
@@ -189,7 +201,7 @@ def savelesson(request):
         lesson.end = end
         lesson.state = 1
         lesson.updatetime=time.time()
-        conn.flush()
+        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
     else:
         lesson = Lesson()
         lesson.courseid = courseid
@@ -227,7 +239,7 @@ def mentor_lesson_save(request):
         lesson.end = end
         lesson.state = 0
         lesson.updatetime=time.time()
-        conn.flush()
+        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
     else:
         lesson = Lesson()
         lesson.courseid = courseid

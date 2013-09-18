@@ -128,8 +128,8 @@ def delstudent(request):
 def upload(request):
     upload = request.params.get('file')
     path = "frostcms/upload/exceltmp"
-#     if  os.path.exists(path):
-#         os.makedirs(path)
+    if not os.path.exists(path):
+        os.makedirs(path)
          
     if isinstance(upload, cgi.FieldStorage) and upload.file:
         extension = upload.filename.split('.')[-1:][0]  
@@ -160,7 +160,7 @@ def operateexcel(filepath=None):
         collegename=table.row(rownum)[3].value.strip()
         if(identitynum and name and clazzname and collegename):
             clazznum=clazzname[len(clazzname)-3:len(clazzname)-1]
-            grade=clazzname[len(clazzname)-7:len(clazzname)-3]
+            year=clazzname[len(clazzname)-7:len(clazzname)-3]
             facultyname=clazzname[0:len(clazzname)-7]
             college=conn.query(College).filter(College.name==collegename).first()
             if not college:
@@ -179,17 +179,18 @@ def operateexcel(filepath=None):
                 conn.add(faculty)
                    
             faculty=conn.query(Faculty).filter(and_(Faculty.name==facultyname ,Faculty.collegeid==college.id)).first()
-            clazz=conn.query(Clazz).filter(and_(and_(Clazz.grade==grade 
+            clazz=conn.query(Clazz).filter(and_(and_(Clazz.year==year 
                                            , Clazz.num==clazznum),Clazz.facultyid==faculty.id)).first()
             if not clazz:
                 
                 clazz=Clazz()
-                clazz.grade=grade
+                clazz.year=year
                 clazz.num=clazznum
                 clazz.facultyid=faculty.id
+                clazz.mulfloat=1
                 conn.add(clazz)
                  
-            clazz=conn.query(Clazz).filter(and_(and_(Clazz.grade==grade,Clazz.num==clazznum),Clazz.facultyid==faculty.id)).first()
+            clazz=conn.query(Clazz).filter(and_(and_(Clazz.year==year,Clazz.num==clazznum),Clazz.facultyid==faculty.id)).first()
             
             student=conn.query(Student).filter(and_(and_(Student.clazzid==clazz.id ,
                                                Student.name==name),Student.identity==identitynum)).first()

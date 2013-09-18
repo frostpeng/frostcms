@@ -13,7 +13,11 @@
             <li><a href="/faculty/list">专业</a></li>
             <li><a href="/clazz/list">班级</a></li>
             <li><a href="/course/list">课程</a></li>
-            <li><a href="/admin/lesson/undolist">课堂申请</a></li>
+            <li><a href="/admin/lesson/undolist">课堂申请 
+            %if request.undocount>0:
+              ${request.undocount}
+            %endif
+            </a></li>
 		</ul>
 </div>
 	% elif request.user.role == 1:

@@ -31,7 +31,7 @@
         	 	%if lesson:
         	 	<input type="hidden" name="lesson.id" value="${lesson.id}" />
         	 	%endif
-        			% if course :
+        			%if course :
         			<input type="hidden" name="lesson.courseid" value="${course.id}"/>
         			
 						<a class="btn btn-primary disabled"><i class="icon-book icon-white"></i> ${course.name}</a>
@@ -42,42 +42,82 @@
 							from datetime import date	 
 						%>
 						<a class="btn btn-inverse disabled "><i class="icon-time icon-white"></i> ${date.fromtimestamp(course.semester.start).year}
-						% if date.fromtimestamp(course.semester.start).month>7 :
+						%if date.fromtimestamp(course.semester.start).month>7 :
 							年秋季
-						% else :
+						%else :
 							年春季	
-						% endif
+						%endif
 						</a>
-					% endif
+					%endif
 				<br /><br />
 				<div class="input-prepend">
   					<span class="add-on">周次</span>
+  					%if lesson:
+  					<input class="span2" id="checkWeek" type="text" name="lesson.week" value="${lesson.week}" onkeyup="checkTime()" placeholder="" />
+  					%else:
   					<input class="span2" id="checkWeek" type="text" name="lesson.week" onkeyup="checkTime()" placeholder="" />
+  					%endif
 				</div>
 				<span id="checkWeekRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">星期</span>
   					<select class="span2" style="width:140px" name="lesson.dow" onchange="checkTime()" size="1" onchange="" >
-						<option value="0" >星期日</option>
-						<option value="1" >星期一</option>
-						<option value="2" >星期二</option>
-						<option value="3" >星期三</option>
-						<option value="4" >星期四</option>
-						<option value="5" >星期五</option>
-						<option value="6" >星期六</option>
+						<option value="0" 
+						% if lesson and lesson.dow == 0:
+							selected="selected"
+						% endif
+						>星期日</option>
+						<option value="1" 
+						% if lesson and lesson.dow == 1:
+							selected="selected"
+						% endif
+						>星期一</option>
+						<option value="2"
+						%if lesson and lesson.dow == 2:
+							selected="selected"
+						%endif
+						 >星期二</option>
+						<option value="3" 
+						%if lesson and lesson.dow == 3:
+							selected="selected"
+						%endif
+						>星期三</option>
+						<option value="4" 
+						%if lesson and lesson.dow == 4:
+							selected="selected"
+						%endif
+						>星期四</option>
+						<option value="5" 
+						%if lesson and lesson.dow == 5:
+							selected="selected"
+						%endif
+						>星期五</option>
+						<option value="6" 
+						%if lesson and lesson.dow == 6:
+							selected="selected"
+						%endif
+						>星期六</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">开始节数</span>
+  					%if lesson:
+  					<input class="span2" id="checkStarttime" type="text" name="lesson.starttime"  value="${lesson.start}" onkeyup="checkTime()" placeholder="" />
+  					%else:
   					<input class="span2" id="checkStarttime" type="text" name="lesson.starttime" onkeyup="checkTime()" placeholder="" />
+  					%endif
 				</div>
 				<span id="checkStarttimeRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">结束节数</span>
+  					%if lesson:
+  					<input class="span2" id="checkEndtime" type="text" name="lesson.endtime" value="${lesson.end}"  onkeyup="checkTime()" placeholder="" />
+  					%else:
   					<input class="span2" id="checkEndtime" type="text" name="lesson.endtime" onkeyup="checkTime()" placeholder="" />
+  					%endif
 				</div>
 				<span id="checkEndtimeRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				
@@ -86,7 +126,15 @@
 					<div class="locationSelect">
 						<div class="locationSelectHead" style="text-align:left;"><i class="icon-th-large" style="margin:8px;float:left;"></i> 实验室(<span id="sNumHave">0</span>)</div>
 						<div class="locationSelectContent">
-						<span id="locationHave"></span>
+						<span id="locationHave">
+							%if lesson:
+								% for lessonlocation in lesson.lessonlocations:
+								<input type="text" name="locationid" id="location${lessonlocation.locationid}" id="location"value="${lessonlocation.locationid}" style="display:none;"/>
+								<input type="text" name="studentnum" id="location${lessonlocation.locationid}" value="${lessonlocation.studentnum}" style="display:none;"/>
+								<a class="btn btn-mini classBoxSingle"  id="location${lessonlocation.locationid}" onclick="deleteLocation(this.id);">${lessonlocation.location.name}:${lessonlocation.studentnum}人  <i class="icon-remove"></i></a>
+								% endfor
+							%endif
+						</span>
 						</div>
 					</div>
 					<div class="locationAdd">

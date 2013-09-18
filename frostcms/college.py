@@ -10,6 +10,7 @@ log = getLogger(__name__)
 def includeme(config):
     config.scan(__name__)
     config.add_route('college_list', '/college/list')
+    config.add_route('api_college_list','/api/college/list')
     config.add_route('college_add', '/college/add')
     config.add_route('college_save', '/college/save')
     config.add_route('college_del', '/college/del')
@@ -27,6 +28,16 @@ def listcollege(request):
             url=page_url,
             )
     return dict(items=items)
+
+@view_config(route_name='api_college_list', renderer='jsonp',permission='user')
+def api_college_list(request):
+    page = int(request.params.get('page', 1))
+    conn = DBSession()
+    colleges = conn.query(College).order_by(College.id).all()
+    return dict(colleges=colleges)
+#         print dict(college)
+#     items=[dict(college) for college in list(colleges)]
+#     return dict(items=items)
  
 @view_config(route_name='college_add', renderer='college/college_add.mako',permission='admin')
 def addcollege(request):

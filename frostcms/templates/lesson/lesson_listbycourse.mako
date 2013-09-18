@@ -59,7 +59,7 @@
         			<th class="name">结束节数</th>
         			<th class="name_l">教室安排</th>
         			<th class="name">状态</th>
-        			<th class="name">操作</th>
+        			<th class="name_l">操作</th>
       			</tr>
     		</thead>
             <tbody>
@@ -87,6 +87,7 @@
         			%endif
 					</td>
         			<td class="name">
+        			<a class="btn btn-info" href="/admin/lesson/edit?lessonid=${item.id}">编辑</a>
         			<a class="btn btn-danger" href="/lesson/del?lessonid=${item.id}">删除</a></td>
       			</tr>
       			% endfor
