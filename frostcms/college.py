@@ -33,8 +33,11 @@ def listcollege(request):
 def api_college_list(request):
     page = int(request.params.get('page', 1))
     conn = DBSession()
+    collegelist = []
     colleges = conn.query(College).order_by(College.id).all()
-    return dict(colleges=colleges)
+    for college in colleges :
+        collegelist.append({'id':college.id,'name':college.name})
+    return dict(colleges=collegelist)
 #         print dict(college)
 #     items=[dict(college) for college in list(colleges)]
 #     return dict(items=items)

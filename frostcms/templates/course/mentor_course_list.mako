@@ -3,16 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
+    <%include file="/unit/link_JS&CSS.mako" />
 </head>
 
 <body>
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
@@ -28,7 +24,7 @@
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/mentor/course/add">添加课程</a> 
+			<a class="btn btn-primary" id="btn_head" href="/mentor/course/add"><i class="icon-plus icon-white"></i> 添加课程</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -37,7 +33,7 @@
             <thead>
       			<tr>     
         			<th class="name">课程</th>
-        			<th class="name">教师</th>
+        			<!--<th class="name">教师</th>-->
         			<th class="name">学期</th>
         			<th class="app">操作</th>
       			</tr>
@@ -46,7 +42,7 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.name}</td>
-        			<td class="name">${item.mentor.name}</td>
+        			<!--<td class="name">${item.mentor.name}</td>-->
         			<td class="name">
         			% for li in lis :
         				% if item.semesterid == li.id :
@@ -55,43 +51,16 @@
         			% endfor 
         			</td>
         			<td class="app">
-        				<a class="btn btn-info" href="/mentor/course/add?courseid=${item.id}">编辑</a>
-        				<a class="btn btn-info" href="/mentor/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
-        				<a class="btn btn-danger" href="/mentor/course/del?courseid=${item.id}">删除</a>
+        				<a class="btn btn-info btn-mini" href="/mentor/course/add?courseid=${item.id}">编辑</a>
+        				<a class="btn btn-info btn-mini" href="/mentor/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
+        				<a class="btn btn-danger btn-mini" href="/mentor/course/del?courseid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor
     		</tbody>
             </table>
-            <div class="right_foot">
-            	<div class="pagination">
-                <ul>
-          	 		% if items.first_page:
-	          		<li><a href="?page=${items.first_page}" title="第一页">&laquo; 第一页</a></li>
-	         		% endif
-	         		 % if items.previous_page:
-	          		<li><a href="?page=${items.previous_page}" title="上一页">&laquo; 上一页</a></li>
-	          		% endif
-	         		% for i in range(items.page - 3,items.page):
-			  		% if items.page_count>0 and i>=items.first_page:
-					<li><a href="?page=${i}" class="number" title="${i}">${i}</a></li>
-					% endif
-			  		% endfor
-	          		<li><a href="#" class="number current" title="${items.page}">${items.page}</a></li> 
-	          		% for i in range(items.page+1, items.page + 3):
-			  			% if items.page_count>0 and i<=items.last_page:
-						<li><a href="?page=${i}" class="number" title="${i}"> ${i} </a></li>
-			  			% endif
-			 		% endfor
-			  		% if items.next_page:
-			  		<li><a href="?page=${items.next_page}" title="下一页">下一页 &raquo;</a></li>
-			  		% endif
-			  		% if items.last_page:
-	          		<li><a href="?page=${items.last_page}" title="最后一页">最后一页 &raquo;</a></li> 
-	          		% endif
-          		</ul>
-            	</div>
-            </div>
+            <!-- 分页导航 -->         
+        	<%include file="/unit/pagination.mako" />
         </div>               
         
     </div>

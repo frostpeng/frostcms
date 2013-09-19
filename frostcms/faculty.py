@@ -38,11 +38,14 @@ def listfaculty(request):
 def api_faculty_list(request):
     conn = DBSession()
     collegeid = request.params.get('collegeid')
+    facultylist = []
     if collegeid:
         faculties = conn.query(Faculty).filter(Faculty.collegeid==collegeid)
+        for faculty in faculties :
+            facultylist.append({'id':faculty.id,'name':faculty.name})
     else :
         faculties = conn.query(Faculty).order_by(Faculty.id)
-    return dict(faculties=faculties)
+    return dict(faculties=facultylist)
  
 @view_config(route_name='faculty_add', renderer='faculty/faculty_add.mako',permission='admin')
 def addfaculty(request):

@@ -69,11 +69,14 @@ def listclazz(request):
 def api_clazz_list(request):
     conn = DBSession()
     facultyid = request.params.get('facultyid')
+    clazzlist = []
     if facultyid:
         clazzes = conn.query(Clazz).filter(Clazz.facultyid==facultyid).order_by(Clazz.id)
+        for clazz in clazzes :
+            clazzlist.append({'id':clazz.id,'year':clazz.year,'num':clazz.num})
     else :
         clazzes = conn.query(Clazz).order_by(Clazz.id)
-    return dict(clazzes=clazzes) 
+    return dict(clazzes=clazzlist) 
  
 @view_config(route_name='clazz_add', renderer='clazz/clazz_add.mako',permission='admin')
 def addclazz(request):

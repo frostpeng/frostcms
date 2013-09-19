@@ -3,59 +3,19 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
-    <script src="../../static/js/course_add.js"></script>
-    	<script>
-		function setFaculty(){
-			var collegeid = document.student.collegeid.value;
-			% for info in infos:
-			var collegeNum = ${info.collegeNum};
-			% endfor
-			var i = 0;
-			var open = "option.college_"+collegeid.toString();
-			var close = "";
-			for (i=0;i<=collegeNum;i++)
-			{
-				close = "option.college_"+i.toString();
-				$(close).hide();
-			}
-			$(open).show();
-			document.student.facultyid.value = -1;
-		}
-		
-		function setClazz(){
-			var facultyid = document.student.facultyid.value;
-			% for info in infos:
-			var facultyNum = ${info.facultyNum};
-			% endfor
-			var i = 0;
-			var open = "option.faculty_"+facultyid.toString();
-			var close = "";
-			for (i=0;i<=facultyNum;i++)
-			{
-				close = "option.faculty_"+i.toString();
-				$(close).hide();
-			}
-			$(open).show();
-			document.student.clazzbox.value = -1;
-		}
-	</script>
+    <%include file="/unit/link_JS&CSS.mako" />
 </head>
 
-<body>
+<body onload="searchGetCollege();">
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">课程管理</div>
-			<a class="btn btn-primary" id="btn_head" href="/mentor/course/list">返回课程列表</a>   
+			<a class="btn btn-primary" id="btn_head" href="/mentor/course/list"><i class="icon-share-alt icon-white"></i> 课程列表</a>   
 		</div>
         
         <!-- 主体信息表 -->
@@ -100,44 +60,35 @@
 						</div>
 					</div>
 					<div class="ClassBoxRight">
-					<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
-					<br /><br />
-					<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
-						% for college in colleges:
-						<option value="${college.id}">${college.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">专业</span>
-  					<select class="span2" id="faculyBoxName" style="width:180px" name="facultyid" onchange="setClazz();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
-						% for faculty in facultys:
-						<option value="${faculty.id}" id="faculty${faculty.id}"class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">班级</span>
-  					<select class="span2" id="classBoxName" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
-						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
-						% for clazz in clazzs:
-						<option value="${clazz.id}" id="class${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;" >${clazz.year}级${clazz.num}班</option>
-						% endfor
-					</select>
-				</div>
-				
+						<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
+						<br /><br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">学院</span>
+  							<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" >
+								<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
+							</select>
+						</div>
+						<br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">专业</span>
+  							<select class="span2" id="putFacultyBox" style="width:180px" name="facultyid" onchange="searchGetClazz(this);" >
+								<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
+							</select>
+						</div>
+						<br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">班级</span>
+  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
+								<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
  				%else:
  				<div class="app_name">
+ 				<i class="icon-plus"></i>
         		添加课程
         		</div>
         		<div class="input-prepend">
@@ -178,38 +129,28 @@
 						</div>
 					</div>
 					<div class="ClassBoxRight">
-					<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
-					<br /><br />
-					<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
-						% for college in colleges:
-						<option value="${college.id}">${college.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">专业</span>
-  					<select class="span2" id="faculyBoxName" style="width:180px" name="facultyid" onchange="setClazz();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
-						% for faculty in facultys:
-						<option value="${faculty.id}" id="faculty${faculty.id}"class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
-						% endfor
-					</select>
-				</div>
-				<br />
-				<div class="input-prepend"  id="add_adress">
-  					<span class="add-on">班级</span>
-  					<select class="span2" id="classBoxName" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
-						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
-						% for clazz in clazzs:
-						<option value="${clazz.id}" id="class${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;" >${clazz.year}级${clazz.num}班</option>
-						% endfor
-					</select>
-				</div>
-				
+						<div class="ClassBoxLeftHead"><i class="icon-circle-arrow-left" style="margin:5px 0;"></i>添加班级</div>
+						<br /><br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">学院</span>
+  							<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" >
+								<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
+							</select>
+						</div>
+						<br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">专业</span>
+  							<select class="span2" id="putFacultyBox" style="width:180px" name="facultyid" onchange="searchGetClazz(this);" >
+								<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
+							</select>
+						</div>
+						<br />
+						<div class="input-prepend"  id="add_adress">
+  							<span class="add-on">班级</span>
+  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
+								<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
+							</select>
+						</div>			
 					</div>
 				</div>
 				<br />

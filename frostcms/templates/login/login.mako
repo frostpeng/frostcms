@@ -7,20 +7,20 @@
 	<ul>
     <a href="#">
       <li>
-        <img src="/static/img/user.png" alt="" />
-            <p>${request.user.name}</p>
+        <!--<img src="/static/img/user.png" alt="" />-->
+            <p><i class="icon-user icon-white"></i> ${request.user.name}</p>
       </li>
     </a>
     <a href="/user/change_password" title="修改密码">
       <li>
-        <img src="/static/img/修改密码.png" alt="" />
-          <p>密码</p>
+        <!--<img src="/static/img/修改密码.png" alt="" />-->
+          <p><i class="icon-wrench icon-white"></i> 密码</p>
       </li>
     </a>
     <a href="/logout" title="退出登录">
       <li>
-        <img src="/static/img/退出.png" alt="" />
-          <p>退出</p>
+        <!--<img src="/static/img/退出.png" alt="" />-->
+          <p><i class="icon-remove icon-white"></i> 退出</p>
       </li>
     </a>
   </ul>

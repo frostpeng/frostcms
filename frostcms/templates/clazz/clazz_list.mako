@@ -3,89 +3,39 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
-	<script>
-		function setFaculty(){
-			var collegeid = document.clazz.collegeid.value;
-			var max = 5;
-			% for info in infos:
-			var collegeNum = ${info.collegeNum};
-			% endfor
-			var i = 0;
-			var open = "option.college_"+collegeid.toString();
-			var close = "";
-			for (i=0;i<=collegeNum;i++)
-			{
-				close = "option.college_"+i.toString();
-				$(close).hide();
-			}
-			$(open).show();
-			document.clazz.facultyid.value = -1;
-		}
-		
-		function setClazz(){
-			var facultyid = document.clazz.facultyid.value;
-			var max = 5;
-			% for info in infos:
-			var facultyNum = ${info.facultyNum};
-			% endfor
-			var i = 0;
-			var open = "option.faculty_"+facultyid.toString();
-			var close = "";
-			for (i=0;i<=facultyNum;i++)
-			{
-				close = "option.faculty_"+i.toString();
-				$(close).hide();
-			}
-			$(open).show();
-			document.clazz.clazzid.value = -1;
-		}
-	</script>
+	<%include file="/unit/link_JS&CSS.mako" />
 </head>
 
-<body>
+<body onload="searchGetCollege();">
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">班级管理</div>
-			<form action="/clazz/list" class="search" name="clazz" method="post">
+			<form action="/clazz/list" class="search" name="clazz" method="post" >
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
+  					<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
-						% for college in colleges:
-						<option value="${college.id}">${college.name}</option>
-						% endfor
 					</select>
 				</div>
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">专业</span>
-  					<select class="span2" style="width:180px" name="facultyid" onchange="setClazz();" >
+  					<select class="span2" style="width:180px" id="putFacultyBox" name="facultyid" onchange="searchGetClazz(this);" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
-						% for faculty in facultys:
-						<option value="${faculty.id}" class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
-						% endfor
 					</select>
 				</div>
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" style="width:180px" name="clazzid" onchange="document.all.clazz.submit();" >
+  					<select class="span2" style="width:180px" id="putClazzBox" name="clazzid" onchange="document.all.clazz.submit();" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
-						% for clazz in clazzs:
-						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
-						% endfor
 					</select>
 				</div>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/clazz/add">添加班级</a> 
+			<a class="btn btn-primary" id="btn_head" href="/clazz/add"><i class="icon-plus icon-white"></i> 添加班级</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -121,38 +71,9 @@
       			</tr>
       			% endfor
     		</tbody>
-            </table>
-            <div class="right_foot">
-            	<div class="pagination">
-                <ul>
-          	 		% if items.first_page:
-	          		<li><a href="?page=${items.first_page}" title="第一页">&laquo; 第一页</a></li>
-	         		% endif
-	         		 % if items.previous_page:
-	          		<li><a href="?page=${items.previous_page}" title="上一页">&laquo; 上一页</a></li>
-	          		% endif
-	         		% for i in range(items.page - 3,items.page):
-			  		% if items.page_count>0 and i>=items.first_page:
-					<li><a href="?page=${i}" class="number" title="${i}">${i}</a></li>
-					% endif
-			  		% endfor
-	          		<li><a href="#" class="number current" title="${items.page}">${items.page}</a></li> 
-	          		% for i in range(items.page+1, items.page + 3):
-			  			% if items.page_count>0 and i<=items.last_page:
-						<li><a href="?page=${i}" class="number" title="${i}"> ${i} </a></li>
-			  			% endif
-			 		% endfor
-			  		% if items.next_page:
-			  		<li><a href="?page=${items.next_page}" title="下一页">下一页 &raquo;</a></li>
-			  		% endif
-			  		% if items.last_page:
-	          		<li><a href="?page=${items.last_page}" title="最后一页">最后一页 &raquo;</a></li> 
-	          		% endif
-          		</ul>
-            	</div>
-            </div>
-        </div>               
-        
+            </table>     
+            <!-- 分页导航 -->         
+        	<%include file="/unit/pagination.mako" />
     </div>
     <!-- 登录模块 -->
     <%include file="/login/login.mako" />

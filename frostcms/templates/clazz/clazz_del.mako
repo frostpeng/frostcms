@@ -3,11 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
+    <%include file="/unit/link_JS&CSS.mako" />
 	<script>
 		function setFaculty(){
 			var collegeid = document.clazz.collegeid.value;
@@ -49,7 +45,7 @@
 
 <body>
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
@@ -85,7 +81,7 @@
 					</select>
 				</div>
 			</form-->
-			<a class="btn btn-primary" id="btn_head" href="/clazz/list">返回班级主栏</a> 
+			<a class="btn btn-primary" id="btn_head" href="/clazz/list"><i class="icon-share-alt icon-white"></i> 班级主栏</a> 
 		</div>
         
         <!-- 主体信息表 -->

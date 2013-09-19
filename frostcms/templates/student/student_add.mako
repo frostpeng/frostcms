@@ -3,11 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
+    <%include file="/unit/link_JS&CSS.mako" />
 	<script>
 		function setFaculty(){
 			var collegeid = document.student.collegeid.value;
@@ -44,17 +40,20 @@
 		}
 	</script>
 </head>
-
-<body>
+<body
+% if not student:
+onload="searchGetCollege();"
+% endif
+>
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">学生管理</div>
-			<a class="btn btn-primary" id="btn_head" href="/student/list">返回学生列表</a>   
+			<a class="btn btn-primary" id="btn_head" href="/student/list"><i class="icon-share-alt icon-white"></i> 学生列表</a>   
 		</div>
         
         <!-- 主体信息表 -->
@@ -77,43 +76,22 @@
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
-						% for college in colleges:
-						<option value="${college.id}" 
-						%if college.id == student.clazz.faculty.collegeid :
-						selected="selected"
-						%endif
-						>${college.name}</option>
-						% endfor
+  					<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" onfocus="searchGetCollege();">
+						<option disabled="disabled" selected="selected" value="${student.clazz.faculty.college.id}">${student.clazz.faculty.college.name}</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">专业</span>
-  					<select class="span2" style="width:180px" name="facultyid" onchange="setClazz();" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
-						% for faculty in facultys:
-						<option value="${faculty.id}" class="college_${faculty.collegeid}" style="display:none;"
-						%if faculty.id == student.clazz.facultyid :
-						selected="selected"
-						%endif
-						>${faculty.name}</option>
-						% endfor
+  					<select class="span2" style="width:180px" id="putFacultyBox" name="facultyid" onchange="searchGetClazz(this);" >
+						<option disabled="disabled" selected="selected" value="${student.clazz.faculty.id}">${student.clazz.faculty.name}</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" style="width:180px" name="clazzid" onchange="" >
-						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
-						% for clazz in clazzs:
-							% if clazz.id == student.clazzid :
-							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" selected="selected">${clazz.year}级${clazz.num}班</option>
-							% else :
-							<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
-							% endif
-						% endfor
+  					<select class="span2" style="width:180px" id="putClazzBox" name="clazzid" onchange="" >
+						<option disabled="disabled" selected="selected" value="${student.clazz.id}">${student.clazz.year}级${student.clazz.num}班</option>
 					</select>
 				</div>
 				<br />
@@ -134,31 +112,22 @@
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" name="collegeid" onchange="setFaculty();" >
+  					<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
-						% for college in colleges:
-						<option value="${college.id}">${college.name}</option>
-						% endfor
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">专业</span>
-  					<select class="span2" style="width:180px" name="facultyid" onchange="setClazz();" >
+  					<select class="span2" style="width:180px" id="putFacultyBox" name="facultyid" onchange="searchGetClazz(this);" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
-						% for faculty in facultys:
-						<option value="${faculty.id}" class="college_${faculty.collegeid}" style="display:none;">${faculty.name}</option>
-						% endfor
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" style="width:180px" name="clazzid" onchange="" >
+  					<select class="span2" style="width:180px" id="putClazzBox" name="clazzid" onchange="" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
-						% for clazz in clazzs:
-						<option value="${clazz.id}" class="faculty_${clazz.facultyid}" style="display:none;">${clazz.year}级${clazz.num}班</option>
-						% endfor
 					</select>
 				</div>
 				<br />

@@ -80,7 +80,7 @@ function checkTime(){
 		document.getElementById("locationHave").innerHTML = "";
 		document.getElementById("locationCan").innerHTML = "";
 		 $.ajax({
-				url:"/api/location_studentnum/list?week="+week+"&dow="+dow+"&start="+starttime+"&end="+endtime,
+				url:"/api/location_studentnum/list",
 				type: "post",
 				data: {week:week,dow:dow,start:starttime,end:endtime},
 				dataType: "json",
