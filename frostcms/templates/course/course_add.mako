@@ -20,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/course/save" class="add" name="student">
+        	<form action="/course/save" class="add" name="course">
  				%if course:
  				<div class="app_name">
         		课程信息/编辑
@@ -30,11 +30,12 @@
   					<span class="add-on">课程名称</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="course.name" value="${course.name}"/>
 				</div>
+				<span id="checkCourseName"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">教师</span>
   					<select class="span2" style="width:200px" name="course.mentorid" size="1">
-						<option disabled="disabled" >--------请选择教师--------</option>
+						<option disabled="disabled" value="-1">--------请选择教师--------</option>
 						% for li in mentordictionary:
 						<option value="${li.id}" 
 							% if course.mentorid == li.id :
@@ -44,11 +45,12 @@
 						% endfor
 					</select>
 				</div>
+				<span id="checkCourseMentorid"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学期</span>
   					<select class="span2" style="width:200px" name="course.semesterid" size="1">
-						<option disabled="disabled">--------请选择学期--------</option>
+						<option disabled="disabled" value="-1">--------请选择学期--------</option>
 						% for li in lis:
 						<option value="${li.id}" 
 							% if course.semesterid == li.id :
@@ -58,6 +60,7 @@
 						% endfor
 					</select>
 				</div>
+				<span id="checkCourseSemesterid"></span>
 				<div class="dClassBox">
 					<span id="dClassBox"></span>
 				</div>
@@ -92,14 +95,16 @@
 						<br />
 						<div class="input-prepend"  id="add_adress">
   							<span class="add-on">班级</span>
-  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
+  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.course.facultyid.value)">
 								<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 							</select>
 						</div>
+						<br />
+						<span id="checkCourseClazzes"></span>
 					</div>
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkCourseAdd();">保存</button>
  				%else:
  				<div class="app_name">
         		添加课程
@@ -108,39 +113,30 @@
   					<span class="add-on">课程名称</span>
   					<input class="span2" id="prependedInput" type="text" name="course.name" placeholder="" />
 				</div>
+				<span id="checkCourseName"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">教师</span>
   					<select class="span2" style="width:200px" name="course.mentorid" size="1" >
-						<option disabled="disabled" selected="selected" >--------请选择教师--------</option>
+						<option disabled="disabled" selected="selected" value="-1" >--------请选择教师--------</option>
 						% for li in mentordictionary:
 						<option value="${li.id}" >${li.name}</option>
 						% endfor
 					</select>
 				</div>
+				<span id="checkCourseMentorid"></span>
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学期</span>
   					<select class="span2" style="width:200px" name="course.semesterid" size="1" onchange="" >
-						<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
+						<option disabled="disabled" selected="selected" value="-1" >--------请选择学期--------</option>
 						% for li in lis:
 						<option value="${li.id}" >${li.name}</option>
 						% endfor
 					</select>
 				</div>
+				<span id="checkCourseSemesterid"></span>
 				<br />
-				<!--
-				<div class="input-prepend"   id="add_adress">
-  					<span class="add-on">班级</span>
-  					<input class="btn btn-blue" style="display:none;" id="classlist" type="text" placeholder="" onkeyup=""/>
-  					<a class="btn btn-info" onclick="showClassBox()"><<添加班级</a>
-					<table>
-						<tr>
-							<td>班级</td>
-						</tr>
-					</table>
-				</div>
-				-->
 				<div class="dClassBox">
 					<span id="dClassBox"></span>
 				</div>
@@ -170,14 +166,16 @@
 						<br />
 						<div class="input-prepend"  id="add_adress">
   							<span class="add-on">班级</span>
-  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.student.facultyid.value)">
+  							<select class="span2" id="putClazzBox" style="width:180px" name="clazzbox" onchange="addClass(this.value,document.course.facultyid.value)">
 								<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 							</select>
 						</div>
+						<br />
+						<span id="checkCourseClazzes"></span>
 					</div>
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkCourseAdd();" >提交</button>
  				%endif
  			</form>
         </div>               

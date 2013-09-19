@@ -68,34 +68,37 @@ onload="searchGetCollege();"
   					<span class="add-on">姓名</span>
   					<input class="span2" id="prependedInput" type="text" name="student.name" value="${student.name}" placeholder="" />
 				</div>
+				<span id="checkStudentName"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">学号</span>
   					<input class="span2" id="prependedInput" type="text" name="student.identity" value="${student.identity}" placeholder="" />
 				</div>
+				<span id="checkStudentIdentity"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
   					<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" onfocus="searchGetCollege();">
-						<option disabled="disabled" selected="selected" value="${student.clazz.faculty.college.id}">${student.clazz.faculty.college.name}</option>
+						<option selected="selected" value="${student.clazz.faculty.college.id}">${student.clazz.faculty.college.name}</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">专业</span>
   					<select class="span2" style="width:180px" id="putFacultyBox" name="facultyid" onchange="searchGetClazz(this);" >
-						<option disabled="disabled" selected="selected" value="${student.clazz.faculty.id}">${student.clazz.faculty.name}</option>
+						<option selected="selected" value="${student.clazz.faculty.id}">${student.clazz.faculty.name}</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" style="width:180px" id="putClazzBox" name="clazzid" onchange="" >
-						<option disabled="disabled" selected="selected" value="${student.clazz.id}">${student.clazz.year}级${student.clazz.num}班</option>
+  					<select class="span2" style="width:180px" id="putClazzBox" name="student.clazzid" onload="" >
+						<option selected="selected" value="${student.clazz.id}">${student.clazz.year}级${student.clazz.num}班</option>
 					</select>
 				</div>
+				<span id="checkStudentClazzid"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkStudentAdd();">保存</button>
  				%else:
  				<div class="app_name">
         		添加学生
@@ -104,11 +107,13 @@ onload="searchGetCollege();"
   					<span class="add-on">姓名</span>
   					<input class="span2" id="prependedInput" type="text" name="student.name" placeholder="" />
 				</div>
+				<span id="checkStudentName"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">学号</span>
   					<input class="span2" id="prependedInput" type="text" name="student.identity" placeholder="" />
 				</div>
+				<span id="checkStudentIdentity"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
@@ -126,12 +131,13 @@ onload="searchGetCollege();"
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">班级</span>
-  					<select class="span2" style="width:180px" id="putClazzBox" name="clazzid" onchange="" >
+  					<select class="span2" style="width:180px" id="putClazzBox" name="student.clazzid" onchange="" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择班级--------</option>
 					</select>
 				</div>
+				<span id="checkStudentClazzid"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkStudentAdd();">提交</button>
  				%endif
  			</form>
         </div>               

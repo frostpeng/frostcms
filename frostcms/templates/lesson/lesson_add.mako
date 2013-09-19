@@ -119,7 +119,7 @@
 				<br /><hr />
 				<div class="locationBox">
 					<div class="locationSelect">
-						<div class="locationSelectHead" style="text-align:left;"><i class="icon-th-large" style="margin:8px;float:left;"></i> 实验室(<span id="sNumHave">0</span>)</div>
+						<div class="locationSelectHead" style="text-align:left;"><i class="icon-th-large" style="margin:8px;float:left;"></i> 实验室 <span class="badge badge-success" style="margin:-8px 0 0 5px;"><span id="sNumHave">0</span></span></div>
 						<div class="locationSelectContent">
 						<span id="locationHave">
 							%if lesson:
@@ -137,19 +137,20 @@
 						<a class="btn btn-mini btn-success" style="float:left;margin:3px;" onclick="addLocations()" ><i class="icon-chevron-left icon-white" style="margin:3px 0;"></i> 添加</a>	
 						<span>
 						% if course :
-							需要(${studentnum})
+							<span class="badge" style="margin:6px;"> 需要 : ${studentnum} </span>
 						% endif 
 						</span>
 						<i class="icon-comment" style="float:right;margin:8px;"></i>
 						</div>
 						<div class="locationSelectContent">
+						<span id="checkLessonLocations" style="margin:10px;"></span>
 						<span id="locationCan"></span>
 						</div>
 					</div>
 				</div>
 				<hr />
 				<span id="debug"></span>
- 				<button class="btn btn-primary" id="add_submit" type="submit"><i class="icon-ok icon-white"></i>  提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkLessonAdd();"><i class="icon-ok icon-white"></i>  提交</button>
  			</form>
         </div>               
         

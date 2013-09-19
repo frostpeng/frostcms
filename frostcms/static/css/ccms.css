@@ -451,3 +451,13 @@ input.singleLocationUse{
 	height:20px;
 	border-radius:5px;
 }
+span.checkOut{
+	padding:2px 10px;
+	margin:3px;
+	border-radius:5px;
+	border:solid 1px #FF0033;
+	font-family:"微软雅黑","黑体",Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#FF0033;
+	line-height:20px;
+}

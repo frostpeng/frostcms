@@ -52,15 +52,17 @@
                     		<span class="add-on"><i class=" icon-remove"></i></span>
 							<span class="add-on"><i class=" icon-th"></i></span>
                 		</div>
-						<input type="hidden" id="dtp_input1" value="" /><br/>
-            		</div>
-        		</fieldset>										
+						<input type="hidden" id="dtp_input1" value="" />
+						<span id="checkSemesterStart"></span>
+            		</div>			
+        		</fieldset>									
 				<div class="input-prepend">
   					<span class="add-on">周数</span>
   					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" value="${semester.weeks}" />
 				</div>
+				<span id="checkSemesterWeeks"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkSemesterAdd()">保存</button>
  				%else:
  				<div class="app_name">
         		添加学期
@@ -74,17 +76,27 @@
                     		<span class="add-on"><i class=" icon-remove"></i></span>
 							<span class="add-on"><i class=" icon-th"></i></span>
                 		</div>
-						<input type="hidden" id="dtp_input1" value="" /><br/>
+						<input type="hidden" id="dtp_input1" value="" />
+						<span id="checkSemesterStart"></span>
             		</div>
         		</fieldset>										
 				<div class="input-prepend">
   					<span class="add-on">周数</span>
   					<input class="span2" id="prependedInput" type="text" name="semester.weeks" placeholder="" />
 				</div>
+				<span id="checkSemesterWeeks"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkSemesterAdd()">提交</button>
  				%endif
- 		<script type="text/javascript">
+ 		
+ 			</form>
+        </div>               
+    </div>
+	<!-- 登录模块 -->
+    <%include file="/login/login.mako" />
+</body>
+</html>
+<script type="text/javascript">
     		$('.form_datetime').datetimepicker({
         		language:'zh-CN',
         		weekStart:0,
@@ -98,12 +110,4 @@
 				forceParse:0,
         		showMeridian:1
    	 		});
-		</script>
- 			</form>
-        </div>               
-        
-    </div>
-	<!-- 登录模块 -->
-    <%include file="/login/login.mako" />
-</body>
-</html>
+	</script>

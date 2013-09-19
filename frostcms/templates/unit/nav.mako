@@ -13,13 +13,13 @@
             <li><a href="/faculty/list">专业</a></li>
             <li><a href="/clazz/list">班级</a></li>
             <li><a href="/course/list">课程</a></li>
-            <li><a href="/admin/lesson/undolist">课堂申请 (
+            <li><a href="/admin/lesson/undolist">课堂申请 <span class="badge badge-info">
             % if request.undocount>0:
             	${request.undocount}
             % else :
             	0
             % endif
-            )
+            </span>
             </a></li>
 		</ul>
 </div>

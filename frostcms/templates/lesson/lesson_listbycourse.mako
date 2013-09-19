@@ -14,7 +14,8 @@
     	
         <!-- 主体头部 -->
 		<div class="right_head">
-			<div class="title_2">课堂管理</div>	
+			<div class="title_2">课堂管理</div>
+			<a class="btn btn-primary" id="btn_head" href="/course/list"><i class="icon-share-alt icon-white"></i> 课程列表</a>
 			% if course:	
 			<a class="btn btn-primary" id="btn_head" href="/lesson/addtocourse?courseid=${course.id}"><i class="icon-plus icon-white"></i> 添加课堂</a>
 			% endif

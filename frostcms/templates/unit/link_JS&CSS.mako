@@ -7,3 +7,4 @@
 <script src="../../static/js/searchID.js"></script>
 <script src="../../static/js/course_add.js"></script>
 <script src="../../static/js/lesson.js"></script>
+<script src="../../static/js/check.js"></script>

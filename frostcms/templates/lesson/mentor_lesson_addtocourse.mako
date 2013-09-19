@@ -95,13 +95,14 @@
 						<i class="icon-comment" style="float:right;margin:8px;"></i>
 						</div>
 						<div class="locationSelectContent">
+						<span id="checkLessonLocations" style="margin:10px;"></span>
 						<span id="locationCan"></span>
 						</div>
 					</div>
 				</div>
 				<hr />
 				<span id="debug"></span>
- 				<button class="btn btn-primary" id="add_submit" type="submit"><i class="icon-ok icon-white"></i>  提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkLessonAdd();"><i class="icon-ok icon-white"></i>  提交</button>
  			</form>
         </div>               
         

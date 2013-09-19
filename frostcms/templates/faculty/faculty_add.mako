@@ -20,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/faculty/save" class="add">
+        	<form action="/faculty/save" class="add" name="faculty">
  				%if faculty:
  				<div class="app_name">
         		专业编辑
@@ -30,6 +30,7 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="faculty.name" value="${faculty.name}"/>
 				</div>
+				<span id="checkFacultyName"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
@@ -44,8 +45,9 @@
 						% endfor
 					</select>
 				</div>
+				<span id="checkFacultyCollegeid"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkFacultyAdd();">保存</button>
  				%else:
  				<div class="app_name">
         		添加专业
@@ -54,18 +56,20 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" name="faculty.name" placeholder="" />
 				</div>
+				<span id="checkFacultyName"></span>
 				<br />
 				<div class="input-prepend"   id="add_adress">
   					<span class="add-on">学院</span>
   					<select class="span2" style="width:200px" name="faculty.collegeid" size="1" onchange= "">
-						<option disabled="disabled" selected="selected" >--------请选择学院--------</option>
+						<option  selected="selected" value="-1">--------请选择学院--------</option>
 						% for li in lis:
 						<option value="${li.id}" >${li.name}</option>
 						% endfor
 					</select>
 				</div>
+				<span id="checkFacultyCollegeid"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkFacultyAdd();">提交</button>
  				%endif
  			</form>
         </div>               

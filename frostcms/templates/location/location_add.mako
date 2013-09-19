@@ -20,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/location/save" class="add">
+        	<form action="/location/save" class="add" name="location">
  				%if location:
  				<div class="app_name">
         		实验室详情
@@ -30,26 +30,31 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.name" value="${location.name}"/>
 				</div>
+				<span id="checkLocationName"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">地址</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.address" value="${location.address}"/>
 				</div>
+				<span id="checkLocationAddress"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">排数</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.totalrows" value="${location.totalrows}"/>
 				</div>
+				<span id="checkLocationTotalrows"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">列数</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.perrow" value="${location.perrow}"/>
 				</div>
+				<span id="checkLocationPerrow"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">总位数</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.seatnum" value="${location.seatnum}"/>
 				</div>
+				<span id="checkLocationSeatnum"></span>
 				<br />
 					<div class="input-prepend">
   					<span class="add-on">校区</span>
@@ -60,9 +65,10 @@
 					<option value="2" >西校区</option>
 					<option value="3" >同济校区</option>
 				</select>
+				<span id="checkLocationArea"></span>
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<input class="btn btn-primary" id="add_submit" type="button" value="保存" onclick="checkLocationAdd();" />
  				%else:
  				<div class="app_name">
         		添加实验室
@@ -71,26 +77,31 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" name="location.name" placeholder="" />
 				</div>
+				<span id="checkLocationName"></span>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">地址</span>
   					<input class="span2" id="prependedInput" type="text" name="location.address" placeholder="" />
 				</div>
+				<span id="checkLocationAddress"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">排数</span>
   					<input class="span2" id="prependedInput" type="text" name="location.totalrows" placeholder="" />
 				</div>
+				<span id="checkLocationTotalrows"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">列数</span>
   					<input class="span2" id="prependedInput" type="text" name="location.perrow" placeholder="" />
 				</div>
+				<span id="checkLocationPerrow"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">总位数</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="location.seatnum"/>
 				</div>
+				<span id="checkLocationSeatnum"></span>
 				<br />
 					<div class="input-prepend">
   					<span class="add-on">校区</span>
@@ -101,9 +112,10 @@
 					<option value="2" >西校区</option>
 					<option value="3" >同济校区</option>
 				</select>
+				<span id="checkLocationArea"></span>
 				</div>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<input class="btn btn-primary" id="add_submit" type="button" value="提交" onclick="checkLocationAdd();" />
  				%endif
  			</form>
         </div>                

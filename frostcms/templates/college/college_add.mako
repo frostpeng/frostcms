@@ -20,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/college/save" class="add">
+        	<form action="/college/save" class="add" name="college">
  				%if college:
  				<div class="app_name">
         		学院名编辑
@@ -30,8 +30,9 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="college.name" value="${college.name}"/>
 				</div>
+				<span id="checkCollegeName"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">保存</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkCollegeAdd();">保存</button>
  				%else:
  				<div class="app_name">
         		添加学院
@@ -40,10 +41,11 @@
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" name="college.name" placeholder="" />
 				</div>
+				<span id="checkCollegeName"></span>
 				<br />
 				
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkCollegeAdd();">提交</button>
  				%endif
  			</form>
         </div>               

@@ -48,7 +48,7 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">班级</span>
-  					<input class="span2" style="width:220px;" readOnly="true"  id="prependedInput" type="text" name="clazz" value="${student.clazz.grade}级${student.clazz.num}班" placeholder="" />
+  					<input class="span2" style="width:220px;" readOnly="true"  id="prependedInput" type="text" name="clazz" value="${student.clazz.year}级${student.clazz.num}班" placeholder="" />
 				</div>
 				<br />
  				<button class="btn btn-danger" id="add_submit" type="submit">确认删除</button>

@@ -26,35 +26,39 @@
         		</div>
  				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">学院</span>
-  					<select class="span2" style="width:180px" id="putCollegeBox" name="collegeid" onchange="searchGetFaculty(this);" >
+  					<select class="span2" style="width:180px" id="putCollegeBox" name="clazz.collegeid" onchange="searchGetFaculty(this);" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择学院--------</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend"  id="add_adress">
   					<span class="add-on">专业</span>
-  					<select class="span2" style="width:180px" id="putFacultyBox" name="facultyid" onchange="" >
+  					<select class="span2" style="width:180px" id="putFacultyBox" name="clazz.facultyid" onchange="" >
 						<option disabled="disabled" selected="selected" value="-1">--------请选择专业--------</option>
 					</select>
 				</div>
+				<span id="checkClazzFacultyid"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">年级</span>
-  					<input class="span2" style="width:160px;" id="prependedInput" type="text" name="year" placeholder="请输入年级，例：2013">
+  					<input class="span2" style="width:160px;" id="prependedInput" type="text" name="clazz.year" placeholder="请输入年级，例：2013">
 				</div>
+				<span id="checkClazzYear"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">班号</span>
-  					<input class="span2" id="prependedInput" type="text" name="num" placeholder="请输入班级号">
+  					<input class="span2" id="prependedInput" type="text" name="clazz.num" placeholder="请输入班级号">
 				</div>
+				<span id="checkClazzNum"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">位置浮动率</span>
-  					<input class="span2" id="prependedInput" type="text" name="mulfloat" placeholder="请输入班级号">
+  					<input class="span2" id="prependedInput" type="text" name="clazz.mulfloat" placeholder="请输入班级号" value="1">
   					<span class="add-on">%</span>
 				</div>
+				<span id="checkClazzMulfloat"></span>
 				<br />
- 				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkClazzAdd();">提交</button>
  			</form>
         </div>               
         

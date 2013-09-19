@@ -80,7 +80,7 @@ def addstudent(request):
 @view_config(route_name='student_save', renderer='student/student_add.mako', permission='admin')
 def savestudent(request):
     conn = DBSession()
-    params_tuple=['student.id','student.name','student.identity','clazzid']
+    params_tuple=['student.id','student.name','student.identity','student.clazzid']
     student_id,name,identity,clazzid=[request.params.get(x) for x in params_tuple]
     student = conn.query(Student).filter(Student.id == student_id).first()
     if student:

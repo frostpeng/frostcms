@@ -41,9 +41,9 @@
             <thead>
       			<tr>     
         			<th class="name">姓名</th>
-        			<th style="width:180px;text-align:center;">学院</th>
+        			<th style="width:160px;text-align:center;">学院</th>
         			<th class="name">电话</th>
-        			<th class="name_l">mail</th>
+        			<th class="name_l" style="width:220px;" >mail</th>
         			<th class="app">操作</th>
       			</tr>
     		</thead>
@@ -51,9 +51,9 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.name}</td>
-        			<td style="width:180px;text-align:center;">${item.college.name}</td>
+        			<td style="width:160px;text-align:center;">${item.college.name}</td>
         			<td class="name">${item.phone}</td>
-        			<td class="name">${item.email}</td>
+        			<td class="name" style="width:220px;">${item.email}</td>
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/mentor/add?mentorid=${item.id}">详情与修改</a>
         				<a class="btn btn-danger btn-mini" href="/mentor/del?mentorid=${item.id}">删除</a>

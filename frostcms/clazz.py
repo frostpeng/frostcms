@@ -114,7 +114,7 @@ def addclazz(request):
 @view_config(route_name='clazz_save', renderer='clazz/clazz_add.mako',permission='admin')
 def saveclazz(request):
     conn = DBSession()
-    params_tuple=['clazz.id','facultyid','clazz.collegeid','year','num','mulfloat']
+    params_tuple=['clazz.id','clazz.facultyid','clazz.collegeid','clazz.year','clazz.num','clazz.mulfloat']
     clazzid,facultyid,collegeid,year,num,mulfloat=[request.params.get(x) for x in params_tuple]
     clazz = conn.query(Clazz).filter(Clazz.id==clazzid).first()
     if clazz:  
