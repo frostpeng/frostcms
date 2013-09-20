@@ -251,6 +251,7 @@ class LessonWorkItem(Base):
     viewstate=Column(Integer,default=0)
     action=Column(Integer,default=0)
     actiontime=Column(INTEGER)
+    description=Column(String(255))
     lesson = relationship("Lesson")
     acceptuser=relationship("User",foreign_keys=[acceptuserid])
     senduser=relationship("User",foreign_keys=[senduserid])

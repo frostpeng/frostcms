@@ -4,7 +4,7 @@ body{
 	min-width:960px;
 	margin:0;
 	padding:0;
-	background-color:#FFF;
+	background-color:#FFFFFF;
 }
 /*********************************************************************************************
 	顶部部分
@@ -460,4 +460,45 @@ span.checkOut{
 	font-size:14px;
 	color:#FF0033;
 	line-height:20px;
+}
+
+table.class-tab {
+	text-align:center;
+}
+teble.class-tab td{
+	text-align:center;
+}
+tr.class-tab{
+	text-align:center;
+}
+td.class-tab{
+	text-align:center;
+	height:80px;
+	font-size:12px;
+}
+td.class-tab:hover{
+	background-color:#eee;
+}
+td.class-tab-have{
+	text-align:center;
+	height:80px;
+	font-size:12px;
+	background-color:#CCFFFF;
+}
+td.class-tab-have:hover{
+	background-color:#CCEEFF;
+}
+td.class-tab-none{
+	text-align:center;
+	height:80px;
+	font-size:12px;
+	background-color:#FFCCFF;
+}
+td.class-tab-none:hover{
+	background-color:#eee;
+	background-color:#FFCCCC;
+}
+th.class-tab{
+	text-align:center;
+	width:12.5%;
 }

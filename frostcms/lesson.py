@@ -2,10 +2,9 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
-from .models import DBSession,Semester,Lesson,Course,and_,Location,Mentor,Lesson_Location
+from frostcms.models import *
 import webhelpers.paginate as paginate
 from datetime import date  
-from frostcms.models import Lesson_Location, Course_Class
 from frostcms.utils import getStudentnumOfCourse,getLeftSeatByLocation
 import time
 
@@ -36,7 +35,7 @@ def listlessonsbycourse(request):
     course=conn.query(Course).filter(Course.id==courseid).first()
     course_classes=conn.query(Course_Class).filter(Course_Class.courseid==courseid).all()
     course.course_classes=course_classes
-    items=conn.query(Lesson).filter(Lesson.courseid==courseid).all()
+    items=conn.query(Lesson).filter(Lesson.courseid==courseid,Lesson.state!=-1).all()
     for item in items:
         lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
         item.lesson_locations=lesson_locations
@@ -120,7 +119,7 @@ def listlesson(request):
     semesters = conn.query(Semester).order_by(Semester.id)
     if request.method == "POST":
         semesterid = request.params.get('semesterid')
-        items = conn.query(Lesson,Course).filter(and_(Lesson.courseid==Course.id,Course.semesterid==semesterid)).all()
+        items = conn.query(Lesson,Course).filter(Lesson.courseid==Course.id,Course.semesterid==semesterid).all()
     else :
         items = conn.query(Lesson).order_by(Lesson.id).all()
     semesters = conn.query(Semester).order_by(Semester.id).all()
@@ -194,6 +193,8 @@ def savelesson(request):
     lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
     lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
     if lesson:
+        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
+        """
         lesson.courseid = courseid
         lesson.week = week
         lesson.dow = dow
@@ -202,6 +203,7 @@ def savelesson(request):
         lesson.state = 1
         lesson.updatetime=time.time()
         conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
+        """
     else:
         lesson = Lesson()
         lesson.courseid = courseid
@@ -232,14 +234,15 @@ def mentor_lesson_save(request):
     lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
     lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
     if lesson:
-        lesson.courseid = courseid
+        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
+        """lesson.courseid = courseid
         lesson.week = week
         lesson.dow = dow
         lesson.start = start
         lesson.end = end
         lesson.state = 0
         lesson.updatetime=time.time()
-        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
+        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()"""
     else:
         lesson = Lesson()
         lesson.courseid = courseid
@@ -268,7 +271,13 @@ def dellesson(request):
     lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
     courseid=lesson.courseid
     if lesson:
-        conn.delete(lesson)
+        lesson.state = -1
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.actiontime = time.time()
+        conn.add(lwi)
         conn.flush()
         return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
     return HTTPFound(location=request.route_url('lesson_listbycourse',_query={'courseid':courseid}))
@@ -282,7 +291,13 @@ def mentor_lesson_del(request):
                 conn.query(Mentor.id).filter(Mentor.userid==request.user.id))))).first()
     courseid=lesson.courseid
     if lesson:
-        conn.delete(lesson)
+        lesson.state = -1
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = 0
+        lwi.acceptuserid = request.user.id
+        lwi.actiontime = time.time()
+        conn.add(lwi)
         conn.flush()
         return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
     return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))

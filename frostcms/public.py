@@ -16,15 +16,36 @@ def includeme(config):
     
 @view_config(route_name='public_lesson_list', renderer='public/class_list.mako')
 def listlesson(request):
-    page = int(request.params.get('page', 1))
     conn = DBSession()
-    params_tuple=['startweek','endweek','locationid',"area"]
-    startweek,endweek,locationid,area=[request.params.get(x) for x in params_tuple]
+    params_tuple=['week','locationid','area']
+    week,locationid,area=[request.params.get(x) for x in params_tuple]
     locationdictionary=conn.query(Location).order_by(Location.id)
-    items=None
-    if startweek or endweek or locationid or area:
-        items=conn.query(Lesson)
-        if startweek:
+    class Acolum():
+        def __init__(self):
+            self.courses = []
+            self.studentnum = 0
+    items = []
+    seatnum = 0
+    courses = []
+    if week and locationid:
+        locations = conn.query(Lesson_Location).filter(Lesson_Location.locationid==locationid)
+        for location in locations:
+            if  location.lesson.week == int(week) and location.lesson.state == 1:
+                courses.append(location)
+                seatnum = location.location.seatnum
+        for dow in range(0,7) :
+            day = []
+            for time in range(0,6) :
+                num = 0
+                colum = Acolum()
+                for course in courses :    
+                    if course.lesson.dow == dow and course.lesson.start<=time*2+1 and course.lesson.end>=time*2+1 :
+                        num += course.studentnum
+                        colum.courses.append(course)
+                colum.studentnum = num
+                day.append(colum)
+            items.append(day)
+        """if startweek:
             items=items.filter(Lesson.week>=startweek)
         if endweek:
             items=items.filter(Lesson.week<=endweek) 
@@ -33,15 +54,8 @@ def listlesson(request):
                     (Lesson_Location.locationid.in_(conn.query(Location.id).filter(Location.area==area)))))
         if locationid:
             items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter(Lesson_Location.locationid==locationid)))
-    page_url = paginate.PageURL_WebOb(request)
-    items = paginate.Page(
-            items,
-            page=int(page),
-            items_per_page=10,
-            url=page_url,
-            )
-    return dict(items=items,startweek=startweek,endweek=endweek,
-                 locationid=locationid,locationdictionary=locationdictionary)     
+        """
+    return dict(items=items,week=week,locationid=locationid,area=area,locationdictionary=locationdictionary,seatnum=seatnum)     
     
     
 @view_config(route_name='install', renderer='jsonp')

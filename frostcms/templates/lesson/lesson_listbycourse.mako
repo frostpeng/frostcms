@@ -84,7 +84,6 @@
         			%endif
 					</td>
         			<td class="name">
-        			<a class="btn btn-info btn-mini" href="/admin/lesson/edit?lessonid=${item.id}">编辑</a>
         			<a class="btn btn-danger btn-mini" href="/lesson/del?lessonid=${item.id}">删除</a></td>
       			</tr>
       			% endfor
