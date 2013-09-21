@@ -55,8 +55,19 @@
             <thead>
       			<tr class="class-tab-head">     
         			<th colspan="8">
+        			<i class="icon-time"></i> 周次：
         			% if week :
-        			周次：${week}
+        			${week}
+        			% endif
+        			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        			<i class="icon-th-large"></i> 实验室 ： 
+        			% if loc :
+        			${loc.name}
+        			% endif
+        			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        			<i class="icon-user"></i> 座位 ：
+        			% if seatnum :
+        			${seatnum}
         			% endif
         			</th>
       			</tr>

@@ -20,6 +20,7 @@ def listlesson(request):
     params_tuple=['week','locationid','area']
     week,locationid,area=[request.params.get(x) for x in params_tuple]
     locationdictionary=conn.query(Location).order_by(Location.id)
+    loc = conn.query(Location).filter(Location.id==locationid).first()
     class Acolum():
         def __init__(self):
             self.courses = []
@@ -55,7 +56,7 @@ def listlesson(request):
         if locationid:
             items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter(Lesson_Location.locationid==locationid)))
         """
-    return dict(items=items,week=week,locationid=locationid,area=area,locationdictionary=locationdictionary,seatnum=seatnum)     
+    return dict(items=items,week=week,locationid=locationid,area=area,locationdictionary=locationdictionary,seatnum=seatnum,loc=loc)     
     
     
 @view_config(route_name='install', renderer='jsonp')

@@ -74,6 +74,12 @@ def admin_lesson_agree(request):
     lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
     if lesson:
         lesson.state=1
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.action = 1
+        lwi.actiontime = time.time()
         conn.flush()
         return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
@@ -85,6 +91,12 @@ def admin_lesson_disagree(request):
     lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
     if lesson:
         lesson.state=2
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.action = 2
+        lwi.actiontime = time.time()
         conn.flush()
         return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
@@ -276,6 +288,7 @@ def dellesson(request):
         lwi.lessonid = lesson.id
         lwi.senduserid = request.user.id
         lwi.acceptuserid = lesson.course.mentor.id
+        lwi.action = -1
         lwi.actiontime = time.time()
         conn.add(lwi)
         conn.flush()
@@ -296,6 +309,7 @@ def mentor_lesson_del(request):
         lwi.lessonid = lesson.id
         lwi.senduserid = 0
         lwi.acceptuserid = request.user.id
+        lwi.action = -1
         lwi.actiontime = time.time()
         conn.add(lwi)
         conn.flush()
