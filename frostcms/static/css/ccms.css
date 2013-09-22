@@ -546,9 +546,39 @@ div.notice_sender{
 	color:#666;
 }
 div.notice_time{
-	margin:0px 24px 10px 10px;
+	margin:0px 24px 10px 30px;
+	float:left;
+	line-height:20px;
+	font-size:14px;
+	color:#666;
+}
+div.notice_app{
+	margin:0px 24px 10px 30px;
 	float:right;
 	line-height:20px;
 	font-size:14px;
 	color:#666;
+}
+div.notice_app2{
+	margin:0px 24px 10px 30px;
+	float:left;
+	line-height:20px;
+	font-size:14px;
+	color:#666;
+}
+div.notice_main{
+	border:solid 1px #ccc;
+	border-radius:5px;
+	width:100%;
+	min-height:200px;
+	text-align:center;
+}
+
+div.notice_main p{
+	width:92%;
+	margin:10px 30px;
+	line-height:24px;
+	font-size:14px;
+	text-align:left;
+	text-indent:2em;
 }

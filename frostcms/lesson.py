@@ -351,12 +351,12 @@ def notice_lesson_list(request):
     conn = DBSession()
     page = int(request.params.get('page', 1))
     userid = request.user.id
-    items = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==userid).order_by(LessonWorkItem.viewstate,LessonWorkItem.actiontime)
+    items = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==userid).order_by(LessonWorkItem.viewstate,desc(LessonWorkItem.actiontime))
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
             page=int(page),
-            items_per_page=10,
+            items_per_page=12,
             url=page_url,
             )
     return dict(items=items)
