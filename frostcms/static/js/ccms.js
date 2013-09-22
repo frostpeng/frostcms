@@ -8,6 +8,6 @@ $("div").ready(function(){
   		});
 	});
 
-function setFaculty(){
-	
+function notice_page(workid){
+	window.location.href="/lesson/notice/watch?workid="+workid;
 }

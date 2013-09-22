@@ -26,6 +26,8 @@ def includeme(config):
     config.add_route('lesson_del', '/lesson/del')
     config.add_route('mentor_lesson_del', '/mentor/lesson/del')
     config.add_route('api_location_studentnum_list','api/location_studentnum/list')
+    config.add_route('lesson_notice_list','/lesson/notice/list')
+    config.add_route('lesson_notice_watch','/lesson/notice/watch')
     
 @view_config(route_name='lesson_listbycourse', renderer='lesson/lesson_listbycourse.mako',permission='admin')
 def listlessonsbycourse(request):
@@ -77,9 +79,10 @@ def admin_lesson_agree(request):
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
         lwi.senduserid = request.user.id
-        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.acceptuserid = lesson.course.mentor.user.id
         lwi.action = 1
         lwi.actiontime = time.time()
+        conn.add(lwi)
         conn.flush()
         return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
@@ -94,9 +97,10 @@ def admin_lesson_disagree(request):
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
         lwi.senduserid = request.user.id
-        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.acceptuserid = lesson.course.mentor.user.id
         lwi.action = 2
         lwi.actiontime = time.time()
+        conn.add(lwi)
         conn.flush()
         return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
@@ -112,7 +116,7 @@ def mentor_lesson_listbycourse(request):
     if course:
         course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id).all()
         course.course_classes=course_classes
-        items=conn.query(Lesson).filter(Lesson.courseid==course.id).all()
+        items=conn.query(Lesson).filter(Lesson.courseid==course.id,Lesson.state!=-1).all()
         for item in items:
             lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
             item.lesson_locations=lesson_locations
@@ -287,7 +291,7 @@ def dellesson(request):
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
         lwi.senduserid = request.user.id
-        lwi.acceptuserid = lesson.course.mentor.id
+        lwi.acceptuserid = lesson.course.mentor.user.id
         lwi.action = -1
         lwi.actiontime = time.time()
         conn.add(lwi)
@@ -307,8 +311,8 @@ def mentor_lesson_del(request):
         lesson.state = -1
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
-        lwi.senduserid = 0
-        lwi.acceptuserid = request.user.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = 1 #admin.id
         lwi.action = -1
         lwi.actiontime = time.time()
         conn.add(lwi)
@@ -341,4 +345,30 @@ def api_location_studentnum_list(request):
             loclist.append({'id':location.id,'leftnum':location.leftnum,'name':location.name})
     return dict(locations=loclist)
 
+
+@view_config(route_name='lesson_notice_list', renderer='notice/notice_lesson_list.mako',permission='user')
+def notice_lesson_list(request):
+    conn = DBSession()
+    page = int(request.params.get('page', 1))
+    userid = request.user.id
+    items = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==userid).order_by(LessonWorkItem.viewstate,LessonWorkItem.actiontime)
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
+            items,
+            page=int(page),
+            items_per_page=10,
+            url=page_url,
+            )
+    return dict(items=items)
     
+@view_config(route_name='lesson_notice_watch', renderer='notice/notice_lesson_watch.mako',permission='user')
+def notice_lesson_watch(request):
+    conn = DBSession()
+    workid=request.params.get('workid')
+    if workid :
+        notice = conn.query(LessonWorkItem).filter(LessonWorkItem.id==workid).first()
+        notice.viewstate = 1
+        conn.flush()
+    else :
+        notice = None
+    return dict(notice=notice)

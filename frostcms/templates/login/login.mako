@@ -1,4 +1,4 @@
-<div class="head">
+<div class="head" >
     <div class="title">
    	 实验室管理系统
     </div>
@@ -9,6 +9,12 @@
       <li>
         <!--<img src="/static/img/user.png" alt="" />-->
             <p><i class="icon-user icon-white"></i> ${request.user.name}</p>
+      </li>
+    </a>
+    <a href="" title="通知">
+      <li>
+        <!--<img src="/static/img/修改密码.png" alt="" />-->
+          <p><i class="icon-envelope icon-white"></i> 通知</p>
       </li>
     </a>
     <a href="/user/change_password" title="修改密码">

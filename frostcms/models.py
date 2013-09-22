@@ -251,15 +251,33 @@ class LessonWorkItem(Base):
     viewstate=Column(Integer,default=0)
     action=Column(Integer,default=0)
     actiontime=Column(INTEGER)
-    description=Column(String(255))
-    lesson = relationship("Lesson")
+    description=Column(String(1000))
+    lesson = relationship("Lesson",foreign_keys=[lessonid])
     acceptuser=relationship("User",foreign_keys=[acceptuserid])
     senduser=relationship("User",foreign_keys=[senduserid])
     
     def __json__(self,request):
         return dict(id=self.id,lessonid=self.lessonid,acceptuserid=self.acceptuserid,senduserid\
                     =self.senduserid,viewstate=self.viewstate,action=self.action,actiontime=\
-                    self.actiontime)
+                    self.actiontime,description=self.description)
+        
+class Courseware(Base):
+    """关于课件的处理
+    """
+    __tablename__ = 'courseware'
+    id = Column(Integer,primary_key=True)
+    mentorid=Column(Integer,ForeignKey('mentor.id',onupdate="CASCADE", ondelete="SET NULL"))
+    title=Column(String(1000))
+    filepath=Column(String(1000))
+    createtime=Column(INTEGER)
+    description=Column(String(1000))
+    mentor=relationship("Mentor")
+    
+    def __json__(self,request):
+        return dict(id=self.id,mentorid=self.mentorid,title=self.title,filepath\
+                    =self.filepath,createtime=self.createtime,description=self.description)
+
+
     
 
 def initialize_sql(engine):

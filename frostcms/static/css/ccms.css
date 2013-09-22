@@ -285,7 +285,7 @@ form.search{
 
 .topNav{
 	height: 32px;
-	border: 10px solid #dcdcdc;
+	border: 10px solid #666666;
 	border-width: 0 0 10px 0;
 	margin-bottom: 5px;
 	z-index: 10;
@@ -500,4 +500,55 @@ td.class-tab-none:hover{
 th.class-tab{
 	text-align:center;
 	width:12.5%;
+}
+
+
+td.notice_head{
+	text-align:center;
+	width:40px;
+	cursor: pointer;
+}
+td.notice_sender{
+	text-align:center;
+	width:120px;
+	cursor: pointer;
+}
+td.notice_title{
+	text-align:center;
+	width:450px;
+	cursor: pointer;
+}
+td.notice_time{
+	text-align:center;
+	cursor: pointer;
+}
+th.notice_head{
+	text-align:center;
+	width:40px;
+}
+th.notice_sender{
+	text-align:center;
+	width:120px;
+}
+th.notice_title{
+	text-align:center;
+	width:450px;
+}
+th.notice_time{
+	text-align:center;
+}
+
+div.notice_sender{
+	margin:0px 10px 10px 24px;
+	float:left;
+	line-height:20px;
+	font-size:14px;
+	color:#666;
+}
+div.notice_time{
+	margin:0px 24px 10px 10px;
+	float:right;
+	line-height:20px;
+	font-size:14px;
+	color:#666;
 }
