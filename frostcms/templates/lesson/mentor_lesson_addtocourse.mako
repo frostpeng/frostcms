@@ -6,7 +6,11 @@
     <%include file="/unit/link_JS&CSS.mako" />
 </head>
 
-<body>
+<body 
+% if lesson :
+onload="checkTimeB();"
+% endif
+>
 	<!-- 导航栏部分 -->
     <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
@@ -47,41 +51,93 @@
 				<br /><br />
 				<div class="input-prepend">
   					<span class="add-on">周次</span>
+  					% if lesson :
+  					<input class="span2" id="checkWeek" type="text" name="lesson.week" onkeyup="checkTime()" placeholder="" value="${lesson.week}" />
+  					% else :
   					<input class="span2" id="checkWeek" type="text" name="lesson.week" onkeyup="checkTime()" placeholder="" />
+  					% endif
 				</div>
 				<span id="checkWeekRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">星期</span>
   					<select class="span2" style="width:140px" name="lesson.dow" onchange="checkTime()" size="1" onchange="" >
-						<option value="0" >星期日</option>
-						<option value="1" >星期一</option>
-						<option value="2" >星期二</option>
-						<option value="3" >星期三</option>
-						<option value="4" >星期四</option>
-						<option value="5" >星期五</option>
-						<option value="6" >星期六</option>
+						<option value="0" 
+						% if lesson and lesson.dow == 0:
+						selected="selected"
+						% endif 
+						>星期日</option>
+						<option value="1" 
+						% if lesson and lesson.dow == 1:
+						selected="selected"
+						% endif
+						>星期一</option>
+						<option value="2" 
+						% if lesson and lesson.dow == 2:
+						selected="selected"
+						% endif
+						>星期二</option>
+						<option value="3" 
+						% if lesson and lesson.dow == 3:
+						selected="selected"
+						% endif
+						>星期三</option>
+						<option value="4" 
+						% if lesson and lesson.dow == 4:
+						selected="selected"
+						% endif
+						>星期四</option>
+						<option value="5" 
+						% if lesson and lesson.dow == 5:
+						selected="selected"
+						% endif
+						>星期五</option>
+						<option value="6" 
+						% if lesson and lesson.dow == 6:
+						selected="selected"
+						% endif
+						>星期六</option>
 					</select>
 				</div>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">开始节数</span>
-  					<input class="span2" id="checkStarttime" type="text" name="lesson.starttime" onkeyup="checkTime()" placeholder="" />
+  					% if lesson :
+  					<input class="span2" id="checkStarttime" type="text" name="lesson.starttime" onkeyup="checkTime()" placeholder="" value="${lesson.start}"/>
+					% else :
+					<input class="span2" id="checkStarttime" type="text" name="lesson.starttime" onkeyup="checkTime()" placeholder="" />
+					% endif
 				</div>
 				<span id="checkStarttimeRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">结束节数</span>
-  					<input class="span2" id="checkEndtime" type="text" name="lesson.endtime" onkeyup="checkTime()" placeholder="" />
+  					% if lesson :
+  					<input class="span2" id="checkEndtime" type="text" name="lesson.endtime" onkeyup="checkTime()" placeholder="" value="${lesson.end}"/>
+					% else:
+					<input class="span2" id="checkEndtime" type="text" name="lesson.endtime" onkeyup="checkTime()" placeholder="" />
+					% endif
 				</div>
 				<span id="checkEndtimeRes" style="margin:0 10px;color:red;font-size:14px;line-height:24px;font-family:'微软雅黑','黑体';"></span>
 				
 				<br /><hr />
 				<div class="locationBox">
 					<div class="locationSelect">
+						% if lesson:
+						<div class="locationSelectHead" style="text-align:left;"><i class="icon-th-large" style="margin:8px;float:left;"></i> 实验室(<span id="sNumHave">${studenthave}</span>)</div>
+						% else :
 						<div class="locationSelectHead" style="text-align:left;"><i class="icon-th-large" style="margin:8px;float:left;"></i> 实验室(<span id="sNumHave">0</span>)</div>
+						% endif
 						<div class="locationSelectContent">
-						<span id="locationHave"></span>
+						<span id="locationHave">
+						% if lesson :
+							% for location in locations:
+							<input name="locationid" id="location${location.id}" value="${location.location.id}" type="text" style="display:none;">
+							<input name="studentnum" id="location${location.id}" value="${location.studentnum}" type="text" style="display:none;">
+							<a id="location${location.id}" class="btn" onclick="deleteLocation(&quot;location${location.id}&quot;)" style="margin:5px 5px 0 0;">${location.location.name} : ${location.studentnum}人  <i class="icon-remove" style="margin:3px 0;"></i></a>
+							% endfor
+						% endif
+						</span>
 						</div>
 					</div>
 					<div class="locationAdd">
@@ -102,7 +158,11 @@
 				</div>
 				<hr />
 				<span id="debug"></span>
+				% if lesson :
+ 				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkLessonAdd();"><i class="icon-ok icon-white"></i>  重新申请</button>
+ 				% else :
  				<button class="btn btn-primary" id="add_submit" type="button" onclick="checkLessonAdd();"><i class="icon-ok icon-white"></i>  提交</button>
+ 				% endif
  			</form>
         </div>               
         

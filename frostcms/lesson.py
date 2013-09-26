@@ -186,7 +186,17 @@ def mentor_lesson_addtocourse(request):
             conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
     if course:
         studentnum=getStudentnumOfCourse(courseid)
-        return dict(course=course,studentnum=studentnum) 
+        return dict(course=course,studentnum=studentnum)
+    else :
+        lessonid = request.params.get('lessonid')
+        lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
+        course = conn.query(Course).filter(Course.id==lesson.courseid).first()
+        studentnum=getStudentnumOfCourse(lesson.courseid)
+        locations = conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lessonid)
+        studenthave = 0
+        for location in locations :
+            studenthave += location.studentnum
+        return dict(lesson=lesson,course=course,studentnum=studentnum,locations=locations,studenthave=studenthave)
     return dict(code=0,error=u'课程不存在')   
 
 @view_config(route_name='admin_lesson_edit', renderer='lesson/lesson_add.mako',permission='admin')
@@ -210,8 +220,6 @@ def savelesson(request):
     lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
     lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
     if lesson:
-        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
-        """
         lesson.courseid = courseid
         lesson.week = week
         lesson.dow = dow
@@ -220,7 +228,6 @@ def savelesson(request):
         lesson.state = 1
         lesson.updatetime=time.time()
         conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
-        """
     else:
         lesson = Lesson()
         lesson.courseid = courseid
@@ -251,15 +258,14 @@ def mentor_lesson_save(request):
     lesson_id,courseid,week,dow,start,end=[request.params.get(x) for x in params_tuple]
     lesson = conn.query(Lesson).filter(Lesson.id==lesson_id).first()
     if lesson:
-        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
-        """lesson.courseid = courseid
+        lesson.courseid = courseid
         lesson.week = week
         lesson.dow = dow
         lesson.start = start
         lesson.end = end
         lesson.state = 0
         lesson.updatetime=time.time()
-        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()"""
+        conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson.id).delete()
     else:
         lesson = Lesson()
         lesson.courseid = courseid

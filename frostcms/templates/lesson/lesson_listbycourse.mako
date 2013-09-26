@@ -51,7 +51,7 @@
             	</tr>
       			<tr>     
         			<th class="name">周数</th>
-        			<th class="name">天数</th>
+        			<th class="name">星期</th>
         			<th class="name">开始节数</th>
         			<th class="name">结束节数</th>
         			<th class="name_l">教室安排</th>
@@ -63,7 +63,23 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.week}</td>
-        			<td class="name">${item.dow+1}</td>
+        			<td class="name">
+        			% if item.dow == 0 :
+        			日
+        			% elif item.dow == 1:
+        			一
+        			% elif item.dow == 2:
+        			二
+        			% elif item.dow == 3:
+        			三
+        			% elif item.dow == 4:
+        			四
+        			% elif item.dow == 5:
+        			五
+        			% elif item.dow == 6:
+        			六
+        			% endif
+        			</td>
         			<td class="name">${item.start}</td>
         			<td class="name">${item.end}</td>
         			<td class="name">

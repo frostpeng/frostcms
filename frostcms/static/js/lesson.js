@@ -98,6 +98,56 @@ function checkTime(){
 				
 }
 
+function checkTimeB(){
+	var starttime = document.course["lesson.starttime"].value;
+	var endtime = document.course["lesson.endtime"].value;
+	var week = document.course["lesson.week"].value;
+	var dow = document.course["lesson.dow"].value;
+	if (week==""){
+		document.getElementById("checkWeekRes").innerHTML = "！请输入周数！";
+		return;
+	}
+	else{
+		document.getElementById("checkWeekRes").innerHTML = "";
+	}
+	
+	if (starttime==""){
+		document.getElementById("checkStarttimeRes").innerHTML = "！请输入开始节数！";
+		return;
+	}
+	else{
+		document.getElementById("checkStarttimeRes").innerHTML = "";
+	}
+	
+	if (parseInt(endtime)<parseInt(starttime)){
+		document.getElementById("checkEndtimeRes").innerHTML = "！结束节数应大于等于开始节数！";
+		return;
+	}
+	else{
+		document.getElementById("checkEndtimeRes").innerHTML = "";
+	}
+	
+	if (week!="" && starttime!="" && endtime!=""){
+		document.getElementById("locationCan").innerHTML = "";
+		 $.ajax({
+				url:"/api/location_studentnum/list",
+				type: "post",
+				data: {week:week,dow:dow,start:starttime,end:endtime},
+				dataType: "json",
+				success: function(data){
+					for (var ix=0;ix<data.locations.length;++ix)
+						addSingleBox(data.locations[ix]);
+				},
+				error: function(data){
+					alert("系统错误，请联系管理员");
+				},
+				complete: function(){
+				}
+			});
+	}
+				
+}
+
 function addLocations(){
 	document.getElementById("locationHave").innerHTML = "";
 	var Box = document.getElementById("locationHave");

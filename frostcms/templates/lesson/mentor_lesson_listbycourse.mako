@@ -15,7 +15,7 @@
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">课堂管理</div>	
-			<a class="btn btn-primary" id="btn_head" href="/course/list"><i class="icon-share-alt icon-white"></i> 课程列表</a>
+			<a class="btn btn-primary" id="btn_head" href="/mentor/course/list"><i class="icon-share-alt icon-white"></i> 课程列表</a>
 			% if course:	
 			<a class="btn btn-primary" id="btn_head" href="/mentor/lesson/addtocourse?courseid=${course.id}"><i class="icon-plus icon-white"></i> 添加课堂</a>
 			% endif
@@ -51,7 +51,7 @@
             	</tr>
       			<tr>     
         			<th class="name">周数</th>
-        			<th class="name">天数</th>
+        			<th class="name">星期</th>
         			<th class="name">开始节数</th>
         			<th class="name">结束节数</th>
         			<th class="name_l">教室安排</th>
@@ -63,7 +63,23 @@
       			% for item in items:
       			<tr>
         			<td class="name">${item.week}</td>
-        			<td class="name">${item.dow+1}</td>
+        			<td class="name">
+        			% if item.dow == 0 :
+        			日
+        			% elif item.dow == 1:
+        			一
+        			% elif item.dow == 2:
+        			二
+        			% elif item.dow == 3:
+        			三
+        			% elif item.dow == 4:
+        			四
+        			% elif item.dow == 5:
+        			五
+        			% elif item.dow == 6:
+        			六
+        			% endif
+        			</td>
         			<td class="name">${item.start}</td>
         			<td class="name">${item.end}</td>
         			<td class="name">
@@ -82,17 +98,14 @@
         			%endif
 					</td>
         			<td class="name">
-        			<a class="btn btn-danger" href="/mentor/lesson/del?lessonid=${item.id}">删除</a></td>
+        			% if item.state == 2 :
+        			<a class="btn btn-info btn-small" href="/mentor/lesson/addtocourse?lessonid=${item.id}">编辑</a>
+        			% endif
+        			<a class="btn btn-danger btn-small" href="/mentor/lesson/del?lessonid=${item.id}">删除</a>
+        			</td>
       			</tr>
       			% endfor
     		</tbody>
-    		<!--
-    		<tfoot >
-    			<tr>
-    				<th colspan="6"><a class="btn btn-primary" id="btn_head" href="/mentor/lesson/add" style="margin:0;width:97%;"><i class="icon-plus-sign icon-white"></i> 添加课堂</a> </th>
-    			</tr>
-    		</tfoot>
-    		-->
             </table>
             <!-- 分页导航 -->         
         	<%include file="/unit/pagination.mako" />

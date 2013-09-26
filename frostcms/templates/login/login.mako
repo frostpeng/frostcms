@@ -11,7 +11,7 @@
             <p><i class="icon-user icon-white"></i> ${request.user.name}</p>
       </li>
     </a>
-    <a href="" title="通知">
+    <a href="/lesson/notice/list" title="通知">
       <li>
         <!--<img src="/static/img/修改密码.png" alt="" />-->
           <p><i class="icon-envelope icon-white"></i> 通知</p>

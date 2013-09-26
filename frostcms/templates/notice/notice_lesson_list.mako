@@ -46,7 +46,7 @@
         			% elif item.action == 1 :
         			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-success">课堂申请成功</span>
         			% elif item.action == 2 :
-        			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-warning">课堂申请呗拒绝</span>
+        			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-warning">课堂申请被拒绝</span>
         			% endif 
         			</td>
         			<td class="notice_time">
