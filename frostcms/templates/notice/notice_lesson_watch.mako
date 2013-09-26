@@ -38,7 +38,7 @@
         			
 			</div>
 			<div class="notice_app">
-			<a href="#" class="btn btn-danger btn-mini"><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
+			<a href="/lesson/notice/del?workid=${notice.id}" class="btn btn-danger btn-mini"><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
 			<a href="/lesson/notice/list" class="btn btn-primary btn-mini"><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
 			</div>
 		</div>
@@ -80,12 +80,11 @@
         	<p>${notice.description}</p>
         	% endif
         	<p>————文件为系统统一格式，若有疑问请咨询网络中心办公室。</p>
-        	<hr />
-        	<div class="notice_app2">
-        		<a href="/lesson/notice/list" class="btn btn-primary btn-mini"><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
-				<a href="#" class="btn btn-danger btn-mini"><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
-			</div>
         	</div>
+        	<div class="notice_app2">
+        		<a href="/lesson/notice/list" class="btn btn-primary btn-mini" ><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
+				<a href="/lesson/notice/del?workid=${notice.id}" class="btn btn-danger btn-mini" ><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
+			</div>
         </div>               
         % endif
     </div>

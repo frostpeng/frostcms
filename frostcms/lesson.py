@@ -28,6 +28,7 @@ def includeme(config):
     config.add_route('api_location_studentnum_list','api/location_studentnum/list')
     config.add_route('lesson_notice_list','/lesson/notice/list')
     config.add_route('lesson_notice_watch','/lesson/notice/watch')
+    config.add_route('lesson_notice_del','/lesson/notice/del')
     
 @view_config(route_name='lesson_listbycourse', renderer='lesson/lesson_listbycourse.mako',permission='admin')
 def listlessonsbycourse(request):
@@ -365,10 +366,22 @@ def notice_lesson_list(request):
 def notice_lesson_watch(request):
     conn = DBSession()
     workid=request.params.get('workid')
+    userid = request.user.id
     if workid :
-        notice = conn.query(LessonWorkItem).filter(LessonWorkItem.id==workid).first()
+        notice = conn.query(LessonWorkItem).filter(LessonWorkItem.id==workid,LessonWorkItem.acceptuserid==userid).first()
         notice.viewstate = 1
         conn.flush()
     else :
         notice = None
     return dict(notice=notice)
+
+@view_config(route_name='lesson_notice_del', renderer='notice/notice_lesson_watch.mako',permission='user')
+def notice_lesson_del(request):
+    conn = DBSession()
+    workid=request.params.get('workid')
+    userid = request.user.id
+    if workid :
+        notice = conn.query(LessonWorkItem).filter(LessonWorkItem.id==workid,LessonWorkItem.acceptuserid==userid).first()
+        conn.delete(notice)
+        conn.flush()
+    return HTTPFound(location=request.route_url('lesson_notice_list'))
