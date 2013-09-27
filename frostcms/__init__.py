@@ -67,4 +67,5 @@ def main(global_config, **settings):
     config.include("frostcms.public")
     config.include("frostcms.lesson")
     config.include("frostcms.course")
+    config.include("frostcms.courseware")
     return config.make_wsgi_app()

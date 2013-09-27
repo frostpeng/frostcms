@@ -268,13 +268,14 @@ class Courseware(Base):
     id = Column(Integer,primary_key=True)
     mentorid=Column(Integer,ForeignKey('mentor.id',onupdate="CASCADE", ondelete="SET NULL"))
     title=Column(String(1000))
+    filename=Column(String(1000))
     filepath=Column(String(1000))
     createtime=Column(INTEGER)
     description=Column(String(1000))
     mentor=relationship("Mentor")
     
     def __json__(self,request):
-        return dict(id=self.id,mentorid=self.mentorid,title=self.title,filepath\
+        return dict(id=self.id,mentorid=self.mentorid,title=self.title,filename=self.filename,filepath\
                     =self.filepath,createtime=self.createtime,description=self.description)
 
 

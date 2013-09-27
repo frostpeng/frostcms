@@ -12,7 +12,7 @@
 
 <body>
 	<!-- 导航栏部分 -->
-    <%include file="/main/nav_admin.mako" />
+    <%include file="/unit/nav.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	

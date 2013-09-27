@@ -11,7 +11,7 @@ import formencode
 from frostcms.utils import md5
 from frostcms.models import Courseware
 import os,urllib
-import magic
+import mimetypes
 
 log = getLogger(__name__)
 
@@ -92,8 +92,8 @@ def user_courseware_getfilebyid(request):
     coursewareid = request.params.get('coursewareid')
     courseware=conn.query(Courseware).filter(Courseware.id==coursewareid).first()
     if os.path.exists(courseware.filepath): 
-        mime = magic.Magic(mime=True)
-        content_type=mime.from_file(courseware.filepath)
+        extension = courseware.filename.split('.')[-1:][0]  
+        content_type= mimetypes.types_map['.'+extension]
         file=open(courseware.filepath)
         response = request.response
         response.headers['Pragma']='no-cache'
