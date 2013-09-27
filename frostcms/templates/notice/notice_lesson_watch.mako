@@ -79,7 +79,7 @@
         	% if notice.description :
         	<p>${notice.description}</p>
         	% endif
-        	<p>————文件为系统统一格式，若有疑问请咨询网络中心办公室。</p>
+        	<p>————本文件由服务器自动发送。</p>
         	</div>
         	<div class="notice_app2">
         		<a href="/lesson/notice/list" class="btn btn-primary btn-mini" ><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
