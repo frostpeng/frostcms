@@ -1,6 +1,6 @@
 # coding=utf-8
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound,HTTPNotFound
 from logging import getLogger
 from .models import DBSession,User
 import webhelpers.paginate as paginate
@@ -9,6 +9,9 @@ from pyramid_simpleform import Form, State
 from pyramid_simpleform.renderers import FormRenderer
 import formencode
 from frostcms.utils import md5
+from frostcms.models import Courseware
+import os,urllib
+import magic
 
 log = getLogger(__name__)
 
@@ -18,6 +21,7 @@ def includeme(config):
     config.add_route('user_resetpsd', '/user/resetpsd')
     config.add_route('user_change_psd', '/user/change_password')
     config.add_route('api_user_change_password', '/api/user/change_password')
+    config.add_route('user_courseware_getfilebyid','/user/courseware/getfilebyid')
     
 
 @view_config(route_name='user_list', renderer='user/user_list.mako',permission='admin')
@@ -79,5 +83,27 @@ def api_user_change_password(request):
         conn.flush()
         return dict(code=1)
     return dict(code=0,error=FormRenderer(form).errorlist())
+
+@view_config(route_name='user_courseware_getfilebyid',permission='user')
+def user_courseware_getfilebyid(request):
+    """获取文件
+    """
+    conn=DBSession()
+    coursewareid = request.params.get('coursewareid')
+    courseware=conn.query(Courseware).filter(Courseware.id==coursewareid).first()
+    if os.path.exists(courseware.filepath): 
+        mime = magic.Magic(mime=True)
+        content_type=mime.from_file(courseware.filepath)
+        file=open(courseware.filepath)
+        response = request.response
+        response.headers['Pragma']='no-cache'
+        response.headers['Cache-Control']='no-cache'
+        response.headers['Content-Disposition']=str("attachment; filename="+courseware.filename)
+        response.headers['Content-Type']=content_type
+        response.headers['Expires']='0'
+        response.write(file.read())
+        return response
+    else:
+        return HTTPNotFound()
         
  

@@ -3,12 +3,16 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <%include file="/unit/link_JS&CSS.mako" />
+    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/ccms.js"></script>
 </head>
 
 <body>
 	<!-- 导航栏部分 -->
-    <%include file="/unit/nav.mako" />
+    <%include file="/main/nav_admin.mako" />
     <!-- 主体部分 -->
 	<div class="right">
     	
@@ -38,6 +42,8 @@
         			${item.description}
         			</td>
         			<td class="app">
+        			<a class="btn btn-info" href="/user/courseware/getfilebyid?coursewareid=${item.id}">下载</a>
+        			<a class="btn btn-danger" href="/mentor/courseware/del?coursewareid=${item.id}">删除</a>
         			</td>
       			</tr>
       			% endfor
