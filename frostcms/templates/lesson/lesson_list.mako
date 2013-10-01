@@ -47,7 +47,7 @@
         			<td class="name_l">item.start</td>
         			<td class="name">item.end</td>
         			<td class="app">
-        				<a class="btn btn-danger btn-mini" href="/lesson/del?lessonid=${item.id}">删除</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除该课堂？','/lesson/del?lessonid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

@@ -56,7 +56,7 @@
         			<td class="name" style="width:220px;">${item.email}</td>
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/mentor/add?mentorid=${item.id}">详情与修改</a>
-        				<a class="btn btn-danger btn-mini" href="/mentor/del?mentorid=${item.id}">删除</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除教师【${item.name}】？','/mentor/del?mentorid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

@@ -11,3 +11,8 @@ $("div").ready(function(){
 function notice_page(workid){
 	window.location.href="/lesson/notice/watch?workid="+workid;
 }
+
+function delete_con(text,href){
+	if (confirm(text))
+		window.location.href=href;
+}

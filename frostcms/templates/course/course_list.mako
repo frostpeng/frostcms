@@ -53,7 +53,7 @@
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/course/add?courseid=${item.id}">编辑</a>
         				<a class="btn btn-info btn-mini" href="/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
-        				<a class="btn btn-danger btn-mini" href="/course/del?lessonid=${item.id}">删除</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除课程【${item.name}】？','/course/del?lessonid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

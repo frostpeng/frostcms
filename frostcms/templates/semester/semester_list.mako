@@ -37,7 +37,7 @@
         			<td class="name">${item.weeks}</td>
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/semester/add?semesterid=${item.id}">编辑</a>
-        				<a class="btn btn-danger btn-mini" href="/semester/del?semesterid=${item.id}">删除</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除学期【${item.name}】？','/semester/del?semesterid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

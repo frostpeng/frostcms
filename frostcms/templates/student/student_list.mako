@@ -55,7 +55,7 @@
         			<td class="name">${item.clazz.year}</td>
         			<td class="app">
         			<a class="btn btn-info btn-mini" href="/student/add?studentid=${item.id}">修改学生信息</a>
-        			<a class="btn btn-danger btn-mini" href="/student/del?studentid=${item.id}">删除</a>
+        			<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除学生【${item.identity}】？','/student/del?studentid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

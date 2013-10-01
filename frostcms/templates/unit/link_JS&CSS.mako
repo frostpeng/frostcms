@@ -1,4 +1,4 @@
-//link JS files:
+<!--//link JS files:-->
 <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
 <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
 <script src="../../static/js/bootstrap.js"></script>

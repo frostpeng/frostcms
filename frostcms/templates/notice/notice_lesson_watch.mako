@@ -38,7 +38,7 @@
         			
 			</div>
 			<div class="notice_app">
-			<a href="/lesson/notice/del?workid=${notice.id}" class="btn btn-danger btn-mini"><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
+			<a onclick="delete_con('是否删除该通知？','/lesson/notice/del?workid=${notice.id}');" class="btn btn-danger btn-mini"><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
 			<a href="/lesson/notice/list" class="btn btn-primary btn-mini"><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
 			</div>
 		</div>
@@ -83,7 +83,7 @@
         	</div>
         	<div class="notice_app2">
         		<a href="/lesson/notice/list" class="btn btn-primary btn-mini" ><i class="icon-share-alt icon-white" style="margin:2px;"></i> 通知列表</a>
-				<a href="/lesson/notice/del?workid=${notice.id}" class="btn btn-danger btn-mini" ><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
+				<a onclick="delete_con('是否删除该通知？','/lesson/notice/del?workid=${notice.id}');" class="btn btn-danger btn-mini" ><i class=" icon-remove icon-white" style="margin:2px;"></i> 删除通知</a>
 			</div>
         </div>               
         % endif

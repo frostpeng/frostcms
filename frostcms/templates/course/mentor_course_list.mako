@@ -53,7 +53,8 @@
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/mentor/course/add?courseid=${item.id}">编辑</a>
         				<a class="btn btn-info btn-mini" href="/mentor/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
-        				<a class="btn btn-danger btn-mini" href="/mentor/course/del?courseid=${item.id}">删除</a>
+        				<a class="btn btn-info btn-mini" href="/mentor/course/warelist?courseid=${item.id}">查看课件</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除课程【${item.name}】？','/mentor/course/del?courseid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

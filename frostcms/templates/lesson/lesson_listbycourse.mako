@@ -100,7 +100,7 @@
         			%endif
 					</td>
         			<td class="name">
-        			<a class="btn btn-danger btn-mini" href="/lesson/del?lessonid=${item.id}">删除</a></td>
+        			<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除该课堂？','/lesson/del?lessonid=${item.id}');">删除</a></td>
       			</tr>
       			% endfor
     		</tbody>

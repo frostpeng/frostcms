@@ -3,11 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
+    <%include file="/unit/link_JS&CSS.mako" />
 </head>
 
 <body>
@@ -24,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<table class="table table-bordered table-hover" id="main_table">
+        	<table class="table table-bordered table-hover table-condensed" id="main_table">
             <thead>
       			<tr>     
         			<th class="name">课件名</th>
@@ -42,42 +38,15 @@
         			${item.description}
         			</td>
         			<td class="app">
-        			<a class="btn btn-info" href="/user/courseware/getfilebyid?coursewareid=${item.id}">下载</a>
-        			<a class="btn btn-danger" href="/mentor/courseware/del?coursewareid=${item.id}">删除</a>
+        			<a class="btn btn-info btn-small" href="/user/courseware/getfilebyid?coursewareid=${item.id}">下载</a>
+        			<a class="btn btn-danger btn-small" onclick="delete_con('是否删除课件【${item.title}】？','/mentor/courseware/del?coursewareid=${item.id}');">删除</a>
         			</td>
       			</tr>
       			% endfor
     		</tbody>
             </table>
-            <div class="right_foot">
-            	<div class="pagination">
-                <ul>
-          	 		% if items.first_page:
-	          		<li><a href="?page=${items.first_page}" title="第一页">&laquo; 第一页</a></li>
-	         		% endif
-	         		 % if items.previous_page:
-	          		<li><a href="?page=${items.previous_page}" title="上一页">&laquo; 上一页</a></li>
-	          		% endif
-	         		% for i in range(items.page - 3,items.page):
-			  		% if items.page_count>0 and i>=items.first_page:
-					<li><a href="?page=${i}" class="number" title="${i}">${i}</a></li>
-					% endif
-			  		% endfor
-	          		<li><a href="#" class="number current" title="${items.page}">${items.page}</a></li> 
-	          		% for i in range(items.page+1, items.page + 3):
-			  			% if items.page_count>0 and i<=items.last_page:
-						<li><a href="?page=${i}" class="number" title="${i}"> ${i} </a></li>
-			  			% endif
-			 		% endfor
-			  		% if items.next_page:
-			  		<li><a href="?page=${items.next_page}" title="下一页">下一页 &raquo;</a></li>
-			  		% endif
-			  		% if items.last_page:
-	          		<li><a href="?page=${items.last_page}" title="最后一页">最后一页 &raquo;</a></li> 
-	          		% endif
-          		</ul>
-            	</div>
-            </div>
+            <!-- 分页导航 -->         
+        	<%include file="/unit/pagination.mako" />
         </div>               
         
     </div>

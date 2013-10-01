@@ -3,11 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
-    <link href="../../static/css/bootstrap.css" rel="stylesheet" media="screen"/>
-    <link href="../../static/css/ccms.css" rel="stylesheet" media="screen"/>
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/jquery.js"></script>
-    <script src="../../static/js/ccms.js"></script>
+    <%include file="/unit/link_JS&CSS.mako" />
 </head>
 
 <body>
@@ -24,7 +20,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form enctype="multipart/form-data"  action="/mentor/courseware/save"  method="post">
+        	<form enctype="multipart/form-data" class="add"  action="/mentor/courseware/save"  method="post">
  				%if courseware:
  				<div class="app_name">
         		添加课件
@@ -56,10 +52,10 @@
 				</div>
 				<br />
 				<div class="input-append">
-				<span class="add-on">课件</span>
-				<input type="file" name="coursefile" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
-			</div>
-			<br />
+					<span class="add-on">课件</span>
+					<input class="span2" type="file" name="coursefile" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
+				</div>
+				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>
  				%endif
  			</form>

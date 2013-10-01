@@ -33,7 +33,7 @@
         			<td class="name">${item.name}</td>
         			<td class="app">
         				<a class="btn btn-info btn-mini" href="/location/add?locationid=${item.id}">详情</a>
-        				<a class="btn btn-danger btn-mini" href="/location/del?locationid=${item.id}">删除</a>
+        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除实验室【${item.name}】？','/location/del?locationid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor
