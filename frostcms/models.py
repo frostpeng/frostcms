@@ -278,7 +278,20 @@ class Courseware(Base):
         return dict(id=self.id,mentorid=self.mentorid,title=self.title,filename=self.filename,filepath\
                     =self.filepath,createtime=self.createtime,description=self.description)
 
-
+class Ware_Course(Base):
+    """课件与课程的关系
+    """
+    __tablename__ = 'ware_course'
+    id = Column(Integer,primary_key=True)
+    wareid=Column(Integer,ForeignKey('courseware.id',onupdate="CASCADE", ondelete="SET NULL"))
+    courseid=Column(Integer,ForeignKey('course.id',onupdate="CASCADE", ondelete="SET NULL"))
+    state=Column(Integer,default=0)
+    courseware=relationship("Courseware",foreign_keys=[wareid])
+    course=relationship('Course',foreign_keys=[courseid])
+    
+    def __json__(self,request):
+        return dict(id=self.id,wareid=self.wareid,courseid=self.courseid,state=self.state,\
+                    courseware=self.courseware,course=self.course)
     
 
 def initialize_sql(engine):
