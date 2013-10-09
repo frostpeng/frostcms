@@ -10,7 +10,7 @@ from pyramid_simpleform.renderers import FormRenderer
 import formencode
 from frostcms.utils import md5
 from frostcms.models import Courseware
-import os,urllib
+import os,urllib, uuid
 import mimetypes
 
 log = getLogger(__name__)
@@ -21,6 +21,7 @@ def includeme(config):
     config.add_route('user_resetpsd', '/user/resetpsd')
     config.add_route('user_change_psd', '/user/change_password')
     config.add_route('api_user_change_password', '/api/user/change_password')
+    config.add_route('api_user_uploadfile','/api/user/uploadfile')
     config.add_route('user_courseware_getfilebyid','/user/courseware/getfilebyid')
     
 
@@ -83,6 +84,37 @@ def api_user_change_password(request):
         conn.flush()
         return dict(code=1)
     return dict(code=0,error=FormRenderer(form).errorlist())
+
+@view_config(route_name='api_user_uploadfile',renderer='jsonp',permission='user')
+def api_user_uploadfile(request):
+    """用户上传文件，需要传入路径和
+    """
+    validators=dict(upload=formencode.validators.FieldStorageUploadConverter(\
+            not_empty=True,messages=dict(empty=(u'文件不能为空' ))),path=formencode.validators.String\
+                    (not_empty=True,messages=dict(empty=(u'路径不能为空' ))))
+    form=Form(request,validators=validators,state=State(request=request))
+    if form.validate():
+        try:
+            path = "frostcms/upload/"+form.data['path']
+            if not os.path.exists(path):
+                os.makedirs(path)
+                 
+            extension = form.data['upload'].filename.split('.')[-1:][0]  
+            filename = "%s.%s" % (uuid.uuid1(), extension)
+            filepath = os.path.join(path, filename).replace("\\", "/")
+            myfile = open(filepath, 'wb')
+            form.data['upload'].file.seek(0)
+            while 1:
+                tmp = form.data['upload'].file.read(2 << 16)
+                if not tmp:
+                    break
+                myfile.write(tmp)
+            myfile.close()
+            return dict(filename=form.data['upload'].filename,filepath=filepath)
+        except Exception,e:
+            log.debug(str(e))
+            return dict(error_code=0,error=u'参数错误')
+    return dict(error_code=0,error=form.errors)
 
 @view_config(route_name='user_courseware_getfilebyid',permission='user')
 def user_courseware_getfilebyid(request):
