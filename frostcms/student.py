@@ -1,4 +1,6 @@
 # coding=utf-8
+'''错误代码为4**
+'''
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
@@ -27,13 +29,13 @@ def includeme(config):
 def liststudent(request):
     page = int(request.params.get('page', 1))
     clazzid, identity = [request.params.get(x,None) for x in ['search_clazz', 'search_identity']]
-    conn = DBSession()
-    if identity > 0 :
-        items = conn.query(Student).filter(Student.identity == identity)
-    elif clazzid :
-        items = conn.query(Student).filter(Student.clazzid == clazzid)
-    else :
-        items = conn.query(Student).order_by(Student.identity)
+    items = DBSession().query(Student)
+    if identity:
+        items = items.filter(Student.identity == identity)
+    if clazzid :
+        items = items.filter(Student.clazzid == clazzid)
+        
+    items = items.order_by(Student.identity)
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
@@ -111,12 +113,13 @@ def savestudent(request):
     conn.flush()
     return HTTPFound(location=request.route_url('student_list'))
  
-@view_config(route_name='student_del', renderer='student/student_del.mako', permission='admin')
+@view_config(route_name='student_del', renderer='student/student_add.mako', permission='admin')
 def delstudent(request):
     conn = DBSession()
-    student = conn.query(Student).filter(Student.id == request.params.get('studentid')).first()
-    if request.params.get('student.id'):
-        student = conn.query(Student).filter(Student.id == request.params.get('student.id')).first()
+    studentid=request.params.get('studentid',None)
+    student = conn.query(Student).filter(Student.id == studentid).first()
+    if studentid:
+        student = conn.query(Student).filter(Student.id == studentid).first()
         conn.delete(student)
         conn.flush()
         return HTTPFound(location=request.route_url('student_list'))

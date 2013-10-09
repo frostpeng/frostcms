@@ -1,4 +1,6 @@
 # coding=utf-8
+'''错误为3**
+'''
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound,HTTPNotFound
 from logging import getLogger
@@ -42,6 +44,8 @@ def listuser(request):
        
 @view_config(route_name='user_resetpsd', renderer='user/user_list.mako',permission='admin')
 def resetpsd(request):
+    """密码重置
+    """
     conn = DBSession();
     user = conn.query(User).filter(User.id == request.params.get('userid')).first()
     user.password=md5(user.name)
@@ -82,8 +86,8 @@ def api_user_change_password(request):
         conn=DBSession()
         request.user.password=md5(form.data['newpassword'])
         conn.flush()
-        return dict(code=1)
-    return dict(code=0,error=FormRenderer(form).errorlist())
+        return {}
+    return dict(code=101,error=FormRenderer(form).errorlist())
 
 @view_config(route_name='api_user_uploadfile',renderer='jsonp',permission='user')
 def api_user_uploadfile(request):
@@ -113,8 +117,8 @@ def api_user_uploadfile(request):
             return dict(filename=form.data['upload'].filename,filepath=filepath)
         except Exception,e:
             log.debug(str(e))
-            return dict(error_code=0,error=u'参数错误')
-    return dict(error_code=0,error=form.errors)
+            return dict(code=301,error=u'参数错误')
+    return dict(code=101,error=form.errors)
 
 @view_config(route_name='user_courseware_getfilebyid',permission='user')
 def user_courseware_getfilebyid(request):
@@ -135,7 +139,6 @@ def user_courseware_getfilebyid(request):
         response.headers['Expires']='0'
         response.write(file.read())
         return response
-    else:
-        return HTTPNotFound()
+    return HTTPNotFound()
         
  

@@ -77,11 +77,11 @@ $(document).ready(function(){
 				remember:document.getElementById('remember').checked},
 			dataType: "json",
 			success: function(data){
-				if(data.code == 0){
+				if(data.code){
+					alert(error);
 					$("#add_error").html(data.error);
-				}
-				if(data.code==1){
-					window.location.href =data.return_url;
+				}else{
+				window.location.href =data.return_url;
 				}
 			},
 			error: function(data){

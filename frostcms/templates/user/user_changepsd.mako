@@ -57,10 +57,9 @@ $(document).ready(function(){
 			data: {oldpassword:$('#oldpassword').val(),newpassword:$('#newpassword').val()},
 			dataType: "json",
 			success: function(data){
-				if(data.code == 0){
+				if(data.code){
 					$("#add_error").html(data.error);
-				}
-				if(data.code==1){
+				}else{
 					$("#add_error").html("密码修改成功");
 				}
 			},
