@@ -35,12 +35,11 @@ class MainRequest(Request):
         lessonscout=conn.query(Lesson.id).filter(Lesson.state==0).count()
         return lessonscout
     
+    @reify
     def noticenum(self):
         conn=DBSession()
-        log.debug(str(self)+'true')
-        test = str(self) + 'true'
         noticenum = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==self.user.id,LessonWorkItem.viewstate==0).count()
-        return test
+        return noticenum
 
 
 def main(global_config, **settings):
