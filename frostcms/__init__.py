@@ -1,5 +1,5 @@
 from pyramid.config import Configurator
-from sqlalchemy import engine_from_config
+from sqlalchemy import engine_from_config,func
 
 from pyramid.renderers import JSONP
 from pyramid.decorator import reify
@@ -11,7 +11,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from .authentication import AuthenticationPolicy
 from .security import groupfinder
-from .models import initialize_sql,DBSession,User,Lesson
+from .models import initialize_sql,DBSession,User,Lesson,LessonWorkItem
 import hashlib
 import transaction
 from logging import getLogger
@@ -32,8 +32,15 @@ class MainRequest(Request):
     @reify
     def undocount(self):
         conn=DBSession()
-        lessons=conn.query(Lesson).filter(Lesson.state==0).all()
-        return len(lessons)
+        lessonscout=conn.query(Lesson.id).filter(Lesson.state==0).count()
+        return lessonscout
+    
+    def noticenum(self):
+        conn=DBSession()
+        log.debug(str(self)+'true')
+        test = str(self) + 'true'
+        noticenum = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==self.user.id,LessonWorkItem.viewstate==0).count()
+        return test
 
 
 def main(global_config, **settings):

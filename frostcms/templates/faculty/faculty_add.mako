@@ -25,7 +25,7 @@
  				<div class="app_name">
         		专业编辑
         		</div>
- 				<input type="hidden" name="faculty.id" value="${faculty.id}"/>
+ 				<input type="hidden" name="faculty.id" value="${faculty.id if faculty else ''}"/>
  				<div class="input-prepend">
   					<span class="add-on">名称</span>
   					<input class="span2" id="prependedInput" type="text" placeholder="" name="faculty.name" value="${faculty.name}"/>

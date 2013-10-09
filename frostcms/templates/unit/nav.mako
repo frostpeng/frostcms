@@ -36,7 +36,13 @@
             <li><a href="#">我的作业</a></li>
             <!--<li><a href="#">课堂申请</a></li>-->
             <li class="disabled"><a href="#"><i class="icon-list"></i> 通知</a></li>
-            <li><a href="/lesson/notice/list">课堂通知 <span class="badge badge-important">0</span></a></li>
+            <li><a href="/lesson/notice/list">课堂通知 <span class="badge badge-important">
+            % if request.noticenum>0:
+            	${request.noticenum}
+            % else :
+            	0
+            % endif
+            </span></a></li>
 		</ul>
 </div>
 	% elif request.user.role == 2:
