@@ -101,7 +101,11 @@
         			% if item.state == 2 :
         			<a class="btn btn-info btn-small" href="/mentor/lesson/addtocourse?lessonid=${item.id}">编辑</a>
         			% endif
+        			%if item.assignment:
+        			<a class="btn btn-info" href='/mentor/assignment/add?lessonid=${item.id}'>修改作业</a>
+        			%else:
         			<a class="btn btn-info" href='/mentor/assignment/add?lessonid=${item.id}'>添加作业</a>
+        			%endif
         			<a class="btn btn-danger" onclick="delete_con('是否删除该课堂？','/mentor/lesson/del?lessonid=${item.id}');">删除</a>
         			</td>
       			</tr>

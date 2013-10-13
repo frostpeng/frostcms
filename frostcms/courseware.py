@@ -1,4 +1,6 @@
 # coding=utf-8
+'''错误代码为11**
+'''
 from pyramid.view import view_config
 import formencode
 from pyramid.httpexceptions import HTTPFound
@@ -53,8 +55,9 @@ def mentor_courseware_del(request):
     courseware=conn.query(Courseware).filter(Courseware.id==coursewareid).first()
     mentor=conn.query(Mentor).filter(Mentor.userid==request.user.id).first()
     if courseware and mentor and mentor.id==courseware.mentorid:
-        if os.path.exists(courseware.filepath):
-            os.remove(courseware.filepath)
+        if os.path.exists(courseware.fsfile.filepath):
+            os.remove(courseware.fsfile.filepath)
+        conn.delete(courseware.fsfile)
         conn.delete(courseware)
         conn.flush()
     return HTTPFound(location=request.route_url('mentor_courseware_list'))
@@ -69,12 +72,13 @@ def mentor_courseware_save(request):
     mentor=conn.query(Mentor).filter(Mentor.userid==userid).first()
     try:
         if isinstance(coursefile, cgi.FieldStorage) and coursefile.file:
-            path = "frostcms/upload/courseware"
+            path = "frostcms/upload"
             if not os.path.exists(path):
                 os.makedirs(path)
                  
-            extension = coursefile.filename.split('.')[-1:][0]  
-            filename = "%s.%s" % (uuid.uuid1(), extension)
+            extension = coursefile.filename.split('.')[-1:][0] 
+            uid= uuid.uuid1()
+            filename = "%s.%s" % (uid, extension)
             filepath = os.path.join(path, filename).replace("\\", "/")
             myfile = open(filepath, 'wb')
             coursefile.file.seek(0)
@@ -84,16 +88,23 @@ def mentor_courseware_save(request):
                     break
                 myfile.write(tmp)
             myfile.close()
+            fsfile=Fsfile()
+            fsfile.id=uid
+            fsfile.userid=userid
+            fsfile.createtime=time.time()
+            fsfile.filename=coursefile.filename
+            fsfile.filepath=filepath
+            conn.add(fsfile)
+            conn.flush()
             courseware=Courseware()
             courseware.title=title
             courseware.description=description
             courseware.createtime=time.time()
-            courseware.filepath=filepath
             courseware.mentorid=mentor.id
-            courseware.filename=coursefile.filename
+            courseware.fsfileid=fsfile.id
             conn.add(courseware)
             conn.flush()
-            return dict(code=1)
+            return HTTPFound(location=request.route_url('mentor_courseware_list'))
     except Exception,e:
         log.debug(str(e))
     return dict(code=0)

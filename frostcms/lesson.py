@@ -1,4 +1,6 @@
 # coding=utf-8
+'''错误代码为9**
+'''
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger
@@ -113,7 +115,6 @@ def mentor_lesson_listbycourse(request):
     conn = DBSession()
     course=conn.query(Course).filter(Course.id==courseid,Course.mentorid.in_(\
             conn.query(Mentor.id).filter(Mentor.userid==request.user.id))).first()
-    log.debug(course.id)
     if course:
         course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id).all()
         course.course_classes=course_classes

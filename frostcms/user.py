@@ -11,9 +11,8 @@ from pyramid_simpleform import Form, State
 from pyramid_simpleform.renderers import FormRenderer
 import formencode
 from frostcms.utils import md5
-from frostcms.models import Courseware
-import os,urllib, uuid
-import mimetypes
+from frostcms.models import *
+import os,urllib, uuid,time,mimetypes
 
 log = getLogger(__name__)
 
@@ -24,7 +23,7 @@ def includeme(config):
     config.add_route('user_change_psd', '/user/change_password')
     config.add_route('api_user_change_password', '/api/user/change_password')
     config.add_route('api_user_uploadfile','/api/user/uploadfile')
-    config.add_route('user_courseware_getfilebyid','/user/courseware/getfilebyid')
+    config.add_route('user_getfilebyid','/user/getfilebyid')
     
 
 @view_config(route_name='user_list', renderer='user/user_list.mako',permission='admin')
@@ -94,17 +93,17 @@ def api_user_uploadfile(request):
     """用户上传文件，需要传入路径和
     """
     validators=dict(uploadfile=formencode.validators.FieldStorageUploadConverter(\
-            not_empty=True,messages=dict(empty=(u'文件不能为空' ))),path=formencode.validators.String\
-                    (not_empty=True,messages=dict(empty=(u'路径不能为空' ))))
+            not_empty=True,messages=dict(empty=(u'文件不能为空' ))))
     form=Form(request,validators=validators,state=State(request=request))
     if form.validate():
         try:
-            path = "frostcms/upload/"+form.data['path']
+            path = "frostcms/upload"
             if not os.path.exists(path):
                 os.makedirs(path)
                  
             extension = form.data['uploadfile'].filename.split('.')[-1:][0]  
-            filename = "%s.%s" % (uuid.uuid1(), extension)
+            uid=uuid.uuid1()
+            filename = "%s.%s" % (uid, extension)
             filepath = os.path.join(path, filename).replace("\\", "/")
             myfile = open(filepath, 'wb')
             form.data['uploadfile'].file.seek(0)
@@ -114,10 +113,16 @@ def api_user_uploadfile(request):
                     break
                 myfile.write(tmp)
             myfile.close()
-            result=dict(filename=form.data['uploadfile'].filename,filepath=filepath.replace("/","\\"))
-#             result=dict(filename=form.data['uploadfile'].filename,filepath=filepath)
-            returnStr=str(result)
-            returnStr=returnStr.replace("u'","'")
+            fsfile=Fsfile()
+            fsfile.id=uid
+            fsfile.userid=request.user.id
+            fsfile.createtime=time.time()
+            fsfile.filename=form.data['uploadfile'].filename
+            fsfile.filepath=filepath
+            conn=DBSession()
+            conn.add(fsfile)
+            conn.flush()
+            returnStr=str(dict(fsfileid=str(uid)))
             #returnStr="<body><pre>"+str(result)+"</pre></body>"
             response = request.response
             response.headers['Pragma']='no-cache'
@@ -125,28 +130,26 @@ def api_user_uploadfile(request):
             response.headers['Expires']='0'
             response.headers['Content-Type']="text/html"
             response.write(returnStr)
-            log.debug(result)
             return response
         except Exception,e:
-            log.debug(str(e))
             return dict(code=301,error=u'参数错误')
     return dict(code=101,error=form.errors)
 
-@view_config(route_name='user_courseware_getfilebyid',permission='user')
-def user_courseware_getfilebyid(request):
+@view_config(route_name='user_getfilebyid',permission='user')
+def user_getfilebyid(request):
     """获取文件
     """
     conn=DBSession()
-    coursewareid = request.params.get('coursewareid')
-    courseware=conn.query(Courseware).filter(Courseware.id==coursewareid).first()
-    if os.path.exists(courseware.filepath): 
-        extension = courseware.filename.split('.')[-1:][0]  
+    fsfileid = request.params.get('fsfileid')
+    fsfile=conn.query(Fsfile).filter(Fsfile.id==fsfileid).first()
+    if os.path.exists(fsfile.filepath): 
+        extension = fsfile.filename.split('.')[-1:][0]  
         content_type= mimetypes.types_map['.'+extension]
-        file=open(courseware.filepath)
+        file=open(fsfile.filepath)
         response = request.response
         response.headers['Pragma']='no-cache'
         response.headers['Cache-Control']='no-cache'
-        response.headers['Content-Disposition']=str("attachment; filename="+courseware.filename)
+        response.headers['Content-Disposition']=str("attachment; filename="+fsfile.filename)
         response.headers['Content-Type']=content_type
         response.headers['Expires']='0'
         response.write(file.read())

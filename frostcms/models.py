@@ -86,12 +86,12 @@ class Assignment(Base):     #Assignment
     title=Column(String(200))
     description = Column(String(2000))
     duedate = Column(Integer)
-    filename=Column(String(1000))
-    filepath=Column(String(1000))
+    fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
+    fsfile=relationship("Fsfile",foreign_keys=[fsfileid])
     
     def __json__(self,request):
         return dict(id=self.id,title=self.title,description=self.description,duedate=self.duedate,\
-                    filename=self.filename,filepath=self.filepath)
+                    fsfileid=self.fsfileid)
     
 
 class Clazz(Base):  #Class
@@ -179,8 +179,8 @@ class Lesson_Location(Base):
     studentnum=Column(Integer,default=0)
     firstrow = Column(Integer,default=0)
     lastrow = Column(Integer,default=0)
-    lesson = relationship("Lesson")
-    location = relationship("Location")
+    lesson = relationship("Lesson",foreign_keys=[lessonid])
+    location = relationship("Location",foreign_keys=[locationid])
     
     def __json__(self,request):
         return dict(id=self.id,lessonid=self.lessonid,locationid=self.locationid,studentnum=\
@@ -254,15 +254,15 @@ class Courseware(Base):
     id = Column(Integer,primary_key=True)
     mentorid=Column(Integer,ForeignKey('mentor.id',onupdate="CASCADE", ondelete="SET NULL"))
     title=Column(String(1000))
-    filename=Column(String(1000))
-    filepath=Column(String(1000))
+    fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
     createtime=Column(INTEGER)
     description=Column(String(1000))
     mentor=relationship("Mentor")
+    fsfile=relationship("Fsfile")
     
     def __json__(self,request):
-        return dict(id=self.id,mentorid=self.mentorid,title=self.title,filename=self.filename,filepath\
-                    =self.filepath,createtime=self.createtime,description=self.description)
+        return dict(id=self.id,mentorid=self.mentorid,title=self.title,fsfileid=self.fsfileid\
+                    ,createtime=self.createtime,description=self.description)
 
 class Ware_Course(Base):
     """课件与课程的关系
@@ -276,8 +276,22 @@ class Ware_Course(Base):
     course=relationship('Course',foreign_keys=[courseid])
     
     def __json__(self,request):
-        return dict(id=self.id,wareid=self.wareid,courseid=self.courseid,state=self.state,\
-                    courseware=self.courseware,course=self.course)
+        return dict(id=self.id,wareid=self.wareid,courseid=self.courseid,state=self.state)
+        
+class Fsfile(Base):
+    """关于文件的处理
+    """
+    __tablename__ = 'fsfile'
+    id = Column(String(50),primary_key=True)
+    userid=Column(Integer,ForeignKey('user.id',onupdate="CASCADE", ondelete="SET NULL"))
+    filename=Column(String(1000))
+    filepath=Column(String(1000))
+    createtime=Column(INTEGER)
+    User=relationship("User",foreign_keys=[userid])
+    
+    def __json__(self,request):
+        return dict(id=self.id,userid=self.userid,filename=self.filename,filepath\
+                    =self.filepath,createtime=self.createtime)
     
 
 def initialize_sql(engine):

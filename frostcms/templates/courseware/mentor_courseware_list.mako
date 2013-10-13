@@ -38,7 +38,7 @@
         			${item.description}
         			</td>
         			<td class="app">
-        			<a class="btn btn-info btn-small" href="/user/courseware/getfilebyid?coursewareid=${item.id}">下载</a>
+        			<a class="btn btn-info btn-small" href="/user/getfilebyid?fsfileid=${item.fsfileid}">下载</a>
         			<a class="btn btn-danger btn-small" onclick="delete_con('是否删除课件【${item.title}】？','/mentor/courseware/del?coursewareid=${item.id}');">删除</a>
         			</td>
       			</tr>

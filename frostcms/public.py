@@ -1,4 +1,6 @@
 # coding=utf-8
+'''错误代码为6**
+'''
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from logging import getLogger

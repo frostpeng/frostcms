@@ -78,7 +78,7 @@ $(document).ready(function(){
 			dataType: "json",
 			success: function(data){
 				if(data.code){
-					alert(error);
+					alert(data.error);
 					$("#add_error").html(data.error);
 				}else{
 				window.location.href =data.return_url;

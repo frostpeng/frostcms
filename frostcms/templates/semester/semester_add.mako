@@ -4,8 +4,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>ccms</title>
     <%include file="/unit/link_JS&CSS.mako" />
-    <script src="../../static/js/datetimepicker.js"></script>
-    <script src="../../static/js/datetimepicker_CN.js"></script>
+    <script src="/static/js/datetimepicker.js"></script>
+    <script src="/static/js/datetimepicker_CN.js"></script>
     <script >	
 						function noneDays(){
 							var year = document.semester.year.value;
