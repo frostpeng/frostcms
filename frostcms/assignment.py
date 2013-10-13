@@ -20,6 +20,8 @@ def includeme(config):
     config.add_route('mentor_assignment_add','/mentor/assignment/add')
     config.add_route('api_mentor_assignment_add','/api/mentor/assignment/add')
     config.add_route('mentor_assignment_list','/mentor/assignment/list')
+    config.add_route('student_assignment_detail','/student/assignment/detail')
+    config.add_route('student_assignment_list','/student/assignment/list')
 
 @view_config(route_name='mentor_assignment_add', renderer='assignment/mentor_assignment_add.mako',permission='mentor')
 def mentor_assignment_add(request):
@@ -85,6 +87,33 @@ def mentor_assignment_list(request):
                      Lesson.courseid.in_(conn.query(Course.id).filter(Course.mentorid.in_(\
                             conn.query(Mentor.id).filter(Mentor.userid==userid)),\
                             Course.id.in_(courses)))).all()
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
+            items,
+            page=int(page),
+            items_per_page=10,
+            url=page_url,
+            )
+    return dict(items=items,courses=courses)
+
+@view_config(route_name='student_assignment_list', renderer='assignment/mentor_assignment_list.mako',permission='student')
+def student_assignment_list(request):
+    conn=DBSession()
+    page = int(request.params.get('page', 1))
+    s_courseid=request.params.get('s_courseid')
+    userid=request.user.id
+    student=conn.query(Student).filter(Student.userid==userid).first()
+    courses=conn.query(Course).filter(Course.id.in_(\
+                            conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
+                            ==student.clazzid))).all()
+    items=conn.query(Assignment,Lesson).filter(Assignment.id==Lesson.assignmentid,
+                     Lesson.courseid.in_(conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
+                            ==student.clazzid))).all()
+    if s_courseid:
+        items=conn.query(Assignment,Lesson).filter(Assignment.id==Lesson.assignmentid,
+                     Lesson.courseid.in_(conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
+                            ==student.clazzid)),\
+                            Course.id.in_(courses)).all()
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,

@@ -58,7 +58,7 @@
             <li><a href="/public/lesson_list">课堂查询</a></li>
             <li class="disabled"><a href=""><i class="icon-list"></i> 学生</a></li>
             <li><a href="/student/course/list">我的课程</a></li>
-            <li><a href="#">我的作业</a></li>
+            <li><a href="/student/assignment/list">我的作业</a></li>
 		</ul>
 </div>
 	% endif

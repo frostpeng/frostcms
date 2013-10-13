@@ -19,6 +19,7 @@ def includeme(config):
     config.add_route('admin_lesson_disagree', '/admin/lesson/disagree')
     config.add_route('lesson_listbycourse', '/lesson/listbycourse')
     config.add_route('mentor_lesson_listbycourse', '/mentor/lesson/listbycourse')
+    config.add_route('student_lesson_listbycourse', '/student/lesson/listbycourse')
     config.add_route('lesson_list', '/lesson/list')
     config.add_route('lesson_addtocourse', '/lesson/addtocourse')
     config.add_route('mentor_lesson_addtocourse', '/mentor/lesson/addtocourse')
@@ -123,6 +124,24 @@ def mentor_lesson_listbycourse(request):
             lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
             item.lesson_locations=lesson_locations
             
+        page_url = paginate.PageURL_WebOb(request)
+        items = paginate.Page(items,page=int(page),items_per_page=10,url=page_url,)
+        return dict(items=items,course=course)
+    return dict(code=0,error=u"课程不存在")
+
+@view_config(route_name='student_lesson_listbycourse', renderer='lesson/student_lesson_listbycourse.mako',permission='student')
+def student_lesson_listbycourse(request):
+    page = int(request.params.get('page', 1))
+    courseid=request.params.get('courseid')
+    conn = DBSession()
+    course=conn.query(Course).filter(Course.id==courseid).first()
+    if course:
+        course_classes=conn.query(Course_Class).filter(Course_Class.courseid==course.id).all()
+        course.course_classes=course_classes
+        items=conn.query(Lesson).filter(Lesson.courseid==course.id,Lesson.state==1).all()
+        for item in items:
+            lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
+            item.lesson_locations=lesson_locations
         page_url = paginate.PageURL_WebOb(request)
         items = paginate.Page(items,page=int(page),items_per_page=10,url=page_url,)
         return dict(items=items,course=course)

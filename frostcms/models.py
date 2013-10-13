@@ -86,12 +86,34 @@ class Assignment(Base):     #Assignment
     title=Column(String(200))
     description = Column(String(2000))
     duedate = Column(Integer)
-    fsfileid=Column(String(50),ForeignKey('fsfile.id', ondelete="SET NULL"))
+    fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
     fsfile=relationship("Fsfile",foreign_keys=[fsfileid])
     
     def __json__(self,request):
         return dict(id=self.id,title=self.title,description=self.description,duedate=self.duedate,\
                     fsfileid=self.fsfileid)
+        
+class AssignmentUpload(Base):  
+    """作业包含id，描述，提交时间
+    """
+    __tablename__ = 'assignment_upload'
+    id = Column(Integer, primary_key=True)
+    title=Column(String(200))
+    description = Column(String(2000))
+    createtime=Column(Integer)
+    updatetime=Column(Integer)
+    mark=Column(Float,default=0)
+    assignmentid=Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"))
+    studentid=Column(Integer,ForeignKey('student.id',onupdate="CASCADE", ondelete="SET NULL"))
+    fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
+    assignment=relationship("Assignment",foreign_keys=[assignmentid])
+    student=relationship("Student",foreign_keys=[studentid])
+    fsfile=relationship("Fsfile",foreign_keys=[fsfileid])
+    
+    def __json__(self,request):
+        return dict(id=self.id,title=self.title,description=self.description,createtime=self.createtime,\
+                    updatetime=self.updatetime,mark=self.mark,assignmentid=self.assignmentid,\
+                    studentid=self.studentid,fsfileid=self.fsfileid)
     
 
 class Clazz(Base):  #Class
