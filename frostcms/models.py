@@ -79,36 +79,20 @@ class Mentor(Base):
     
 
 class Assignment(Base):     #Assignment
-    """作业包含id，描述，提交时间，对应课堂
+    """作业包含id，描述，提交时间
     """
     __tablename__ = 'assignment'
     id = Column(Integer, primary_key=True)
+    title=Column(String(200))
     description = Column(String(2000))
     duedate = Column(Integer)
-    lessonid = Column(Integer,ForeignKey('lesson.id',onupdate="CASCADE", ondelete="SET NULL"))
-    lesson = relationship("Lesson")
+    filename=Column(String(1000))
+    filepath=Column(String(1000))
     
     def __json__(self,request):
-        return dict(id=self.id,description=self.description,duedate=self.duedate,lessonid=self.lessonid)
+        return dict(id=self.id,title=self.title,description=self.description,duedate=self.duedate,\
+                    filename=self.filename,filepath=self.filepath)
     
-class AssignUpload(Base):   #AssignmentUpload
-    """作业提交包含作业id，学生id，文件路径，提交时间，最后修改时间，修改次数，分数
-    """
-    __tablename__ = 'assignupload'
-    id = Column(Integer, primary_key=True)
-    assignmentid = Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"))
-    studentid = Column(Integer,ForeignKey('student.id',onupdate="CASCADE", ondelete="SET NULL"))
-    filepath = Column(String(300))
-    subtime = Column(Integer)
-    lastmodified = Column(Integer)
-    modifiedtimes = Column(Integer)
-    grade = Column(Integer)
-    assignment = relationship("Assignment")
-    student = relationship("Student")
-    
-    def __json__(self,request):
-        return dict(id=self.id,studentid=self.studentid,filepath=self.filepath,subtime=self.subtime,\
-             lastmodified=self.lastmodified,modifiedtimes=self.modifiedtimes,grade=self.grade)
 
 class Clazz(Base):  #Class
     """班级包含班级号，年级，院系id,浮动率
@@ -177,7 +161,9 @@ class Lesson(Base):     #Lesson
     state=Column(Integer,default=0)
     createtime=Column(Integer)
     updatetime=Column(Integer)
+    assignmentid=Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"),nullable=True)
     course = relationship("Course")
+    assignment = relationship("Assignment")
     
     def __json__(self,request):
         return dict(id=self.id,courseid=self.courseid,week=self.week,dow=self.dow,start=self.start,\

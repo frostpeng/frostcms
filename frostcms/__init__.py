@@ -62,6 +62,7 @@ def main(global_config, **settings):
     config.add_static_view('static', 'frostcms:static', cache_max_age=3600)
     config.add_static_view('upload', 'frostcms:upload')
     config.include("frostcms.views")
+    config.include("frostcms.assignment")
     config.include("frostcms.user")
     config.include("frostcms.mentor")
     config.include("frostcms.student")

@@ -53,7 +53,7 @@
 				<br />
 				<div class="input-append">
 					<span class="add-on">课件</span>
-					<input class="span2" type="file" name="coursefile" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
+					<input class="span2" type="file" name="coursefile"  style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
 				</div>
 				<br />
  				<button class="btn btn-primary" id="add_submit" type="submit">提交</button>

@@ -89,11 +89,11 @@ def api_user_change_password(request):
         return {}
     return dict(code=101,error=FormRenderer(form).errorlist())
 
-@view_config(route_name='api_user_uploadfile',renderer='jsonp',permission='user')
+@view_config(route_name='api_user_uploadfile',permission='user')
 def api_user_uploadfile(request):
     """用户上传文件，需要传入路径和
     """
-    validators=dict(upload=formencode.validators.FieldStorageUploadConverter(\
+    validators=dict(uploadfile=formencode.validators.FieldStorageUploadConverter(\
             not_empty=True,messages=dict(empty=(u'文件不能为空' ))),path=formencode.validators.String\
                     (not_empty=True,messages=dict(empty=(u'路径不能为空' ))))
     form=Form(request,validators=validators,state=State(request=request))
@@ -103,18 +103,30 @@ def api_user_uploadfile(request):
             if not os.path.exists(path):
                 os.makedirs(path)
                  
-            extension = form.data['upload'].filename.split('.')[-1:][0]  
+            extension = form.data['uploadfile'].filename.split('.')[-1:][0]  
             filename = "%s.%s" % (uuid.uuid1(), extension)
             filepath = os.path.join(path, filename).replace("\\", "/")
             myfile = open(filepath, 'wb')
-            form.data['upload'].file.seek(0)
+            form.data['uploadfile'].file.seek(0)
             while 1:
-                tmp = form.data['upload'].file.read(2 << 16)
+                tmp = form.data['uploadfile'].file.read(2 << 16)
                 if not tmp:
                     break
                 myfile.write(tmp)
             myfile.close()
-            return dict(filename=form.data['upload'].filename,filepath=filepath)
+            result=dict(filename=form.data['uploadfile'].filename,filepath=filepath.replace("/","\\"))
+#             result=dict(filename=form.data['uploadfile'].filename,filepath=filepath)
+            returnStr=str(result)
+            returnStr=returnStr.replace("u'","'")
+            #returnStr="<body><pre>"+str(result)+"</pre></body>"
+            response = request.response
+            response.headers['Pragma']='no-cache'
+            response.headers['Cache-Control']='no-cache'
+            response.headers['Expires']='0'
+            response.headers['Content-Type']="text/html"
+            response.write(returnStr)
+            log.debug(result)
+            return response
         except Exception,e:
             log.debug(str(e))
             return dict(code=301,error=u'参数错误')
