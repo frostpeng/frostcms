@@ -32,8 +32,8 @@
       			<tr>
         			<td class="name">${item.name}</td>
         			<td class="app">
-        				<a class="btn btn-info btn-mini" href="/college/add?collegeid=${item.id}">编辑</a>
-        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除【${item.name}】','/college/del?collegeid=${item.id}');" >删除</a>
+        				<a class="btn btn-info" href="/college/add?collegeid=${item.id}">编辑</a>
+        				<a class="btn btn-danger" onclick="delete_con('是否删除【${item.name}】','/college/del?collegeid=${item.id}');" >删除</a>
         			</td>
       			</tr>
       			% endfor

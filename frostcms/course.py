@@ -16,6 +16,7 @@ def includeme(config):
     config.scan(__name__)
     config.add_route('course_list', '/course/list')
     config.add_route('mentor_course_list', '/mentor/course/list')
+    config.add_route('student_course_list', '/student/course/list')
     config.add_route('course_add','/course/add')
     config.add_route('mentor_course_add','/mentor/course/add')
     config.add_route('course_save','/course/save')
@@ -40,6 +41,44 @@ def listcourse(request):
         items = conn.query(Course).filter(Course.semesterid==semesterid).order_by(Course.id)
     else :
         items = conn.query(Course).order_by(Course.id)
+    semesters = conn.query(Semester).order_by(Semester.id)
+    lis = []
+    for semester in semesters:
+        t = List_semester()
+        t.id = semester.id
+        t.time = date.fromtimestamp(semester.start)
+        t.weeks = semester.weeks
+        time = t.time
+        name = str(time.year)
+        mon = time.month
+        if  mon >7 :
+            name += u"年秋季"
+        else :
+            name += u"年春季"
+        t.name = name 
+        lis.append(t)
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
+            items,
+            page=int(page),
+            items_per_page=10,
+            url=page_url,
+            )
+    return dict(items=items,lis=lis)
+
+@view_config(route_name='student_course_list', renderer='course/student_course_list.mako',permission='student')
+def student_course_list(request):
+    page = int(request.params.get('page', 1))
+    conn = DBSession()
+    semesterid = request.params.get('semesterid')
+    userid=request.user.id
+    student=conn.query(Student).filter(Student.userid==userid).first()
+    if semesterid:
+        items = conn.query(Course).filter(Course.semesterid==semesterid,Course.id.in_
+                (conn.query(Course_Class.courseid).filter(Course_Class.clazzid==student.clazzid))).order_by(Course.id)
+    else :
+        items = conn.query(Course).filter(Course.id.in_(conn.query(Course_Class.courseid).filter(\
+                    Course_Class.clazzid==student.clazzid))).order_by(Course.id)
     semesters = conn.query(Semester).order_by(Semester.id)
     lis = []
     for semester in semesters:

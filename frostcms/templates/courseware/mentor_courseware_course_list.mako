@@ -19,8 +19,12 @@
 			${course.name}
 			% endif
 			</div>
+			%if request.user.role==1:
 			<a class="btn btn-primary" id="btn_head" href="/mentor/course/list">返回课程列表</a>
-			% if course:
+			%elif request.user.role==2:
+			<a class="btn btn-primary" id="btn_head" href="/student/course/list">返回课程列表</a>
+			%endif
+			% if course and request.user.role==1:
 			<a class="btn btn-primary" id="btn_head" href="/mentor/course/waraadd?courseid=${course.id}">添加课件到课程</a>
 			% endif
 		</div>
@@ -33,7 +37,7 @@
         			<th class="name">课件名</th>
         			<th class="name">教师</th>
         			<th class="name">课件描述</th>
-        			<th class="app">操作</th>
+        			<th class="name">操作</th>
       			</tr>
     		</thead>
             <tbody>
@@ -44,9 +48,11 @@
         			<td class="name">
         			${item.description}
         			</td>
-        			<td class="app">
-        			<a class="btn btn-info btn-mini" href="/user/getfilebyid?fsfileid=${item.fsfileid}">下载</a>
-        			<a class="btn btn-danger btn-mini" onclick="delete_con('是否从课程中删除删除课件【${item.title}】?','/mentor/course/waradel?wareid=${item.id}&courseid=${course.id}');">从课程中删除</a>
+        			<td class="name">
+        			<a class="btn btn-info " href="/user/getfilebyid?fsfileid=${item.fsfileid}">下载</a>
+        			%if request.user.role==1:
+        			<a class="btn btn-danger" onclick="delete_con('是否从课程中删除删除课件【${item.title}】?','/mentor/course/waradel?wareid=${item.id}&courseid=${course.id}');">从课程中删除</a>
+        			%endif
         			</td>
       			</tr>
       			% endfor

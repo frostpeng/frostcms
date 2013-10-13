@@ -15,7 +15,7 @@
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">课程管理</div>
-			<form action="/mentor/course/list" class="search" name="college" method="post">
+			<form action="/student/course/list" class="search" name="college" method="post">
 				按学期查询
 				<select name="semesterid" size="1" onchange= "document.all.college.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择学期--------</option>
@@ -24,7 +24,6 @@
 					% endfor
 				</select>
 			</form>
-			<a class="btn btn-primary" id="btn_head" href="/mentor/course/add"><i class="icon-plus icon-white"></i> 添加课程</a> 
 		</div>
         
         <!-- 主体信息表 -->
@@ -33,16 +32,16 @@
             <thead>
       			<tr>     
         			<th class="name">课程</th>
-        			<!--<th class="name">教师</th>-->
+        			<th class="name">教师</th>
         			<th class="name">学期</th>
-        			<th class="app">操作</th>
+        			<th class="name">操作</th>
       			</tr>
     		</thead>
             <tbody>
       			% for item in items:
       			<tr>
         			<td class="name">${item.name}</td>
-        			<!--<td class="name">${item.mentor.name}</td>-->
+        			<td class="name">${item.mentor.name}</td>
         			<td class="name">
         			% for li in lis :
         				% if item.semesterid == li.id :
@@ -50,11 +49,9 @@
         				% endif
         			% endfor 
         			</td>
-        			<td class="app">
-        				<a class="btn btn-info btn-mini" href="/mentor/course/add?courseid=${item.id}">编辑</a>
-        				<a class="btn btn-info btn-mini" href="/mentor/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
-        				<a class="btn btn-info btn-mini" href="/courseware/warelist?courseid=${item.id}">查看课件</a>
-        				<a class="btn btn-danger btn-mini" onclick="delete_con('是否删除课程【${item.name}】？','/mentor/course/del?courseid=${item.id}');" >删除</a>
+        			<td class="name">
+        				<a class="btn btn-info" href="/student/lesson/listbycourse?courseid=${item.id}">课堂安排</a>
+        				<a class="btn btn-info" href="/courseware/warelist?courseid=${item.id}">查看课件</a>
         			</td>
       			</tr>
       			% endfor

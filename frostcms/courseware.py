@@ -20,7 +20,7 @@ def includeme(config):
     config.add_route('mentor_courseware_add', '/mentor/courseware/add')
     config.add_route('mentor_courseware_del', '/mentor/courseware/del')
     config.add_route('mentor_courseware_save', '/mentor/courseware/save')
-    config.add_route('mentor_courseware_course_list','/mentor/course/warelist')
+    config.add_route('courseware_course_list','/courseware/warelist')
     config.add_route('mentor_courseware_course_add','/mentor/course/waraadd')
     config.add_route('mentor_courseware_course_save','/mentor/course/warasave')
     config.add_route('mentor_courseware_course_del','/mentor/course/waradel')
@@ -109,8 +109,8 @@ def mentor_courseware_save(request):
         log.debug(str(e))
     return dict(code=0)
 
-@view_config(route_name='mentor_courseware_course_list', renderer='courseware/mentor_courseware_course_list.mako',permission='mentor')
-def mentor_courseware_course_list(request):
+@view_config(route_name='courseware_course_list', renderer='courseware/mentor_courseware_course_list.mako')
+def courseware_course_list(request):
     page = int(request.params.get('page', 1))
     conn = DBSession()
     userid=request.user.id
@@ -170,7 +170,7 @@ def mentor_courseware_course_save(request):
         ware_course.state=0
         conn.add(ware_course)
     conn.flush()
-    return HTTPFound(location=request.route_url('mentor_courseware_course_list',_query={'courseid':courseid}))
+    return HTTPFound(location=request.route_url('courseware_course_list',_query={'courseid':courseid}))
 
 
 @view_config(route_name='mentor_courseware_course_del', renderer='courseware/mentor_courseware_course_list.mako',permission='mentor')
@@ -182,4 +182,4 @@ def mentor_courseware_course_del(request):
         ware_course=conn.query(Ware_Course).filter(Ware_Course.wareid==wareid,Ware_Course.courseid==courseid).first()
         conn.delete(ware_course)
     conn.flush()
-    return HTTPFound(location=request.route_url('mentor_courseware_course_list',_query={'courseid':courseid})) 
+    return HTTPFound(location=request.route_url('courseware_course_list',_query={'courseid':courseid})) 
