@@ -86,7 +86,7 @@ class Assignment(Base):     #Assignment
     title=Column(String(200))
     description = Column(String(2000))
     duedate = Column(Integer)
-    fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
+    fsfileid=Column(String(50),ForeignKey('fsfile.id', ondelete="SET NULL"))
     fsfile=relationship("Fsfile",foreign_keys=[fsfileid])
     
     def __json__(self,request):
@@ -167,7 +167,8 @@ class Lesson(Base):     #Lesson
     
     def __json__(self,request):
         return dict(id=self.id,courseid=self.courseid,week=self.week,dow=self.dow,start=self.start,\
-            end=self.end,state=self.state,createtime=self.createtime,updatetime=self.updatetime)
+            end=self.end,state=self.state,createtime=self.createtime,updatetime=self.updatetime,\
+            assignmentid=self.assignmentid)
     
 class Lesson_Location(Base):
     """课堂和位置对应关系包含课程id，locationid以及需要占用的位置数量

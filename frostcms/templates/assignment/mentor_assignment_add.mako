@@ -33,6 +33,7 @@
         <div class="right_main">
         	<form action="/lesson/save" class="add" name="course">
         	 	<input type="hidden" id="lessonid" name="lessonid" value="${lesson.id}" />
+        	 	<input type="hidden" id="assignmentid" name="assignmentid" value="${assignment.id if assignment else u' '}" />
         	   <br />
 				<div class="input-prepend">
   					<span class="add-on">标题</span>
@@ -61,10 +62,14 @@
 				<div class="input-prepend">
   					<span class="add-on">附件</span>
 					<input class="span2" type="file" id="uploadfile" name="uploadfile" onchange="fileupload()" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
-					<input type='hidden' id='fsfileid' name='fsfileid' value=' ' />	
+					<input type='hidden' id='fsfileid' name='fsfileid' value='${assignment.fsfileid if assignment else u' '} ' />	
 				</div>
 				<br />
 				<div class="input-prepend" id="download_div" type="hidden">
+				%if assignment:
+					<span class='add-on'>已上传附件</span>
+					<span class='add-on'><a href='/user/getfilebyid?fsfileid=${assignment.fsfileid}'>附件下载</a></span>
+				%endif
 				</div>
 				<hr />
 				<span id="debug"></span>
@@ -88,7 +93,7 @@ function fileupload(){
 				}else{
 				$('#fsfileid').attr('value',data.fsfileid);
 				$('#download_div').empty();
-				$('#download_div').append("<span class='add-on'>上传完成</span>")
+				$('#download_div').append("<span class='add-on'>已上传附件</span>")
 				$('#download_div').append("<span class='add-on'><a href='/user/getfilebyid?fsfileid="+data.fsfileid+"'>附件下载</a></span>");
 				}
 			},
@@ -123,7 +128,7 @@ function fileupload(){
 			type: "post",
 			data: {'title': $("#title").val(),'description': $("#description").val(),
 				'duedate': $("#duedate").val(),'fsfileid': $("#fsfileid").val(),
-				'lessonid': $("#lessonid").val()},
+				'lessonid': $("#lessonid").val(),'assignmentid': $("#assignmentid").val()},
 			dataType: "json",
 			success: function(data){
 				if(data.code){

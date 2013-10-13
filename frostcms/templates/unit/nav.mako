@@ -39,7 +39,7 @@
             <li class="disabled"><a href=""><i class="icon-list"></i> 教师</a></li>
             <li><a href="/mentor/course/list">我的课程</a></li>
             <li><a href="/mentor/courseware/list">我的课件</a></li>
-            <li><a href="#">我的作业</a></li>
+            <li><a href="/mentor/assignment/list">我的作业</a></li>
             <!--<li><a href="#">课堂申请</a></li>-->
             <li class="disabled"><a href="#"><i class="icon-list"></i> 通知</a></li>
             <li><a href="/lesson/notice/list">课堂通知 <span class="badge badge-important">
