@@ -95,12 +95,12 @@ function fileupload(){
    	 		$(document).ready(function(){
    	 		$("#add_submit").click(function(){	
    	 	if ($("#uploadid").val()){
-   	 	   postdata={'title': $("#title").val(),'description': $("#description").val(),
-				'fsfileid': $("#fsfileid").val(),'assignmentid': $("#assignmentid").val()};
-		}else{
-		postdata={'title': $("#title").val(),'description': $("#description").val(),
+   	 	postdata={'title': $("#title").val(),'description': $("#description").val(),
 				'fsfileid': $("#fsfileid").val(),'assignmentid': $("#assignmentid").val(),
 				'uploadid': $("#uploadid").val()};
+		}else{
+		postdata={'title': $("#title").val(),'description': $("#description").val(),
+				'fsfileid': $("#fsfileid").val(),'assignmentid': $("#assignmentid").val()};
 		}
 		
      	$.ajax({
@@ -113,7 +113,7 @@ function fileupload(){
 					alert(data.error);
 					$("#add_error").html(data.error);
 				}else{
-				window.location.href =data.return_url;
+				 window.location.href =data.return_url;
 				}
 			},
 			error: function(data){

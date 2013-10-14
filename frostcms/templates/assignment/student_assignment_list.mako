@@ -15,7 +15,7 @@
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">作业管理</div>
-			<form action="/mentor/assignment/list" name="assignment" class="search"  method="post">
+			<form action="/student/assignment/list" name="assignment" class="search"  method="post">
 				按课程查询
 				<select name="collegeid" size="1" onchange= "document.all.assignment.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择课程--------</option>
@@ -41,18 +41,18 @@
       			% for item in items:
       			<tr>
         			<td class="name">
-        			<a  href='/mentor/assignment/add?lessonid=${item[1].id}'>${item[0].title}</a>
+        			<a  href='/student/assignment/detail?assignmentid=${item[0].id}'>${item[0].title}</a>
         			</td>
         			<td class="name">
         			<%!import time %>
        ${time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[0].duedate))}
         			</td>
         			<td class="name">
-        			<a href='/mentor/lesson/listbycourse?courseid=${item[1].course.id}'>${item[1].course.name}
-        		   </td>
+        			<a href='/student/lesson/listbycourse?courseid=${item[1].course.id}'>${item[1].course.name}
+        			</td>
         			<td class="name">
         			<a class="btn btn-info" href='/user/getfilebyid?fsfileid=${item[0].fsfileid}'>附件下载</a>
-        			<a class="btn btn-info" href='/mentor/assignment/markupload?assignmentid=${item[1].assignmentid}'>批改作业</a>
+        			<a class="btn btn-info" href='/student/assignment/upload?assignmentid=${item[1].assignmentid}'>作业提交</a>
         			</td>
       			</tr>
       			% endfor

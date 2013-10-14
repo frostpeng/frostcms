@@ -20,6 +20,9 @@ def includeme(config):
     config.add_route('mentor_assignment_add','/mentor/assignment/add')
     config.add_route('api_mentor_assignment_add','/api/mentor/assignment/add')
     config.add_route('mentor_assignment_list','/mentor/assignment/list')
+    config.add_route('mentor_assignment_markupload','/mentor/assignment/markupload')
+    config.add_route('api_mentor_assignment_markupload','/api/mentor/assignment/markupload')
+    config.add_route('api_mentor_assignment_overmark','/api/mentor/assignment/overmark')
     config.add_route('student_assignment_detail','/student/assignment/detail')
     config.add_route('student_assignment_list','/student/assignment/list')
     config.add_route('student_assignment_upload','/student/assignment/upload')
@@ -97,7 +100,56 @@ def mentor_assignment_list(request):
             )
     return dict(items=items,courses=courses)
 
-@view_config(route_name='student_assignment_list', renderer='assignment/mentor_assignment_list.mako',permission='student')
+@view_config(route_name='mentor_assignment_markupload', renderer='assignment/mentor_assignment_markupload.mako',permission='mentor')
+def mentor_assignment_markupload(request):
+    conn=DBSession()
+    page = int(request.params.get('page', 1))
+    assignmentid=request.params.get('assignmentid')
+    userid=request.user.id
+    items=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid).all()
+    page_url = paginate.PageURL_WebOb(request)
+    items = paginate.Page(
+            items,
+            page=int(page),
+            items_per_page=20,
+            url=page_url,
+            )
+    return dict(items=items)
+
+@view_config(route_name='api_mentor_assignment_markupload', renderer='jsonp',permission='mentor')
+def api_mentor_assignment_markupload(request):
+    validators=dict(uploadid=formencode.validators.Int(not_empty=True),
+                    mark=formencode.validators.Number(not_empty=True))
+    form=Form(request,validators=validators,state=State(request=request))
+    if form.validate():
+        conn=DBSession()
+        assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.id==form.data['uploadid']).first()
+        if assignmentupload:
+            assignmentupload.state=1
+            assignmentupload.mark=form.data['mark']
+            conn.flush()
+            return {}
+        return dict(code=1401,error=u'作业已经不存在')
+    return dict(code=101,error=form.errors)
+
+@view_config(route_name='api_mentor_assignment_overmark', renderer='jsonp',permission='mentor')
+def api_mentor_assignment_overmark(request):
+    validators=dict(assignmentid=formencode.validators.Int(not_empty=True))
+    form=Form(request,validators=validators,state=State(request=request))
+    if form.validate():
+        conn=DBSession()
+        assignment=conn.query(Assignment).filter(Assignment.id==form.data['assignmentid']).first()
+        if assignment:
+            assignment.state=2
+            assignmentuploads=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==form.data['assignmentid']).all()
+            for assignmentupload in assignmentuploads:
+                assignmentupload.state=2
+            conn.flush()
+            return dict(return_url="/mentor/assignment/list")
+        return dict(code=1401,error=u'作业已经不存在')
+    return dict(code=101,error=form.errors)
+
+@view_config(route_name='student_assignment_list', renderer='assignment/student_assignment_list.mako',permission='student')
 def student_assignment_list(request):
     conn=DBSession()
     page = int(request.params.get('page', 1))
@@ -137,8 +189,10 @@ def student_assignment_upload(request):
     conn=DBSession()
     assignmentid=request.params.get('assignmentid')
     userid=request.user.id
+    student=conn.query(Student).filter(Student.userid==userid).first()
     assignment=conn.query(Assignment).filter(Assignment.id==assignmentid).first()
-    assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid).first()
+    assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid,\
+                    AssignmentUpload.studentid==student.id).first()
     return dict(assignment=assignment,assignmentupload=assignmentupload)
 
 @view_config(route_name='api_student_assignment_upload', renderer='jsonp',permission='student')
@@ -149,7 +203,6 @@ def api_student_assignment_upload(request):
                     description=formencode.validators.String(not_empty=True,messages=dict(empty=(u'描述不能为空'))),\
                     uploadid=formencode.validators.Int(not_empty=False),
                     assignmentid=formencode.validators.Int(not_empty=True))
-    log.debug(request.params)
     form=Form(request,validators=validators,state=State(request=request))
     student=conn.query(Student).filter(Student.userid==request.user.id).first()
     if form.validate():

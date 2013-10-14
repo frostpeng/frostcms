@@ -105,7 +105,7 @@ class AssignmentUpload(Base):
     createtime=Column(Integer)
     updatetime=Column(Integer)
     mark=Column(Float,default=0)
-    #0表示提交,1表示已被批改，2表示已经查看
+    #0表示提交,1表示已被批改，2表示已经被提交,3表示作业已经查看
     state=Column(Integer,default=0)
     assignmentid=Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"))
     studentid=Column(Integer,ForeignKey('student.id',onupdate="CASCADE", ondelete="SET NULL"))
