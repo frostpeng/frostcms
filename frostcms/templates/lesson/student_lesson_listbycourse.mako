@@ -86,7 +86,7 @@
         			%endfor
         			</td>
         			<td class="name">
-        			<a class="btn btn-info" href='/student/assignment/detail?lessonid=${item.id}'>查看作业</a>
+        			<a class="btn btn-info" href='/student/assignment/detail?assignmentid=${item.assignmentid}'>查看作业</a>
         			</td>
       			</tr>
       			% endfor

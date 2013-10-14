@@ -15,7 +15,11 @@
         <!-- 主体头部 -->
 		<div class="right_head">
 			<div class="title_2">作业管理</div>
+			%if request.user.role==1:
 			<form action="/mentor/assignment/list" name="assignment" class="search"  method="post">
+			%elif request.user.role==2:
+			<form action="/student/assignment/list" name="assignment" class="search"  method="post">
+			%endif
 				按课程查询
 				<select name="collegeid" size="1" onchange= "document.all.assignment.submit();">
 					<option disabled="disabled" selected="selected" >--------请选择课程--------</option>
@@ -40,11 +44,31 @@
             <tbody>
       			% for item in items:
       			<tr>
-        			<td class="name">${item[0].title}</td>
-        			<td class="name">${item[0].duedate}</td>
-        			<td class="name"><a href='/mentor/lesson/listbycourse?courseid=${item[1].course.id}'>${item[1].course.name}</td>
+        			<td class="name">
+        			%if request.user.role==1:
+        			<a  href='/mentor/assignment/add?lessonid=${item[1].id}'>${item[0].title}</a>
+        			%elif request.user.role==2:
+        			<a  href='/student/assignment/detail?assignmentid=${item[0].id}'>${item[0].title}</a>
+        			%endif
+        			</td>
+        			<td class="name">
+        			<%!import time %>
+       ${time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(item[0].duedate))}
+        			</td>
+        			<td class="name">
+        			%if request.user.role==1:
+        			<a href='/mentor/lesson/listbycourse?courseid=${item[1].course.id}'>${item[1].course.name}
+        			%elif request.user.role==2:
+        			<a href='/student/lesson/listbycourse?courseid=${item[1].course.id}'>${item[1].course.name}
+        			%endif
+        			</td>
         			<td class="name">
         			<a class="btn btn-info" href='/user/getfilebyid?fsfileid=${item[0].fsfileid}'>附件下载</a>
+        			%if request.user.role==1:
+        			
+        			%elif request.user.role==2:
+        			<a class="btn btn-info" href='/student/assignment/upload?assignmentid=${item[1].assignmentid}'>作业提交</a>
+        			%endif
         			</td>
       			</tr>
       			% endfor

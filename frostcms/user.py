@@ -149,9 +149,11 @@ def user_getfilebyid(request):
         response = request.response
         response.headers['Pragma']='no-cache'
         response.headers['Cache-Control']='no-cache'
-        response.headers['Content-Disposition']=str("attachment; filename="+fsfile.filename)
+        response.headers['Content-Disposition']=str("attachment; filename=\""+fsfile.filename+" \"")
+        log.debug(response.headers['Content-Disposition'])
         response.headers['Content-Type']=content_type
         response.headers['Expires']='0'
+#         response.headers['Accept-Charset']='utf-8'
         response.write(file.read())
         return response
     return HTTPNotFound()

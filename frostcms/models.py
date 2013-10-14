@@ -86,6 +86,8 @@ class Assignment(Base):     #Assignment
     title=Column(String(200))
     description = Column(String(2000))
     duedate = Column(Integer)
+    #0表示发布,1表示到期，2表示已经批改
+    state=Column(Integer,default=0)
     fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))
     fsfile=relationship("Fsfile",foreign_keys=[fsfileid])
     
@@ -103,6 +105,8 @@ class AssignmentUpload(Base):
     createtime=Column(Integer)
     updatetime=Column(Integer)
     mark=Column(Float,default=0)
+    #0表示提交,1表示已被批改，2表示已经查看
+    state=Column(Integer,default=0)
     assignmentid=Column(Integer,ForeignKey('assignment.id',onupdate="CASCADE", ondelete="SET NULL"))
     studentid=Column(Integer,ForeignKey('student.id',onupdate="CASCADE", ondelete="SET NULL"))
     fsfileid=Column(String(50),ForeignKey('fsfile.id',onupdate="CASCADE", ondelete="SET NULL"))

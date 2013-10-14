@@ -22,6 +22,8 @@ def includeme(config):
     config.add_route('mentor_assignment_list','/mentor/assignment/list')
     config.add_route('student_assignment_detail','/student/assignment/detail')
     config.add_route('student_assignment_list','/student/assignment/list')
+    config.add_route('student_assignment_upload','/student/assignment/upload')
+    config.add_route('api_student_assignment_upload','/api/student/assignment/upload')
 
 @view_config(route_name='mentor_assignment_add', renderer='assignment/mentor_assignment_add.mako',permission='mentor')
 def mentor_assignment_add(request):
@@ -40,17 +42,16 @@ def api_mentor_assignment_add(request):
                     description=formencode.validators.String(not_empty=True,messages=dict(empty=(u'描述不能为空'))),\
                     duedate=formencode.validators.String(not_empty=True,messages=dict(empty=(u'截止时间不能为空'))),
                     lessonid=formencode.validators.Int(not_empty=True),
-                    assignment=formencode.validators.Int(not_empty=False))
+                    assignmentid=formencode.validators.Int(not_empty=False))
     form=Form(request,validators=validators,state=State(request=request))
     if form.validate():
         try:
             lesson=conn.query(Lesson).filter(Lesson.id==form.data['lessonid'],Lesson.courseid.in_(\
                                 conn.query(Course.id).filter(Course.mentorid.in_(\
                                 conn.query(Mentor.id).filter(Mentor.userid==request.user.id))))).first()
-            if form.data['assignmentid']:
+            if form.data['assignmentid'] and int(form.data['assignmentid']):
                 assignment=conn.query(Assignment).filter(Assignment.id==lesson.assignmentid).first()
                 assignment.title=form.data['title']
-                log.debug(form.data['fsfileid'])
                 assignment.fsfileid=form.data['fsfileid']
                 assignment.duedate=time.mktime(time.strptime(form.data['duedate'],'%Y-%m-%d'))
                 assignment.description=form.data['description']
@@ -122,4 +123,61 @@ def student_assignment_list(request):
             url=page_url,
             )
     return dict(items=items,courses=courses)
+
+@view_config(route_name='student_assignment_detail', renderer='assignment/student_assignment_detail.mako',permission='student')
+def student_assignment_detail(request):
+    conn=DBSession()
+    assignmentid=request.params.get('assignmentid')
+    userid=request.user.id
+    assignment=conn.query(Assignment).filter(Assignment.id==assignmentid).first()
+    return dict(assignment=assignment)
+
+@view_config(route_name='student_assignment_upload', renderer='assignment/assignment_upload.mako',permission='student')
+def student_assignment_upload(request):
+    conn=DBSession()
+    assignmentid=request.params.get('assignmentid')
+    userid=request.user.id
+    assignment=conn.query(Assignment).filter(Assignment.id==assignmentid).first()
+    assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid).first()
+    return dict(assignment=assignment,assignmentupload=assignmentupload)
+
+@view_config(route_name='api_student_assignment_upload', renderer='jsonp',permission='student')
+def api_student_assignment_upload(request):
+    conn=DBSession()
+    validators=dict(fsfileid=formencode.validators.String(not_empty=True,min=16,messages=dict(empty=(u'文件不能为空' ))),\
+                    title=formencode.validators.String(not_empty=True,messages=dict(empty=(u'标题不能为空'))),\
+                    description=formencode.validators.String(not_empty=True,messages=dict(empty=(u'描述不能为空'))),\
+                    uploadid=formencode.validators.Int(not_empty=False),
+                    assignmentid=formencode.validators.Int(not_empty=True))
+    log.debug(request.params)
+    form=Form(request,validators=validators,state=State(request=request))
+    student=conn.query(Student).filter(Student.userid==request.user.id).first()
+    if form.validate():
+        try:
+            assignment=conn.query(Assignment).filter(Assignment.id==form.data['assignmentid']).first()
+            if form.data['uploadid'] and int(form.data['uploadid']):
+                upload=conn.query(AssignmentUpload).filter(AssignmentUpload.id==int(form.data['uploadid'])).first()
+                upload.title=form.data['title']
+                upload.fsfileid=form.data['fsfileid']
+                upload.description=form.data['description']
+                upload.updatetime=time.time()
+                upload.studentid=student.id
+                conn.flush()
+            else:
+                upload=AssignmentUpload()
+                upload.assignmentid=form.data['assignmentid']
+                upload.title=form.data['title']
+                upload.fsfileid=form.data['fsfileid']
+                upload.createtime=time.time()
+                upload.updatetime=time.time()
+                upload.description=form.data['description']
+                upload.studentid=student.id
+                conn.add(upload)
+                conn.flush()
+            return dict(return_url='/student/assignment/list')
+        except Exception,e:
+            log.debug(e)
+            return dict(code=301,error=u'参数错误')
+    log.debug(form.errors)
+    return dict(code=101,error=form.errors)
     
