@@ -33,7 +33,7 @@
         <div class="right_main">
         	<form action="/lesson/save" class="add" name="course">
         	 	<input type="hidden" id="lessonid" name="lessonid" value="${lesson.id}" />
-        	 	<input type="hidden" id="assignmentid" name="assignmentid" value="${assignment.id if assignment else u' '}" />
+        	 	<input type="hidden" id="assignmentid" name="assignmentid" value="${assignment.id if assignment else u''}" />
         	   <br />
 				<div class="input-prepend">
   					<span class="add-on">标题</span>
@@ -121,14 +121,21 @@ function fileupload(){
 				forceParse:0,
         		showMeridian:1
    	 		});
-   	 		$(document).ready(function(){
-   	 		$("#add_submit").click(function(){	
+   $(document).ready(function(){
+   	 $("#add_submit").click(function(){	
+   	 	if ($("#assignmentid").val()){
+   	 	postdata={'title': $("#title").val(),'description': $("#description").val(),
+				'duedate': $("#duedate").val(),'fsfileid': $("#fsfileid").val(),
+				'lessonid': $("#lessonid").val(),'assignmentid': $("#assignmentid").val()};
+		}else{
+		postdata={'title': $("#title").val(),'description': $("#description").val(),
+				'duedate': $("#duedate").val(),'fsfileid': $("#fsfileid").val(),
+				'lessonid': $("#lessonid").val()};
+		}
      	$.ajax({
 			url:"/api/mentor/assignment/add",
 			type: "post",
-			data: {'title': $("#title").val(),'description': $("#description").val(),
-				'duedate': $("#duedate").val(),'fsfileid': $("#fsfileid").val(),
-				'lessonid': $("#lessonid").val(),'assignmentid': $("#assignmentid").val()},
+			data:postdata,
 			dataType: "json",
 			success: function(data){
 				if(data.code){

@@ -27,6 +27,7 @@ def includeme(config):
     config.add_route('student_assignment_list','/student/assignment/list')
     config.add_route('student_assignment_upload','/student/assignment/upload')
     config.add_route('api_student_assignment_upload','/api/student/assignment/upload')
+    config.add_route('student_assignment_uploaddetail','/student/assignment/uploaddetail')
 
 @view_config(route_name='mentor_assignment_add', renderer='assignment/mentor_assignment_add.mako',permission='mentor')
 def mentor_assignment_add(request):
@@ -46,6 +47,7 @@ def api_mentor_assignment_add(request):
                     duedate=formencode.validators.String(not_empty=True,messages=dict(empty=(u'截止时间不能为空'))),
                     lessonid=formencode.validators.Int(not_empty=True),
                     assignmentid=formencode.validators.Int(not_empty=False))
+    log.debug(request.params)
     form=Form(request,validators=validators,state=State(request=request))
     if form.validate():
         try:
@@ -159,14 +161,14 @@ def student_assignment_list(request):
     courses=conn.query(Course).filter(Course.id.in_(\
                             conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
                             ==student.clazzid))).all()
-    items=conn.query(Assignment,Lesson).filter(Assignment.id==Lesson.assignmentid,
-                     Lesson.courseid.in_(conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
-                            ==student.clazzid))).all()
     if s_courseid:
-        items=conn.query(Assignment,Lesson).filter(Assignment.id==Lesson.assignmentid,
-                     Lesson.courseid.in_(conn.query(Course_Class.courseid).filter(Course_Class.clazzid\
-                            ==student.clazzid)),\
-                            Course.id.in_(courses)).all()
+        items=conn.query(Assignment,Lesson).filter(Assignment.id.in_(conn.query(Lesson.assignmentid).filter(\
+                Lesson.courseid==s_courseid,Lesson.courseid.in_(conn.query(Course_Class.courseid).\
+                filter(Course_Class.clazzid==student.clazzid)))),Assignment.id==Lesson.assignmentid).all()
+    else:
+        items=conn.query(Assignment,Lesson).filter(Assignment.id.in_(conn.query(Lesson.assignmentid).filter(\
+                Lesson.courseid.in_(conn.query(Course_Class.courseid).\
+                filter(Course_Class.clazzid==student.clazzid)))),Assignment.id==Lesson.assignmentid).all()
     page_url = paginate.PageURL_WebOb(request)
     items = paginate.Page(
             items,
@@ -184,13 +186,22 @@ def student_assignment_detail(request):
     assignment=conn.query(Assignment).filter(Assignment.id==assignmentid).first()
     return dict(assignment=assignment)
 
+@view_config(route_name='student_assignment_uploaddetail', renderer='assignment/student_assignment_uploaddetail.mako',permission='student')
+def student_assignment_uploaddetail(request):
+    conn=DBSession()
+    assignmentid=request.params.get('assignmentid')
+    userid=request.user.id
+    assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid\
+                        ,AssignmentUpload.state>=2).first()
+    return dict(upload=assignmentupload)
+
 @view_config(route_name='student_assignment_upload', renderer='assignment/assignment_upload.mako',permission='student')
 def student_assignment_upload(request):
     conn=DBSession()
     assignmentid=request.params.get('assignmentid')
     userid=request.user.id
     student=conn.query(Student).filter(Student.userid==userid).first()
-    assignment=conn.query(Assignment).filter(Assignment.id==assignmentid).first()
+    assignment=conn.query(Assignment).filter(Assignment.id==assignmentid,Assignment.state==0).first()
     assignmentupload=conn.query(AssignmentUpload).filter(AssignmentUpload.assignmentid==assignmentid,\
                     AssignmentUpload.studentid==student.id).first()
     return dict(assignment=assignment,assignmentupload=assignmentupload)

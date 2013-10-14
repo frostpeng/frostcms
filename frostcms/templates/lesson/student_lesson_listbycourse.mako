@@ -16,7 +16,7 @@
 		<div class="right_head">
 			<div class="title_2">课堂管理</div>	
 			
-			<a class="btn btn-primary" id="btn_head" href="/student/course/list"><i class="icon-share-alt icon-white"></i> 课程列表</a>
+			<a class="btn btn-primary" id="btn_head" href="Javascript:history.back()"><i class="icon-share-alt icon-white"></i>返回</a>
 		</div>
         
         <!-- 主体信息表 -->
@@ -86,7 +86,11 @@
         			%endfor
         			</td>
         			<td class="name">
+        			%if item.assignmentid:
         			<a class="btn btn-info" href='/student/assignment/detail?assignmentid=${item.assignmentid}'>查看作业</a>
+        			%else:
+        			暂无作业
+        			%endif
         			</td>
       			</tr>
       			% endfor

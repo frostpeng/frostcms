@@ -52,7 +52,11 @@
         			</td>
         			<td class="name">
         			<a class="btn btn-info" href='/user/getfilebyid?fsfileid=${item[0].fsfileid}'>附件下载</a>
-        			<a class="btn btn-info" href='/student/assignment/upload?assignmentid=${item[1].assignmentid}'>作业提交</a>
+        			%if item[0].state==0:
+        			<a class="btn btn-info" href='/student/assignment/upload?assignmentid=${item[0].id}'>作业提交</a>
+        			%else:
+        			<a class="btn btn-info" href='/student/assignment/uploaddetail?assignmentid=${item[0].id}'>作业详情</a>
+        			%endif
         			</td>
       			</tr>
       			% endfor

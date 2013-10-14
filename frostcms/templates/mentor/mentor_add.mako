@@ -91,7 +91,7 @@
 				<div >
 				描述：
 				<br />
-				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.description">${mentor.description}</textarea>
+				<textarea rows="3" cols="100" style="margin:0 0 0 30px;width:560px;" name="mentor.description">${mentor.description if mentor.description else u'' }</textarea>
 				</div>
 				<span id="checkMentorDescription"></span>
 				<br />
