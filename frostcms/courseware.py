@@ -11,6 +11,9 @@ import webhelpers.paginate as paginate
 from datetime import date  
 import os
 import cgi, uuid
+from formencode import Schema, validators
+from pyramid_simpleform import Form, State
+from pyramid_simpleform.renderers import FormRenderer
 
 log = getLogger(__name__)
 
@@ -19,7 +22,7 @@ def includeme(config):
     config.add_route('mentor_courseware_list', '/mentor/courseware/list')
     config.add_route('mentor_courseware_add', '/mentor/courseware/add')
     config.add_route('mentor_courseware_del', '/mentor/courseware/del')
-    config.add_route('mentor_courseware_save', '/mentor/courseware/save')
+    config.add_route('api_mentor_courseware_add', '/api/mentor/courseware/add')
     config.add_route('courseware_course_list','/courseware/warelist')
     config.add_route('mentor_courseware_course_add','/mentor/course/waraadd')
     config.add_route('mentor_courseware_course_save','/mentor/course/warasave')
@@ -62,52 +65,25 @@ def mentor_courseware_del(request):
         conn.flush()
     return HTTPFound(location=request.route_url('mentor_courseware_list'))
 
-@view_config(route_name='mentor_courseware_save', renderer='courseware/mentor_courseware_add.mako',permission='mentor')
-def mentor_courseware_save(request):
+@view_config(route_name='api_mentor_courseware_add', renderer='jsonp',permission='mentor')
+def api_mentor_courseware_add(request):
     conn=DBSession()
-    params_tuple=['title','description']
-    title,description=[request.params.get(x) for x in params_tuple]
-    userid=request.user.id
-    coursefile=request.params.get('coursefile')
-    mentor=conn.query(Mentor).filter(Mentor.userid==userid).first()
-    try:
-        if isinstance(coursefile, cgi.FieldStorage) and coursefile.file:
-            path = "frostcms/upload"
-            if not os.path.exists(path):
-                os.makedirs(path)
-                 
-            extension = coursefile.filename.split('.')[-1:][0] 
-            uid= uuid.uuid1()
-            filename = "%s.%s" % (uid, extension)
-            filepath = os.path.join(path, filename).replace("\\", "/")
-            myfile = open(filepath, 'wb')
-            coursefile.file.seek(0)
-            while 1:
-                tmp = coursefile.file.read(2 << 16)
-                if not tmp:
-                    break
-                myfile.write(tmp)
-            myfile.close()
-            fsfile=Fsfile()
-            fsfile.id=uid
-            fsfile.userid=userid
-            fsfile.createtime=time.time()
-            fsfile.filename=coursefile.filename
-            fsfile.filepath=filepath
-            conn.add(fsfile)
-            conn.flush()
-            courseware=Courseware()
-            courseware.title=title
-            courseware.description=description
-            courseware.createtime=time.time()
-            courseware.mentorid=mentor.id
-            courseware.fsfileid=fsfile.id
-            conn.add(courseware)
-            conn.flush()
-            return HTTPFound(location=request.route_url('mentor_courseware_list'))
-    except Exception,e:
-        log.debug(str(e))
-    return dict(code=0)
+    validators=dict(fsfileid=formencode.validators.String(not_empty=True,min=16,messages=dict(empty=(u'文件不能为空' ))),\
+                    title=formencode.validators.String(not_empty=True,messages=dict(empty=(u'标题不能为空'))),\
+                    description=formencode.validators.String(not_empty=True,messages=dict(empty=(u'描述不能为空'))))
+    form=Form(request,validators=validators,state=State(request=request))
+    if form.validate():
+        mentor=conn.query(Mentor).filter(Mentor.userid==request.user.id).first()
+        courseware=Courseware()
+        courseware.title=form.data['title']
+        courseware.description=form.data['description']
+        courseware.createtime=time.time()
+        courseware.mentorid=mentor.id
+        courseware.fsfileid=form.data['fsfileid']
+        conn.add(courseware)
+        conn.flush()
+        return dict(return_url='/mentor/courseware/list')
+    return dict(code=101,error=form.errors)
 
 @view_config(route_name='courseware_course_list', renderer='courseware/mentor_courseware_course_list.mako')
 def courseware_course_list(request):

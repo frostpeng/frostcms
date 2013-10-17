@@ -20,7 +20,7 @@
 			% endif
 			</div>
 			% if course :
-			<a class="btn btn-primary" id="btn_head" href="/mentor/course/warelist?courseid=${course.id}">返回课件列表 : ${course.name}</a> 
+			<a class="btn btn-primary" id="btn_head" href="Javascript:history.back()">返回</a> 
 			% endif
 		</div>
         

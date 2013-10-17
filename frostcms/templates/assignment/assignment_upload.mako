@@ -29,7 +29,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
-        	<form action="/lesson/save" class="add" name="course">
+        	<form action="/" class="add" name="course">
         	 	<input type="hidden" id="assignmentid" name="assignmentid" value="${request.params.get('assignmentid')}" />
         	 	<input type="hidden" id="uploadid" name="uploadid" value="${assignmentupload.id if assignmentupload else u''}" />
         	   <br />
@@ -59,9 +59,11 @@
 				<span id="debug"></span>
  				<button class="btn btn-primary" id="add_submit" type="button"><i class="icon-ok icon-white"></i>  提交</button>
  			</form>
-        </div>               
- <script>
-function fileupload(){
+        </div>                      
+    </div>
+   <script type="text/javascript">
+   
+   function fileupload(){
 	$.ajaxFileUpload({
 			url:"/api/user/uploadfile",
 			type: "post",
@@ -89,11 +91,10 @@ function fileupload(){
 			}
 			
 		});};
-		</script>         
-    </div>
-   <script type="text/javascript">
-   	 		$(document).ready(function(){
-   	 		$("#add_submit").click(function(){	
+		
+		
+  $(document).ready(function(){
+   	$("#add_submit").click(function(){	
    	 	if ($("#uploadid").val()){
    	 	postdata={'title': $("#title").val(),'description': $("#description").val(),
 				'fsfileid': $("#fsfileid").val(),'assignmentid': $("#assignmentid").val(),

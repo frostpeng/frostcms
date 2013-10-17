@@ -47,7 +47,6 @@ def api_mentor_assignment_add(request):
                     duedate=formencode.validators.String(not_empty=True,messages=dict(empty=(u'截止时间不能为空'))),
                     lessonid=formencode.validators.Int(not_empty=True),
                     assignmentid=formencode.validators.Int(not_empty=False))
-    log.debug(request.params)
     form=Form(request,validators=validators,state=State(request=request))
     if form.validate():
         try:
