@@ -1,3 +1,21 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+    <a class="brand" href="" style="font-family:'微软雅黑','黑体';margin:auto auto auto 15px;">实验室管理系统</a>
+    <ul class="nav">
+    </ul>
+    <ul class="nav pull-right">
+    % if request.user :
+        <li><a href=""><i class="icon-user icon-white" title="修改密码"></i> ${request.getusername.name}</a></li>
+        <li><a href="/user/change_password" title="修改密码""><i class="icon-wrench icon-white"></i> 密码</a></li>
+        <li><a href="/logout" title="退出登录"><i class="icon-remove icon-white"></i> 退出</a></li>
+    % else :
+    	<li><button id="btn_login" class="btn btn-primary" type="button">登录</button></li>
+    % endif
+    	<li><a href=""> </a></li>
+    </ul>
+  	</div>
+</div>
+<!--
 <div class="head" >
     <div class="title">
    	 实验室管理系统
@@ -7,25 +25,16 @@
 	<ul>
     <a href="#">
       <li>
-        <!--<img src="/static/img/user.png" alt="" />-->
-            <p><i class="icon-user icon-white"></i> ${request.user.name}</p>
-      </li>
-    </a>
-    <a href="/lesson/notice/list" title="通知">
-      <li>
-        <!--<img src="/static/img/修改密码.png" alt="" />-->
-          <p><i class="icon-envelope icon-white"></i> 通知</p>
+            <p><i class="icon-user icon-white"></i> ${request.getusername.name}</p>
       </li>
     </a>
     <a href="/user/change_password" title="修改密码">
       <li>
-        <!--<img src="/static/img/修改密码.png" alt="" />-->
           <p><i class="icon-wrench icon-white"></i> 密码</p>
       </li>
     </a>
     <a href="/logout" title="退出登录">
       <li>
-        <!--<img src="/static/img/退出.png" alt="" />-->
           <p><i class="icon-remove icon-white"></i> 退出</p>
       </li>
     </a>
@@ -35,6 +44,7 @@
     	<button id="btn_login" class="btn btn-primary" type="button">登录</button>
     %endif
 </div>
+-->
 <div class="login" id="login"
 % if request:
 style="display:none;"
@@ -42,7 +52,6 @@ style="display:none;"
 style=""
 % endif
 >
-	
 	<form class="login" action="" method="post">
     	<div class="frame_login">
     		<button id="btn_close" class="btn btn-danger" type="button">关闭</button>

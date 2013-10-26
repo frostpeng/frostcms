@@ -11,7 +11,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from .authentication import AuthenticationPolicy
 from .security import groupfinder
-from .models import initialize_sql,DBSession,User,Lesson,LessonWorkItem
+from .models import initialize_sql,DBSession,User,Lesson,LessonWorkItem,Mentor,Student
 import hashlib
 import transaction
 from logging import getLogger
@@ -40,6 +40,17 @@ class MainRequest(Request):
         conn=DBSession()
         noticenum = conn.query(LessonWorkItem).filter(LessonWorkItem.acceptuserid==self.user.id,LessonWorkItem.viewstate==0).count()
         return noticenum
+    
+    @reify
+    def getusername(self):
+        conn=DBSession()
+        if self.user.role == 1 :
+            ur = conn.query(Mentor).filter(Mentor.userid == self.user.id).first() 
+        elif self.user.role == 2 :
+            ur = conn.query(Student).filter(Student.userid == self.user.id).first()
+        else:
+            ur = self.user
+        return ur
 
 
 def main(global_config, **settings):

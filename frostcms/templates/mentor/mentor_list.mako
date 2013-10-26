@@ -28,7 +28,7 @@
 			<div class="search">
 			<form enctype="multipart/form-data"  action="/mentor/upload" method="post">
 			<div class="input-append">
-				<input type="file"  accept="xls" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" class="btn" name="file"/>
+				<input type="file" accept="xls" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" class="btn" name="file"/>
 				<input type="submit" name="submit" class="btn btn-primary" value="从xls文件导入" />
 			</div>
 			</form>

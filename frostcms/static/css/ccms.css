@@ -222,6 +222,16 @@ form.add{
 	padding:20px 0 0 0;
 	text-indent:2em;
 }
+div.add{
+	float:left;
+	width:100%;
+	height:auto;
+	border:#CCC solid 1px;
+	border-radius:5px;
+	margin:0 auto 15px auto;
+	padding:20px 0 0 0;
+	text-indent:2em;
+}
 span{
 	text-indent:0em;}
 div.app_name{

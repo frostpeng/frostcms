@@ -122,7 +122,7 @@ def api_user_uploadfile(request):
             conn=DBSession()
             conn.add(fsfile)
             conn.flush()
-            returnStr=str(dict(fsfileid=str(uid)))
+            returnStr=str(dict(fsfileid=str(uid),filename=str(fsfile.filename)))
             #returnStr="<body><pre>"+str(result)+"</pre></body>"
             response = request.response
             response.headers['Pragma']='no-cache'

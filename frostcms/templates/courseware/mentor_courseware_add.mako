@@ -29,6 +29,7 @@
         
         <!-- 主体信息表 -->
         <div class="right_main">
+        	<div class="add">
  				<div class="app_name">
         		添加课件
         		</div>
@@ -44,12 +45,14 @@
 				<br />
 				<div class="input-prepend">
   					<span class="add-on">附件</span>
-					<input class="span2" type="file" id="uploadfile" name="uploadfile" onchange="fileupload()" style="vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
+  					<button class="btn" onclick="uploadfile.click()">选择文件</button>
+					<input type="file" id="uploadfile" name="uploadfile" onchange="fileupload()" style="display:none;vertical-align:middle;height:20px;width:220px;line-height:30px;margin:0;text-aligin:center;" />
 					<input type='hidden' id='fsfileid' name='fsfileid' value='${assignmentupload.fsfileid if assignmentupload else u' '} ' />	
 				</div>
 				<br />
 				<div class="input-prepend" id="download_div" type="hidden">
 				%if assignmentupload:
+					<span class='add-title'>${assignmentupload.fsfile.filename}</span>
 					<span class='add-on'>已上传附件</span>
 					<span class='add-on'><a href='/user/getfilebyid?fsfileid=${assignmentupload.fsfileid}'>附件下载</a></span>
 				%endif
@@ -57,8 +60,14 @@
 				<hr />
 				<span id="debug"></span>
  				<button class="btn btn-primary" id="add_submit">保存</button>
-        </div>               
-        <script type="text/javascript">
+ 			</div>
+        </div>               	
+    </div>
+	<!-- 登录模块 -->
+    <%include file="/login/login.mako" />
+</body>
+</html>
+<script type="text/javascript">
    function fileupload(){
 	$.ajaxFileUpload({
 			url:"/api/user/uploadfile",
@@ -75,7 +84,7 @@
 				}else{
 				$('#fsfileid').attr('value',data.fsfileid);
 				$('#download_div').empty();
-				$('#download_div').append("<span class='add-on'>已上传附件</span>")
+				$('#download_div').append("<span class='add-on'>已上传附件: "+data.filename+"</span>")
 				$('#download_div').append("<span class='add-on'><a href='/user/getfilebyid?fsfileid="+data.fsfileid+"'>附件下载</a></span>");
 				}
 			},
@@ -114,10 +123,4 @@ $(document).ready(function(){
 		});
     });
 });
-		</script>
-		
-    </div>
-	<!-- 登录模块 -->
-    <%include file="/login/login.mako" />
-</body>
-</html>
+</script>
