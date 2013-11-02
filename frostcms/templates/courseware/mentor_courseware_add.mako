@@ -52,7 +52,6 @@
 				<br />
 				<div class="input-prepend" id="download_div" type="hidden">
 				%if assignmentupload:
-					<span class='add-title'>${assignmentupload.fsfile.filename}</span>
 					<span class='add-on'>已上传附件</span>
 					<span class='add-on'><a href='/user/getfilebyid?fsfileid=${assignmentupload.fsfileid}'>附件下载</a></span>
 				%endif

@@ -1,5 +1,5 @@
 from pyramid.config import Configurator
-from sqlalchemy import engine_from_config,func
+from sqlalchemy import engine_from_config,func,desc
 
 from pyramid.renderers import JSONP
 from pyramid.decorator import reify
@@ -11,10 +11,11 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from .authentication import AuthenticationPolicy
 from .security import groupfinder
-from .models import initialize_sql,DBSession,User,Lesson,LessonWorkItem,Mentor,Student
+from .models import initialize_sql,DBSession,User,Lesson,LessonWorkItem,Mentor,Student,Semester
 import hashlib
 import transaction
 from logging import getLogger
+import time
 
 log = getLogger(__name__)
 
@@ -51,8 +52,24 @@ class MainRequest(Request):
         else:
             ur = self.user
         return ur
-
-
+    
+    @reify
+    def thissemester(self):
+        conn=DBSession()
+        now = time.time()
+        semester = None
+        semester = conn.query(Semester).filter(now<=Semester.start+Semester.weeks*7*24*60*60).order_by(desc(Semester.start+Semester.weeks*7*24*60*60-now)).first()
+        return semester
+    
+    @reify
+    def thisweek(self):
+        now = time.time()
+        week = 0
+        semester = self.thissemester
+        if semester :
+            week = int((now - semester.start)/(7*24*60*60) + 1) 
+        return week
+        
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """

@@ -486,6 +486,10 @@ td.class-tab{
 	height:80px;
 	font-size:12px;
 }
+td.class-tab2{
+	text-align:center;
+	font-size:14px;
+}
 td.class-tab:hover{
 	background-color:#eee;
 }

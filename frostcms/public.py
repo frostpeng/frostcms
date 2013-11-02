@@ -19,21 +19,29 @@ def includeme(config):
 @view_config(route_name='public_lesson_list', renderer='public/class_list.mako')
 def listlesson(request):
     conn = DBSession()
-    params_tuple=['week','locationid','area']
-    week,locationid,area=[request.params.get(x) for x in params_tuple]
+    params_tuple=['week','locationid','area','dow']
+    week,locationid,area,dayofweek=[request.params.get(x) for x in params_tuple]
     locationdictionary=conn.query(Location).order_by(Location.id)
     loc = conn.query(Location).filter(Location.id==locationid).first()
     class Acolum():
         def __init__(self):
             self.courses = []
             self.studentnum = 0
+    class Aroom():
+        def __init__(self):
+            self.location = None
+            self.lessons = [Acolum(),Acolum(),Acolum(),Acolum(),Acolum(),Acolum()]
     items = []
-    seatnum = 0
+    if loc :
+        seatnum = loc.seatnum
+    else:
+        seatnum = 0
+   
     courses = []
-    if week and locationid:
+    if dayofweek and int(dayofweek)>=7 and week and locationid:
         locations = conn.query(Lesson_Location).filter(Lesson_Location.locationid==locationid)
         for location in locations:
-            if  location.lesson.week == int(week) and location.lesson.state == 1:
+            if  location.lesson.week == int(week) and location.lesson.state == 1 and location.lesson.course.semesterid==request.thissemester.id:
                 courses.append(location)
                 seatnum = location.location.seatnum
         for dow in range(0,7) :
@@ -48,17 +56,60 @@ def listlesson(request):
                 colum.studentnum = num
                 day.append(colum)
             items.append(day)
-        """if startweek:
-            items=items.filter(Lesson.week>=startweek)
-        if endweek:
-            items=items.filter(Lesson.week<=endweek) 
-        if area:
-            items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter\
-                    (Lesson_Location.locationid.in_(conn.query(Location.id).filter(Location.area==area)))))
-        if locationid:
-            items=items.filter(Lesson.id.in_(conn.query(Lesson_Location.lessonid).filter(Lesson_Location.locationid==locationid)))
-        """
-    return dict(items=items,week=week,locationid=locationid,area=area,locationdictionary=locationdictionary,seatnum=seatnum,loc=loc)     
+    elif dayofweek and 0<=int(dayofweek)<=6 and week :
+        cours = conn.query(Course.id).filter(Course.semesterid==request.thissemester.id).all()
+        if locationid and int(locationid)!=-1 :
+            lots = conn.query(Location).filter(Location.id==int(locationid))
+        elif area and int(area)!=-1:
+            lots = conn.query(Location).filter(Location.area==int(area))
+        else :
+            lots = []
+        locations = []
+        for lot in lots:
+            locations.append(lot.id)
+        courses = []
+        les = []
+        lessons = []
+        lols = []
+        def cmpid(lol):
+            return lol.locationid
+        for cour in cours:
+            courses.append(cour.id)
+        for course in courses :
+            les += conn.query(Lesson).filter(Lesson.state==1,Lesson.week==week,Lesson.dow==int(dayofweek),Lesson.courseid==course).all()
+        for le in les :
+            lessons.append(le.id)
+        for lesson in lessons :
+            if (locationid and int(locationid)!=-1) or (area and int(area)!=-1):
+                for location in locations :
+                    lols += conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson,Lesson_Location.locationid==location).all()
+            else:
+                lols += conn.query(Lesson_Location).filter(Lesson_Location.lessonid==lesson).all()
+        lols.sort(key=cmpid)
+        sign = 0
+        num = 0
+        room = None
+        for lol in lols :
+            if sign!=lol.locationid :
+                if room :
+                    items.append(room)
+                sign=lol.locationid
+                room = Aroom()
+                room.location = lol.location
+            if lol.lesson.start%2!=0:
+                start = lol.lesson.start/2
+            else :
+                start = (lol.lesson.start-1)/2
+            if lol.lesson.end%2!=0:
+                end = lol.lesson.end/2
+            else:
+                end = (lol.lesson.end-1)/2
+            for time in range(start,end+1) :
+                room.lessons[time].courses.append(lol.lesson.course)
+                room.lessons[time].studentnum += lol.studentnum
+        if room :
+            items.append(room)                
+    return dict(items=items,week=week,locationid=locationid,area=area,locationdictionary=locationdictionary,seatnum=seatnum,loc=loc,dayofweek=dayofweek)     
     
     
 @view_config(route_name='install', renderer='jsonp')
