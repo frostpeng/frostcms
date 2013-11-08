@@ -41,7 +41,7 @@ def getLeftSeatByLocation(locationid,lessonnum,week,dow):
     seatnum=location.seatnum;
     lessonlocations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid.in_
                     (conn.query(Lesson.id).filter(Lesson.start<=startclass,\
-                    Lesson.end>=endclass,Lesson.week==week,Lesson.dow==dow)),\
+                    Lesson.end>=endclass,Lesson.week==week,Lesson.dow==dow,(Lesson.state!=-1 or Lesson.state!=0))),\
                     Lesson_Location.locationid==locationid).all()
     usedseat=0
     for lessonlocation in lessonlocations:

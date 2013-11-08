@@ -34,6 +34,7 @@ class MainRequest(Request):
     def undocount(self):
         conn=DBSession()
         lessonscout=conn.query(Lesson.id).filter(Lesson.state==0).count()
+        lessonscout+=conn.query(Lesson.id).filter(Lesson.state==-2).count()
         return lessonscout
     
     @reify

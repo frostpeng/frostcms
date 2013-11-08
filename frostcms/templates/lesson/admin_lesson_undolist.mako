@@ -58,11 +58,13 @@
         			</td>
         			<td class="name">
         			%if item.state==0:
-        			申请中
+        			申请课堂
         			%elif item.state==1:
         			申请成功
         			%elif item.state==2:
         			申请失败
+        			%elif item.state==-2:
+        			申请删除
         			%endif
 					</td>
         			<td class="name">

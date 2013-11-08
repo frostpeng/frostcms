@@ -16,11 +16,15 @@
 		<div class="right_head">
 			<div class="title_2">主题 ： 
 				% if notice.action == -1 :
-        		【通知】 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的课堂已被删除
+        		 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的课堂已被删除
         		% elif notice.action == 1 :
-        		【通知】 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的课堂申请成功
+        		 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的课堂申请成功
         		% elif notice.action == 2 :
-        		【通知】 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的 课堂申请呗拒绝
+        		 课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的 课堂申请呗拒绝
+        		% elif notice.action == -2 :
+        		课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的 删除课堂申请，已通过
+        		% elif notice.action == -3 :
+        		课程《${notice.lesson.course.name}》于第${notice.lesson.week}周的 删除课堂申请，呗拒绝
         		% endif 
 			</div>
 			<div class="notice_sender">
@@ -74,6 +78,10 @@
         	申请成功。
         	% elif notice.action == 2 :
         	申请被拒绝。
+        	% elif notice.action == -2 :
+        	课堂删除，申请已通过。
+        	% elif notice.action == -3 :
+        	课堂删除，申请被拒绝。
         	% endif
         	</p>
         	% if notice.description :

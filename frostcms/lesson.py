@@ -60,6 +60,7 @@ def admin_lesson_undolist(request):
     page = int(request.params.get('page', 1))
     conn = DBSession()
     items=conn.query(Lesson).filter(Lesson.state==0).all()
+    items+=conn.query(Lesson).filter(Lesson.state==-2).all()
     for item in items:
         lesson_locations=conn.query(Lesson_Location).filter(Lesson_Location.lessonid==item.id).all()
         item.lesson_locations=lesson_locations
@@ -78,7 +79,7 @@ def admin_lesson_agree(request):
     conn = DBSession()
     lessonid=request.params.get('lessonid')
     lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
-    if lesson:
+    if lesson and lesson.state==0:
         lesson.state=1
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
@@ -88,7 +89,17 @@ def admin_lesson_agree(request):
         lwi.actiontime = time.time()
         conn.add(lwi)
         conn.flush()
-        return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
+        return HTTPFound(location=request.route_url('admin_lesson_undolist'))
+    elif lesson and lesson.state==-2:
+        lesson.state = -1
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = lesson.course.mentor.user.id #admin.id
+        lwi.action = -2
+        lwi.actiontime = time.time()
+        conn.add(lwi)
+        conn.flush()        
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
 
 @view_config(route_name='admin_lesson_disagree', renderer='lesson/lesson_add.mako',permission='admin')
@@ -96,7 +107,7 @@ def admin_lesson_disagree(request):
     conn = DBSession()
     lessonid=request.params.get('lessonid')
     lesson = conn.query(Lesson).filter(Lesson.id==lessonid).first()
-    if lesson:
+    if lesson and lesson.state==0:
         lesson.state=2
         lwi = LessonWorkItem()
         lwi.lessonid = lesson.id
@@ -106,7 +117,17 @@ def admin_lesson_disagree(request):
         lwi.actiontime = time.time()
         conn.add(lwi)
         conn.flush()
-        return HTTPFound(location=request.route_url('admin_lesson_undolist'))                  
+        return HTTPFound(location=request.route_url('admin_lesson_undolist'))
+    elif lesson and lesson.state==-2:
+        lesson.state = 1
+        lwi = LessonWorkItem()
+        lwi.lessonid = lesson.id
+        lwi.senduserid = request.user.id
+        lwi.acceptuserid = lesson.course.mentor.user.id #admin.id
+        lwi.action = -3
+        lwi.actiontime = time.time()
+        conn.add(lwi)
+        conn.flush()               
     return HTTPFound(location=request.route_url('admin_lesson_undolist'))
 
 @view_config(route_name='mentor_lesson_listbycourse', renderer='lesson/mentor_lesson_listbycourse.mako',permission='mentor')
@@ -334,15 +355,19 @@ def mentor_lesson_del(request):
             conn.query(Course.id).filter(Course.mentorid.in_(\
                 conn.query(Mentor.id).filter(Mentor.userid==request.user.id))))).first()
     courseid=lesson.courseid
-    if lesson:
+    if lesson and (lesson.state==0):
         lesson.state = -1
-        lwi = LessonWorkItem()
-        lwi.lessonid = lesson.id
-        lwi.senduserid = request.user.id
-        lwi.acceptuserid = 1 #admin.id
-        lwi.action = -1
-        lwi.actiontime = time.time()
-        conn.add(lwi)
+        conn.flush()
+        return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
+    elif lesson:
+        lesson.state = -2
+        #lwi = LessonWorkItem()
+        #lwi.lessonid = lesson.id
+        #lwi.senduserid = request.user.id
+        #lwi.acceptuserid = 1 #admin.id
+        #lwi.action = -2
+        #lwi.actiontime = time.time()
+        #conn.add(lwi)
         conn.flush()
         return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))
     return HTTPFound(location=request.route_url('mentor_lesson_listbycourse',_query={'courseid':courseid}))

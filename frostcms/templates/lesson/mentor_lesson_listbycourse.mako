@@ -95,6 +95,8 @@
         			申请成功
         			%elif item.state==2:
         			申请失败
+        			%elif item.state==-2:
+        			申请删除中
         			%endif
 					</td>
         			<td>

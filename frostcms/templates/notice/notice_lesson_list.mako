@@ -47,6 +47,10 @@
         			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-success">课堂申请成功</span>
         			% elif item.action == 2 :
         			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-warning">课堂申请被拒绝</span>
+        			% elif item.action == -2 :
+        			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-success">课堂已被批准删除</span>
+        			% elif item.action == -3 :
+        			<span class="label label-info">通知</span> 课程《${item.lesson.course.name}》于第${item.lesson.week}周的 <span class="label label-important">课堂被拒绝删除</span>
         			% endif 
         			</td>
         			<td class="notice_time">
